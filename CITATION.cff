@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use this working paper or verification code, please cite it using the metadata below."
+title: "State-Dependent Affine Bellman Barriers, Asymptotic Equivalence, and the Institutional U-Curve: Analytical Extensions on Minimum Viable Scale"
+authors:
+  - family-names: "Segura"
+    given-names: "Marcelo"
+date-released: "2026-11-16"
+version: "3.0"
+repository-code: "https://github.com/lordtiva/mvs-extension"
+license: "CC-BY-4.0"
+keywords:
+  - "minimum viable scale"
+  - "First Passage Bellman Barriers"
+  - "entry time bounds"
+  - "endogenous labor"
+  - "institutional U-curve"
+  - "nonconcave optimal growth"
+preferred-citation:
+  type: article
+  title: "State-Dependent Affine Bellman Barriers, Asymptotic Equivalence, and the Institutional U-Curve: Analytical Extensions, Sharper Certificates, and Microfoundations on Minimum Viable Scale (Milei and Reidel, 2026)"
+  authors:
+    - family-names: "Segura"
+      given-names: "Marcelo"
+  year: 2026
+  month: 11
