@@ -1,6 +1,9 @@
 # State-Dependent Affine Bellman Barriers, Asymptotic Equivalence, and the Institutional U-Curve
 
-**Author:** Marcelo Segura
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24282792.svg)](https://doi.org/10.5281/zenodo.24282792)
+
+**Author:** Marcelo Segura  
+**Zenodo Preprint (v3.0):** [10.5281/zenodo.24282792](https://doi.org/10.5281/zenodo.24282792) · **Concept DOI (all versions):** [10.5281/zenodo.24282791](https://doi.org/10.5281/zenodo.24282791)
 
 Bilingual working paper (English and Spanish) plus reproducible numerical and interval-arithmetic verification code extending **Milei and Reidel (2026)**, *"Minimum Viable Scale: Bellman Barriers and the Economics of Survival"*, without altering any primitive or parameter box.
 
