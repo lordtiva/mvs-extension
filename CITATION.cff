@@ -4,11 +4,11 @@ title: "State-Dependent Affine Bellman Barriers, Asymptotic Equivalence, and the
 authors:
   - family-names: "Segura"
     given-names: "Marcelo"
-date-released: "2026-11-16"
-version: "3.0"
-doi: "10.5281/zenodo.24282792"
+date-released: "2026-11-17"
+version: "4.0"
+doi: "10.5281/zenodo.24282791"
 repository-code: "https://github.com/lordtiva/mvs-extension"
-url: "https://zenodo.org/records/24282792"
+url: "https://doi.org/10.5281/zenodo.24282791"
 license: "CC-BY-4.0"
 keywords:
   - "minimum viable scale"
@@ -23,6 +23,6 @@ preferred-citation:
   authors:
     - family-names: "Segura"
       given-names: "Marcelo"
-  doi: "10.5281/zenodo.24282792"
+  doi: "10.5281/zenodo.24282791"
   year: 2026
   month: 11

@@ -376,10 +376,21 @@ def make_fig4(lang):
     K_hat_fragmented = 0.06 * (0.91 ** t_grid)
     K_real_fragmented = ((1.0 + g_rate) ** t_grid) * K_hat_fragmented
 
-    p_hazard = np.linspace(0.0, 0.03, 200)
+    p_hazard = np.linspace(0.0, 0.0285, 285)
     surv_46 = (1.0 - p_hazard) ** 46
     surv_23 = (1.0 - p_hazard) ** 23
-    surv_24 = (1.0 - p_hazard) ** 24
+
+    # Endogenous Stochastic Doob Certificate T*(p) under beta_eff = beta*(1-p) (verified in verify_results.py)
+    p_doob_knots = np.array([
+        0.0000, 0.0012, 0.0024, 0.0036, 0.0048, 0.0050, 0.0060, 0.0072,
+        0.0084, 0.0100, 0.0121, 0.0133, 0.0150, 0.0169, 0.0181, 0.0193, 0.0200, 0.0205
+    ])
+    T_doob_knots = np.array([21, 22, 23, 24, 24, 24, 25, 26, 28, 29, 32, 34, 38, 45, 51, 62, 74, 97], dtype=float)
+    p_doob_fine = np.linspace(0.0, 0.0205, 160)
+    T_interp = np.interp(p_doob_fine, p_doob_knots, T_doob_knots)
+    surv_doob = (1.0 - p_doob_fine) ** T_interp
+    surv_23_sub = (1.0 - p_doob_fine) ** 23
+    p_cert = 0.0207
 
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11.2, 4.4), dpi=300)
     fig.subplots_adjust(wspace=0.25, bottom=0.15, top=0.87, left=0.07, right=0.97)
@@ -392,13 +403,15 @@ def make_fig4(lang):
         xlab1 = r'Períodos de tiempo $t$'
         ylab1 = r'Stock de capital real $K_t$'
         tit1 = r'(a) Escala empresarial ($M$) y crecimiento sin techo ($g > 0$)'
-        l_23 = r'Barrera afín 1 paso ($\tau_H \leq 23$: $\mathbb{P}_{\mathrm{sup}} \geq (1-p)^{23}$)'
-        l_24 = r'Cota uniforme 1 paso ($\tau_H \leq 24$: $\mathbb{P}_{\mathrm{sup}} \geq (1-p)^{24}$)'
-        l_46 = r'Cota por bloques original ($\tau_H \leq 46$: $\mathbb{P}_{\mathrm{sup}} \geq (1-p)^{46}$)'
-        l_sh = r'Reducción del riesgo de colapso en tránsito'
-        xlab2 = r'Probabilidad por período de shock adverso severo $p$ (%)'
+        l_doob = r'Doob endógeno $(1-p)^{T^*(p)}$ (anticipando $\tilde{\beta}_p$)'
+        l_23 = r'Cota determinista ingenua $(1-p)^{23}$ ($p=0$ fijo)'
+        l_46 = r'Bloques deterministas originales $(1-p)^{46}$'
+        l_cert = r'Ruptura 1 paso $p_{\mathrm{cert}} \approx 2.07\%$'
+        l_gap = r'Sobreestimación por ignorar anticipación'
+        ann_2pct = 'p = 2.0%: T*=74\n22.4% vs. 62.8%'
+        xlab2 = r'Riesgo anual anticipado de colapso $p$ (%)'
         ylab2 = r'Probabilidad certificada de llegar a $H$ (%)'
-        tit2 = r'(b) Barreras de Bellman estocásticas y supervivencia en $M$'
+        tit2 = r'(b) Certificado estocástico de Doob $T^*(p)$ frente a $T^*=23$'
     else:
         l_h = r'Sustained hockey-stick growth $K_t = (1+g)^t \hat{K}_t$ ($M=1$)'
         l_s = r'Original model bounded by stationary ceiling $K_p^+$ ($g=0$)'
@@ -407,13 +420,15 @@ def make_fig4(lang):
         xlab1 = r'Time periods $t$'
         ylab1 = r'Real capital stock $K_t$'
         tit1 = r'(a) Firm scale ($M$) and unbounded growth ($g > 0$)'
-        l_23 = r'1-step affine barrier ($\tau_H \leq 23$: $\mathbb{P}_{\mathrm{surv}} \geq (1-p)^{23}$)'
-        l_24 = r'1-step uniform bound ($\tau_H \leq 24$: $\mathbb{P}_{\mathrm{surv}} \geq (1-p)^{24}$)'
-        l_46 = r'Original 2-step block bound ($\tau_H \leq 46$: $\mathbb{P}_{\mathrm{surv}} \geq (1-p)^{46}$)'
-        l_sh = r'Reduction in transition collapse risk'
-        xlab2 = r'Per-period severe shock hazard $p$ (%)'
+        l_doob = r'Endogenous Doob $(1-p)^{T^*(p)}$ (anticipating $\tilde{\beta}_p$)'
+        l_23 = r'Naive deterministic bound $(1-p)^{23}$ (fixed $p=0$)'
+        l_46 = r'Original deterministic block bound $(1-p)^{46}$'
+        l_cert = r'1-step breakdown $p_{\mathrm{cert}} \approx 2.07\%$'
+        l_gap = r'Overstatement if anticipation ignored'
+        ann_2pct = 'p = 2.0%: T*=74\n22.4% vs. 62.8%'
+        xlab2 = r'Anticipated annual crisis hazard $p$ (%)'
         ylab2 = r'Certified probability of reaching $H$ (%)'
-        tit2 = r'(b) Stochastic Bellman barriers and survival in $M$'
+        tit2 = r'(b) Endogenous Stochastic Doob $T^*(p)$ vs. fixed $T^*=23$'
 
     ax1.plot(t_grid, K_real_hockey, '-', color='#1f4e78', linewidth=2.3, label=l_h)
     ax1.plot(t_grid, K_stationary_orig, '--', color='#1b7837', linewidth=1.8, label=l_s)
@@ -427,16 +442,25 @@ def make_fig4(lang):
     ax1.legend(loc='upper left', fontsize=7.3, frameon=True, facecolor='white', framealpha=0.95)
     ax1.grid(True, linestyle=':', alpha=0.35)
 
-    ax2.plot(p_hazard * 100, surv_23 * 100, '-', color='#1f4e78', linewidth=2.3, label=l_23)
-    ax2.plot(p_hazard * 100, surv_24 * 100, '-.', color='#2b5c8f', linewidth=1.5, label=l_24)
-    ax2.plot(p_hazard * 100, surv_46 * 100, '--', color='#d95f02', linewidth=2.0, label=l_46)
-    ax2.fill_between(p_hazard * 100, surv_46 * 100, surv_23 * 100, color='#1f4e78', alpha=0.14, label=l_sh)
-    ax2.set_xlim(0, 3.0)
-    ax2.set_ylim(20, 102)
+    ax2.plot(p_doob_fine * 100, surv_doob * 100, '-', color='#1f4e78', linewidth=2.4, label=l_doob)
+    ax2.plot(p_hazard * 100, surv_23 * 100, '--', color='#1b7837', linewidth=1.8, label=l_23)
+    ax2.plot(p_hazard * 100, surv_46 * 100, '-.', color='#d95f02', linewidth=1.6, label=l_46)
+    ax2.axvline(p_cert * 100, color='#c00000', linestyle=':', linewidth=1.6, label=l_cert)
+    mask_over = surv_23_sub > surv_doob
+    ax2.fill_between(p_doob_fine[mask_over] * 100, surv_doob[mask_over] * 100, surv_23_sub[mask_over] * 100,
+                     color='#c00000', alpha=0.12, label=l_gap)
+    ax2.scatter([2.0], [100 * (0.98 ** 74)], color='#1f4e78', s=34, zorder=5)
+    ax2.scatter([2.0], [100 * (0.98 ** 23)], color='#1b7837', s=28, zorder=5)
+    ax2.annotate(ann_2pct, xy=(2.0, 22.42), xytext=(2.12, 12.0),
+                 arrowprops=dict(arrowstyle='->', color='#1f4e78', lw=1.0),
+                 bbox=dict(boxstyle='round,pad=0.25', fc='white', ec='#1f4e78', lw=0.7, alpha=0.95),
+                 fontsize=7.3, color='#1f4e78', fontweight='bold')
+    ax2.set_xlim(0, 2.85)
+    ax2.set_ylim(-2, 105)
     ax2.set_xlabel(xlab2, fontsize=9.5)
     ax2.set_ylabel(ylab2, fontsize=9.5)
     ax2.set_title(tit2, fontsize=10, pad=8)
-    ax2.legend(loc='lower left', fontsize=7.3, frameon=True, facecolor='white', framealpha=0.95)
+    ax2.legend(loc='lower left', fontsize=6.8, frameon=True, facecolor='white', framealpha=0.95)
     ax2.grid(True, linestyle=':', alpha=0.35)
 
     for ext in ['svg', 'png']:

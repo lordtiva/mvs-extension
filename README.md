@@ -1,9 +1,9 @@
 # State-Dependent Affine Bellman Barriers, Asymptotic Equivalence, and the Institutional U-Curve
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24282792.svg)](https://doi.org/10.5281/zenodo.24282792)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24282791.svg)](https://doi.org/10.5281/zenodo.24282791)
 
 **Author:** Marcelo Segura  
-**Zenodo Preprint (v3.0):** [10.5281/zenodo.24282792](https://doi.org/10.5281/zenodo.24282792) · **Concept DOI (all versions):** [10.5281/zenodo.24282791](https://doi.org/10.5281/zenodo.24282791)
+**Zenodo Concept DOI (all versions, latest v4.0):** [10.5281/zenodo.24282791](https://doi.org/10.5281/zenodo.24282791)
 
 Bilingual working paper (English and Spanish) plus reproducible numerical and interval-arithmetic verification code extending **Milei and Reidel (2026)**, *"Minimum Viable Scale: Bellman Barriers and the Economics of Survival"*, without altering any primitive or parameter box.
 
@@ -11,8 +11,8 @@ Bilingual working paper (English and Spanish) plus reproducible numerical and in
 
 ## Main Manuscripts
 
-- **English Working Paper (PDF, 22 pages):** [`mvs_improvements_en.pdf`](mvs_improvements_en.pdf) ([Typst source](mvs_extension_en.typ))
-- **Spanish Working Paper (PDF, 25 pages):** [`mvs_mejoras_paper.pdf`](mvs_mejoras_paper.pdf) ([Typst source](mvs_extension_es.typ), [LaTeX source](mvs_mejoras_paper.tex))
+- **English Working Paper (PDF, 23 pages):** [`mvs_improvements_en.pdf`](mvs_improvements_en.pdf) ([Typst source](mvs_extension_en.typ))
+- **Spanish Working Paper (PDF, 26 pages):** [`mvs_mejoras_paper.pdf`](mvs_mejoras_paper.pdf) ([Typst source](mvs_extension_es.typ), [LaTeX source](mvs_mejoras_paper.tex))
 
 ---
 
@@ -26,8 +26,8 @@ Bilingual working paper (English and Spanish) plus reproducible numerical and in
    - **Theorem 3\* & Table 3:** Resolves Footnote 1 by proving the finite-$A$ scaling isomorphism $S_A^{\mathrm{fix}}(\overline{L}) = \overline{L} S_{A\overline{L}^r}^{\mathrm{fix}}(1)$, a variational criterion for $S_A^{\mathrm{fix}}(1) < S_A$, and convergence of both rescaled frontiers to $(\delta/c_K)^{1/r}$ ($S_A / S_A^{\mathrm{fix}}(\overline{L}) \to 1$) as $A\to\infty$, backed by exact FOC evaluation and continuous-state 880-point normalized Value Function Iteration (VFI).
 3. **Barro–CES Institutional U-Curve & Burden Decomposition (Section 5):**
    - **Theorem 10 & Table 4:** Microfounds Section 4.3 with balanced-budget productive public spending ($\tau_p$) and unproductive compliance overhead ($\tau_u$), cleanly separating the exact differentiable U-curve of $\overline{S}(\tau)$ and physical floor $\kappa(\tau)$ minimized uniquely at $\tau^* = \alpha/(1+\alpha)$, level-set symmetry at finite $A_0$, and the exact asymptotic $S(\tau)$ limit as $A_0 \to \infty$.
-4. **Structural Extensions (Section 6):**
-   - **Propositions 2\*–3\* & Theorem 11:** Formalizes monopolistic competition decentralization with exact Euler factor accounting $(\theta/\mu)Y_t$, firm fragmentation TFP loss $A/M^{\theta-1}$, unbounded balanced growth in efficiency units, and Stochastic Bellman Barriers via Doob's Optional Stopping Theorem ($\mathbb{P} \ge (1-p)^{23}$ vs. $(1-p)^{46}$).
+4. **Structural Extensions & Stochastic Bellman Barriers (Section 6):**
+   - **Propositions 2\*–3\* & Theorem 11\* (Table 5):** Formalizes monopolistic competition decentralization with exact Euler factor accounting $(\theta/\mu)Y_t$, firm fragmentation TFP loss $A/M^{\theta-1}$, unbounded balanced growth in efficiency units, and complete Stochastic Bellman Barriers via Doob's Optional Stopping Theorem—deriving the anticipation-adjusted endogenous deadline $T^*(p)$ (vs. deterministic $T^*=23$, with $p_{\mathrm{cert}}=2.07\%$), a closed $2\times 2$ coupled Markov barrier system $(B_G, B_B)$, and the 880-point Stochastic VFI policy dichotomy (ruin discouragement vs. precautionary "sprint to safety").
 
 ---
 
@@ -38,7 +38,7 @@ Bilingual working paper (English and Spanish) plus reproducible numerical and in
 | `mvs_improvements_en.pdf` / `mvs_extension_en.typ` | Complete English manuscript and Typst source |
 | `mvs_mejoras_paper.pdf` / `mvs_extension_es.typ` | Complete Spanish manuscript and Typst source |
 | `mvs_mejoras_paper.tex` | Synchronized Spanish LaTeX source |
-| `verify_results.py` | Standalone numerical, VFI, and interval-arithmetic verification script |
+| `verify_results.py` | Standalone numerical, VFI, interval-arithmetic, and stochastic Doob/Markov verification script |
 | `generate_figures.py` | Generates all 4 two-panel figures (`fig1`–`fig4`) in ES & EN (`.svg`/`.png`) |
 | `fig1_*` – `fig4_*` | Vector (`.svg`) and raster (`.png`) figures embedded in the papers |
 | `CITATION.cff`, `.zenodo.json`, `LICENSE`, `requirements.txt` | Citation, Zenodo archiving metadata, dual license (CC BY 4.0 / MIT), and Python dependencies |
@@ -50,7 +50,7 @@ Bilingual working paper (English and Spanish) plus reproducible numerical and in
 ```bash
 pip install -r requirements.txt
 
-# 1. Verify all analytical interval bounds, Table 1-4 values, FOC, and VFI frontiers
+# 1. Verify all analytical interval bounds, Table 1-5 values, FOC, VFI, and stochastic barriers
 python verify_results.py
 
 # 2. Regenerate all figures (SVG and PNG, English and Spanish)

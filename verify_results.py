@@ -8,12 +8,14 @@ Verifies:
   2. Proposition 1** & Table 2 (interval arithmetic & Wronskian monotonicity without grid dependence).
   3. Theorem 3* & Table 3 (exact FOC scaling + 880-point two-zone continuous-state normalized VFI).
   4. Theorem 10 & Table 4 (Barro-CES institutional U-curve & extinction thresholds).
+  5. Theorem 11* & Table 5 (Endogenous Doob deadlines T*(p), 2-state Markov barriers, and anticipating VFI).
 
 Usage:
   python verify_results.py
 """
 
 import numpy as np
+from scipy.interpolate import PchipInterpolator
 from scipy.optimize import brentq
 
 
@@ -629,9 +631,389 @@ def verify_theorem10():
             print(f"  tau={tau:7.2e}  Ae={Ae:.4f}  Ae/Arep={ratio:5.2f}  (global extinction)")
 
 
+# ---------------------------------------------------------------------------
+# 5. Theorem 11* & Table 5 (Endogenous Stochastic Doob Certificate & Anticipating VFI)
+# ---------------------------------------------------------------------------
+def verify_theorem11_stochastic():
+    print("\n" + "=" * 72)
+    print("5. THEOREM 11* & TABLE 5 (STOCHASTIC DOOB T*(p), MARKOV BARRIERS & VFI)")
+    print("=" * 72)
+
+    theta, rho, w, delta, beta, eta = 1.5, -1.0, 0.5, 0.08, 0.97, 0.70
+    q = 1.0 - delta
+    A_G, A_B = 0.75, 0.35
+    r_rec = 1.0 / 3.0
+    C_max = Q_MAX * H_M + F_A(A_MAX, H_M, 1.0) - B_M
+    R_hat = -0.996
+
+    def E_plus(A_hi, K, a, l0):
+        c_sup = Q_MAX * K + F_A(A_hi, K, l0) + (1.0 - l0) * dF_dL(A_hi, K, l0) - a
+        ec = ETA_MIN if c_sup < 1.0 else ETA_MAX
+        return ec * np.log(c_sup) + (1.0 - ETA_MAX) * np.log(1.0 - l0)
+
+    def psi_discrepancy(A_hi, b_max, a_c, b_c):
+        xs = np.geomspace(0.01, 45.0, 140)
+        Ls = np.linspace(0.02, 0.995, 55)
+        mv = -1e9
+        for x in xs:
+            Ys = Q_MAX * x + F_A(A_hi, x, Ls)
+            px = a_c * x - b_c * (x ** -0.5)
+            for Y, L in zip(Ys, Ls):
+                ys = np.linspace(max(1e-4, 0.1 * x), Y - 1e-5, 55)
+                cs = Y - ys
+                ec = np.where(cs < 1.0, ETA_MIN, ETA_MAX)
+                rs = ec * np.log(cs) + (1.0 - ETA_MAX) * np.log(1.0 - L)
+                v = np.max(rs + b_max * (a_c * ys - b_c * (ys ** -0.5)) - px)
+                if v > mv:
+                    mv = v
+        return float(mv)
+
+    # Worst-case feasible trajectory builder on box (7.3) for explicit rational witness sums
+    Kp_m = brentq(lambda K: F_A(A_MIN, K, 1.0) - (1.0 - Q_MIN) * K, 0.5, 50.0)
+    k_wg = np.unique(np.concatenate([np.geomspace(0.05, 0.4, 150, endpoint=False), np.geomspace(0.4, Kp_m * 1.02, 200)]))
+    n_kw = len(k_wg)
+    L_wg = np.linspace(0.20, 0.96, 120)
+
+    def build_u_worst(A_lo):
+        y = Q_MIN * k_wg[:, None] + F_A(A_lo, k_wg[:, None], L_wg[None, :])
+        um = np.full((n_kw, n_kw), -1e9)
+        Lm = np.zeros((n_kw, n_kw))
+        for i in range(n_kw):
+            cm = y[i, None, :] - k_wg[:, None]
+            ec = np.where(cm < 1.0, ETA_MAX, ETA_MIN)
+            u = np.where(cm > 1e-10, ec * np.log(np.maximum(cm, 1e-30)) + (1.0 - ETA_MIN) * np.log(1.0 - L_wg[None, :]), -1e9)
+            bl = np.argmax(u, axis=1)
+            um[i, :] = u[np.arange(n_kw), bl]
+            Lm[i, :] = L_wg[bl]
+        return um, Lm
+
+    uw_G, Lw_G = build_u_worst(A_MIN)
+    uw_B, _ = build_u_worst(0.349)
+
+    def witness_seq_val(b_min, K0):
+        V = np.full(n_kw, -25.0)
+        for _ in range(40):
+            jb = np.argmax(uw_G + b_min * V[None, :], axis=1)
+            up = uw_G[np.arange(n_kw), jb]
+            Ve = up + b_min * V[jb]
+            for _h in range(150):
+                Ve = up + b_min * Ve[jb]
+            if np.max(np.abs(Ve - V)) < 1e-9:
+                V = Ve
+                break
+            V = Ve
+        idx = np.argmin(np.abs(k_wg - K0))
+        traj = []
+        for _ in range(25):
+            nxt = jb[idx]
+            traj.append((round(float(k_wg[idx]), 4), round(float(Lw_G[idx, nxt]), 4), round(float(k_wg[nxt]), 4)))
+            idx = nxt
+        traj[0] = (K0, traj[0][1], traj[0][2])
+        for t in range(1, len(traj)):
+            traj[t] = (traj[t - 1][2], traj[t][1], traj[t][2])
+        rs = []
+        for i, (K, L, Kp) in enumerate(traj):
+            Kn = Kp if i + 1 < len(traj) else K
+            c = Q_MIN * K + F_A(A_MIN, K, L) - Kn
+            ec = ETA_MAX if c < 1.0 else ETA_MIN
+            rs.append(ec * np.log(c) + (1.0 - ETA_MIN) * np.log(1.0 - L))
+        return float(sum((b_min ** t) * r for t, r in enumerate(rs[:-1])) + (b_min ** (len(rs) - 1)) * rs[-1] / (1.0 - b_min))
+
+    # 5A. Endogenous Doob Certificate T*(p) under Ruin/Expropriation Hazard p (effective beta_eff = beta*(1-p))
+    eM_exit = E_plus(A_MAX, B_M, B_M, 0.44)
+    eH_exit = E_plus(A_MAX, H_M, H_M, 0.57)
+    psi_shapes = {0.0: (0.45, 5.0), 0.005: (0.40, 5.0), 0.010: (0.35, 5.0), 0.015: (0.40, 4.8), 0.020: (0.35, 4.8)}
+
+    print("  [5A] Endogenous Doob Stochastic Affine Barrier Certificate T*(p) vs Naive (1-p)^23:")
+    T_prev = 0
+    for p in [0.0, 0.005, 0.010, 0.015, 0.020]:
+        b_min = BETA_MIN * (1.0 - p)
+        b_max = BETA_MAX * (1.0 - p)
+        WM = witness_seq_val(b_min, B_M)
+        WH = witness_seq_val(b_min, H_M)
+        a_c, b_c = psi_shapes[p]
+        mv = psi_discrepancy(A_MAX, b_max, a_c, b_c)
+        shift = mv / (1.0 - b_max) + 0.005
+        psi_10 = a_c * B_M - b_c * (B_M ** -0.5) + shift
+        psi_28 = a_c * H_M - b_c * (H_M ** -0.5) + shift
+        mExitM = WM - (eM_exit + b_min * psi_10)
+        mExitH = WH - (eH_exit + b_min * psi_28)
+
+        D2_p = (ETA_MIN * b_min * Q_MIN * (H_M - B_M)) / C_max
+        B_star_p = (R_hat - D2_p) / (1.0 - b_min)
+        B1_b_p = B_star_p - (ETA_MIN * Q_MIN / C_max) * (H_M - B_M)
+        marg_stay = WM - B1_b_p
+        gap_exit = psi_28 - B_star_p
+        T_star = int(np.ceil(np.log(marg_stay / gap_exit) / np.log(b_max)))
+        P_doob = (1.0 - p) ** T_star
+        P_naive = (1.0 - p) ** 23
+        print(
+            f"    p={100*p:4.2f}% | b_eff={b_min:.4f} | B1(0.10)={B1_b_p:7.3f} | stay={marg_stay:5.3f} | "
+            f"exitM={mExitM:+.3f}, exitH={mExitH:+.3f} | T*(p)={T_star:2d} | P_Doob={P_doob:.4f} (vs {P_naive:.4f})"
+        )
+        assert marg_stay > 0.0 and mExitM > 0.0 and mExitH > 0.0
+        assert T_star >= T_prev
+        T_prev = T_star
+
+    # Exact certification breakdown threshold p_cert where staying margin crosses 0
+    def stay_gap_fn(p_v):
+        b_min = BETA_MIN * (1.0 - p_v)
+        WM = witness_seq_val(b_min, B_M)
+        D2_p = (ETA_MIN * b_min * Q_MIN * (H_M - B_M)) / C_max
+        B1_b_p = (R_hat - D2_p) / (1.0 - b_min) - (ETA_MIN * Q_MIN / C_max) * (H_M - B_M)
+        return WM - B1_b_p
+
+    p_cert = brentq(stay_gap_fn, 0.015, 0.030, xtol=1e-5)
+    print(f"    Certification breakdown limit (1-step affine barrier): p_cert = {100*p_cert:.2f}%")
+    assert 0.020 < p_cert < 0.022
+
+    # 5B. Coupled 2-State Markov Bellman Barrier System (Omega = {G, B}, A_G=0.75 <-> A_B=0.35, r_rec=1/3)
+    print("\n  [5B] Coupled 2-State Markov Barrier (B_G, B_B) via (I - beta*P) B_* = R_hat - Delta:")
+    Ls_B = np.linspace(0.01, 0.9999, 1500)
+    cs_B = Q_MAX * H_M + F_A(0.351, H_M, Ls_B) - B_M
+    R_hat_B = float(np.max(np.where(cs_B < 1.0, ETA_MIN, ETA_MAX) * np.log(cs_B) + (1.0 - ETA_MAX) * np.log(1.0 - Ls_B)))
+    C_max_B = float(Q_MAX * H_M + F_A(0.351, H_M, 1.0) - B_M)
+    m_G = (ETA_MIN * Q_MIN) / C_max
+    m_B = (ETA_MIN * Q_MIN) / C_max_B
+    v_G0 = psi_discrepancy(A_MAX, BETA_MAX, 0.40, 5.0)
+    v_B0 = psi_discrepancy(0.351, BETA_MAX, 0.40, 5.0)
+
+    for p in [0.0, 0.005, 0.01, 0.015, 0.02, 0.05, 0.08, 0.12]:
+        P = np.array([[1.0 - p, p], [r_rec, 1.0 - r_rec]])
+        m_bar = P @ np.array([m_G, m_B])
+        Delta = (H_M - B_M) * np.minimum(np.array([ETA_MIN / C_max, ETA_MIN / C_max_B]), BETA_MIN * m_bar)
+        B_star = np.linalg.solve(np.eye(2) - BETA_MIN * P, np.array([R_hat, R_hat_B]) - Delta)
+        B_b = np.array([B_star[0] - m_G * (H_M - B_M), B_star[1] - m_B * (H_M - B_M)])
+        shift_v = np.linalg.solve(np.eye(2) - BETA_MAX * P, np.array([v_G0, v_B0])) + 0.01
+        Psi_h = 0.40 * H_M - 5.0 * (H_M ** -0.5) + shift_v
+
+        VG_w, VB_w = np.full(n_kw, -30.0), np.full(n_kw, -32.0)
+        for _ in range(45):
+            jbG = np.argmax(uw_G + BETA_MIN * ((1.0 - p) * VG_w + p * VB_w)[None, :], axis=1)
+            jbB = np.argmax(uw_B + BETA_MIN * (r_rec * VG_w + (1.0 - r_rec) * VB_w)[None, :], axis=1)
+            upG, upB = uw_G[np.arange(n_kw), jbG], uw_B[np.arange(n_kw), jbB]
+            VGe, VBe = VG_w.copy(), VB_w.copy()
+            for _h in range(150):
+                VGn = upG + BETA_MIN * ((1.0 - p) * VGe[jbG] + p * VBe[jbG])
+                VBn = upB + BETA_MIN * (r_rec * VGe[jbB] + (1.0 - r_rec) * VBe[jbB])
+                if max(np.max(np.abs(VGn - VGe)), np.max(np.abs(VBn - VBe))) < 1e-9:
+                    VGe, VBe = VGn, VBn
+                    break
+                VGe, VBe = VGn, VBn
+            if max(np.max(np.abs(VGe - VG_w)), np.max(np.abs(VBe - VB_w))) < 1e-8:
+                VG_w, VB_w = VGe, VBe
+                break
+            VG_w, VB_w = VGe, VBe
+        WG0, WB0 = float(np.interp(B_M, k_wg, VG_w)), float(np.interp(B_M, k_wg, VB_w))
+        margG, margB = WG0 - B_b[0], WB0 - B_b[1]
+        max_exit = float(np.max(Psi_h - B_star))
+        T_G = int(np.ceil(np.log(margG / max_exit) / np.log(BETA_MAX)))
+        T_B = int(np.ceil(np.log(margB / max_exit) / np.log(BETA_MAX)))
+        print(
+            f"    p={100*p:4.1f}% | BG(0.10)={B_b[0]:7.3f} (marg={margG:5.2f}, T*_G={T_G:2d}) | "
+            f"BB(0.10)={B_b[1]:7.3f} (marg={margB:5.2f}, T*_B={T_B:2d})"
+        )
+        assert margG > 0.0 and margB > 0.0
+
+    # 5C. Anticipatory Stochastic VFI Policy & Threshold Comparison (880-pt Ruin + Markov)
+    print("\n  [5C] Forward-Looking Stochastic VFI (Optimal Policy K'(0.10), L(0.10) & S_p):")
+    K_ss = brentq(lambda K: dF_dK(A_G, K, 1.0) - (1.0 / beta - q), 0.25, 25.0)
+    k_lo, k_hi = 1e-5 / (A_G ** 2), 1.15 * K_ss
+    k_grid = np.unique(np.concatenate([
+        np.geomspace(k_lo, 0.00138, 130, endpoint=False),
+        np.linspace(0.00138, 0.00650, 320, endpoint=False),
+        np.geomspace(0.00650, 0.08, 110, endpoint=False),
+        np.linspace(0.08, 0.34, 160, endpoint=False),
+        np.geomspace(0.34, k_hi, 160),
+    ]))
+    n_k = len(k_grid)
+    L_grid = np.unique(np.concatenate([np.geomspace(1e-4, 0.08, 24, endpoint=False), np.linspace(0.08, 0.995, 64)]))
+    dis_L = (1.0 - eta) * np.log(1.0 - L_grid[None, :])
+
+    def build_u_bench(A_v):
+        y_kL = q * k_grid[:, None] + F_A(A_v, k_grid[:, None], L_grid[None, :])
+        um = np.full((n_k, n_k), -1e9)
+        for i in range(n_k):
+            cm = y_kL[i, None, :] - k_grid[:, None]
+            u = np.where(cm > 1e-15, eta * np.log(np.maximum(cm, 1e-30)) + dis_L, -1e9)
+            um[i, :] = np.max(u, axis=1)
+        return um, y_kL
+
+    u_G, y_kL_G = build_u_bench(A_G)
+    u_B, _ = build_u_bench(A_B)
+
+    def solve_L_p(k_arr, kp_arr):
+        lo_L = np.full_like(k_arr, 1e-7)
+        hi_L = np.full_like(k_arr, 1.0 - 1e-9)
+        inv_phi = (np.sqrt(5.0) - 1.0) / 2.0
+        x1 = hi_L - inv_phi * (hi_L - lo_L)
+        x2 = lo_L + inv_phi * (hi_L - lo_L)
+
+        def obj(Lv):
+            cv = q * k_arr + F_A(A_G, k_arr, Lv) - kp_arr
+            return np.where(cv > 1e-15, eta * np.log(np.maximum(cv, 1e-30)) + (1.0 - eta) * np.log(1.0 - Lv), -1e9 + cv)
+
+        f1, f2 = obj(x1), obj(x2)
+        for _ in range(24):
+            mr = f1 < f2
+            lo_L = np.where(mr, x1, lo_L)
+            hi_L = np.where(mr, hi_L, x2)
+            x1n = np.where(mr, x2, hi_L - inv_phi * (hi_L - lo_L))
+            x2n = np.where(mr, lo_L + inv_phi * (hi_L - lo_L), x1)
+            f1n, f2n = np.where(mr, f2, obj(x1n)), np.where(mr, obj(x2n), f1)
+            x1, x2, f1, f2 = x1n, x2n, f1n, f2n
+        Lb = 0.5 * (lo_L + hi_L)
+        return Lb, obj(Lb)
+
+    s_cand = 1.0 - np.geomspace(1e-5, 0.15, 22)
+    kp_tail = y_kL_G[:, -1][:, None] * s_cand[None, :]
+    u_tail = np.full((n_k, len(s_cand)), -1e9)
+    for j in range(len(s_cand)):
+        _, u_tail[:, j] = solve_L_p(k_grid, kp_tail[:, j])
+
+    def interp_Vs(V, kp, b_eff):
+        r = np.interp(np.clip(kp, k_lo, k_hi), k_grid, V)
+        return np.where(kp < k_lo, V[0] + (eta / (1.0 - b_eff)) * np.log(np.maximum(kp, 1e-30) / k_lo), r)
+
+    def smooth_policy_at(K_val, EV_arr, A_v, b_eff):
+        pchip = PchipInterpolator(k_grid, EV_arr)
+        Ls = np.linspace(0.30, 0.95, 300)
+        Y_L = q * K_val + F_A(A_v, K_val, Ls)
+        dL = (1.0 - eta) * np.log(1.0 - Ls)
+        kps = np.linspace(max(1e-4, 0.9 * K_val), np.max(Y_L) - 1e-6, 350)
+        cm = Y_L[:, None] - kps[None, :]
+        rhs = np.where(cm > 1e-12, eta * np.log(np.maximum(cm, 1e-30)) + dL[:, None] + b_eff * pchip(kps)[None, :], -1e9)
+        il, ik = np.unravel_index(np.argmax(rhs), rhs.shape)
+        dk = kps[1] - kps[0]
+        kp0 = kps[ik]
+        kps_f = np.linspace(max(1e-4, kp0 - 2 * dk), min(np.max(Y_L) - 1e-7, kp0 + 2 * dk), 200)
+        Ls_f = np.linspace(max(0.01, Ls[il] - 0.03), min(0.998, Ls[il] + 0.03), 200)
+        Yf = q * K_val + F_A(A_v, K_val, Ls_f)
+        dLf = (1.0 - eta) * np.log(1.0 - Ls_f)
+        cm_f = Yf[:, None] - kps_f[None, :]
+        rhs_f = np.where(cm_f > 1e-12, eta * np.log(np.maximum(cm_f, 1e-30)) + dLf[:, None] + b_eff * pchip(kps_f)[None, :], -1e9)
+        il2, ik2 = np.unravel_index(np.argmax(rhs_f), rhs_f.shape)
+        return float(kps_f[ik2]), float(Ls_f[il2]), float(Yf[il2])
+
+    inv_phi = (np.sqrt(5.0) - 1.0) / 2.0
+    y_max_row = y_kL_G[:, -1]
+    V_ss_est = eta * np.log(F_A(A_G, K_ss, 0.7) - delta * K_ss)
+
+    p_tests = [0.0, 0.005, 0.010, 0.015, 0.020, 0.050, 0.080]
+    ruin_S, ruin_kp, ruin_L = [], [], []
+    markov_kp, markov_L = [], []
+
+    for p in p_tests:
+        # Case 1: Ruin/Expropriation (beta_eff = beta*(1-p)) with golden-section continuous VFI
+        b_eff = beta * (1.0 - p)
+        Vc = (eta / (1.0 - b_eff)) * (np.log((1.0 - b_eff) * q) + (b_eff / (1.0 - b_eff)) * np.log(b_eff * q))
+        V = np.where(k_grid > 0.00145, V_ss_est / (1.0 - b_eff), Vc + (eta / (1.0 - b_eff)) * np.log(k_grid))
+        for _ in range(55):
+            vg = u_G + b_eff * V[None, :]
+            jb = np.argmax(vg, axis=1)
+            bg = vg[np.arange(n_k), jb]
+            vt = u_tail + b_eff * interp_Vs(V, kp_tail, b_eff)
+            sb = np.argmax(vt, axis=1)
+            bt = vt[np.arange(n_k), sb]
+            ut = bt > bg
+            lo_t = kp_tail[np.arange(n_k), np.maximum(0, sb - 1)]
+            hi_t = kp_tail[np.arange(n_k), np.minimum(len(s_cand) - 1, sb + 1)]
+            lo = np.where(ut, np.minimum(lo_t, hi_t), k_grid[np.maximum(0, jb - 1)])
+            hi = np.where(ut, np.minimum(np.maximum(lo_t, hi_t), y_max_row - 1e-12), np.minimum(k_grid[np.minimum(n_k - 1, jb + 1)], y_max_row - 1e-12))
+            x1 = hi - inv_phi * (hi - lo)
+            x2 = lo + inv_phi * (hi - lo)
+            _, u1 = solve_L_p(k_grid, x1)
+            _, u2 = solve_L_p(k_grid, x2)
+            f1 = u1 + b_eff * interp_Vs(V, x1, b_eff)
+            f2 = u2 + b_eff * interp_Vs(V, x2, b_eff)
+            for _g in range(12):
+                mr = f1 < f2
+                lo = np.where(mr, x1, lo)
+                hi = np.where(mr, hi, x2)
+                x1n = np.where(mr, x2, hi - inv_phi * (hi - lo))
+                x2n = np.where(mr, lo + inv_phi * (hi - lo), x1)
+                _, u1n = solve_L_p(k_grid, x1n)
+                _, u2n = solve_L_p(k_grid, x2n)
+                f1n = np.where(mr, f2, u1n + b_eff * interp_Vs(V, x1n, b_eff))
+                f2n = np.where(mr, u2n + b_eff * interp_Vs(V, x2n, b_eff), f1)
+                x1, x2, f1, f2 = x1n, x2n, f1n, f2n
+            pol = np.where(f1 > f2, x1, x2)
+            _, upol = solve_L_p(k_grid, pol)
+            Ve = np.maximum(f1, f2)
+            for _h in range(60):
+                Vn = upol + b_eff * interp_Vs(Ve, pol, b_eff)
+                if np.max(np.abs(Vn - Ve)) < 1e-9:
+                    Ve = Vn
+                    break
+                Ve = Vn
+            if np.max(np.abs(Ve - V)) < 1e-8:
+                V = Ve
+                break
+            V = Ve
+        idx_m = np.where((k_grid >= 0.00138) & (k_grid <= 0.0065))[0]
+        i0 = idx_m[np.where((pol - k_grid)[idx_m] > 0)[0][0]]
+        k_sub = np.linspace(k_grid[i0 - 1], k_grid[i0], 25)
+        diffs = []
+        for ks in k_sub:
+            ys = q * ks + F_A(A_G, ks, 1.0)
+            kd = np.linspace(max(1e-5, 0.90 * ks), ks, 30)
+            _, ud = solve_L_p(np.full_like(kd, ks), kd)
+            vd = np.max(ud + b_eff * interp_Vs(V, kd, b_eff))
+            if ys > ks + 1e-12:
+                ku = np.linspace(ks, ys - 1e-12, 30)
+                _, uu = solve_L_p(np.full_like(ku, ks), ku)
+                vu = np.max(uu + b_eff * interp_Vs(V, ku, b_eff))
+            else:
+                vu = -1e9
+            diffs.append(vu - vd)
+        pos = np.where(np.array(diffs) >= 0)[0]
+        kS = float(k_sub[pos[0] - 1] + abs(diffs[pos[0] - 1]) / (abs(diffs[pos[0] - 1]) + abs(diffs[pos[0]])) * (k_sub[pos[0]] - k_sub[pos[0] - 1])) if (len(pos) > 0 and pos[0] > 0) else float(0.5 * (k_grid[i0 - 1] + k_grid[i0]))
+        kp_r, L_r, Y_r = smooth_policy_at(B_M, V, A_G, b_eff)
+        ruin_S.append(kS)
+        ruin_kp.append(kp_r)
+        ruin_L.append(L_r)
+
+        # Case 2: Markov Recoverable Crisis Switching (A_G=0.75 <-> A_B=0.35, r_rec=1/3)
+        Vc0 = (eta / (1.0 - beta)) * (np.log((1.0 - beta) * q) + (beta / (1.0 - beta)) * np.log(beta * q))
+        VG = np.where(k_grid > 0.00145, V_ss_est / (1.0 - beta), Vc0 + (eta / (1.0 - beta)) * np.log(k_grid))
+        VB = VG.copy() - 5.0
+        for _ in range(50):
+            EVG = (1.0 - p) * VG + p * VB
+            EVB = r_rec * VG + (1.0 - r_rec) * VB
+            jbG = np.argmax(u_G + beta * EVG[None, :], axis=1)
+            jbB = np.argmax(u_B + beta * EVB[None, :], axis=1)
+            upG, upB = u_G[np.arange(n_k), jbG], u_B[np.arange(n_k), jbB]
+            VGe, VBe = VG.copy(), VB.copy()
+            for _h in range(150):
+                VGn = upG + beta * ((1.0 - p) * VGe[jbG] + p * VBe[jbG])
+                VBn = upB + beta * (r_rec * VGe[jbB] + (1.0 - r_rec) * VBe[jbB])
+                if max(np.max(np.abs(VGn - VGe)), np.max(np.abs(VBn - VBe))) < 1e-10:
+                    VGe, VBe = VGn, VBn
+                    break
+                VGe, VBe = VGn, VBn
+            if max(np.max(np.abs(VGe - VG)), np.max(np.abs(VBe - VB))) < 1e-9:
+                VG, VB = VGe, VBe
+                break
+            VG, VB = VGe, VBe
+        EVG = (1.0 - p) * VG + p * VB
+        kp_m, L_m, Y_m = smooth_policy_at(B_M, EVG, A_G, beta)
+        markov_kp.append(kp_m)
+        markov_L.append(L_m)
+        print(
+            f"    p={100*p:4.1f}% | Ruin: S_p={kS:.6f}, K'(0.10)={kp_r:.5f}, L={L_r:.4f} | "
+            f"Markov: K'_G(0.10)={kp_m:.5f}, L_G={L_m:.4f}"
+        )
+
+    assert all(ruin_S[i] < ruin_S[i + 1] for i in range(len(p_tests) - 1))
+    assert all(ruin_kp[i] > ruin_kp[i + 1] and ruin_L[i] > ruin_L[i + 1] for i in range(len(p_tests) - 1))
+    assert all(markov_kp[i] <= markov_kp[i + 1] and markov_L[i] <= markov_L[i + 1] for i in range(len(p_tests) - 1))
+    assert markov_kp[-1] > markov_kp[0] and markov_L[-1] > markov_L[0]
+
+
 if __name__ == "__main__":
     verify_barriers()
     verify_prop1_double_star()
     verify_theorem3_star()
     verify_theorem10()
+    verify_theorem11_stochastic()
     print("\nALL ANALYTICAL AND NUMERICAL CHECKS PASSED SUCCESSFULLY.")
