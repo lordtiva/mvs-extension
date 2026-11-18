@@ -10,9 +10,10 @@
 \usepackage{array}
 \usepackage{hyperref}
 
-\newtheorem{theorem}{Teorema}
-\newtheorem{lemma}{Lema}
-\newtheorem{proposition}{Proposición}
+\theoremstyle{plain}
+\newtheorem*{namedthm}{\protect\namedthmname}
+\newcommand{\namedthmname}{}
+\newenvironment{thm_box}[1]{\renewcommand{\namedthmname}{#1}\begin{namedthm}}{\end{namedthm}}
 
 \title{\textbf{Barreras de Bellman Afines Dependientes del Estado, Equivalencia Asintótica y la Curva en U Institucional}\\[0.5em]
 \large Extensiones Analíticas, Certificados Reforzados y Microfundaciones sobre \emph{Minimum Viable Scale} (Milei y Reidel, 2026)}
@@ -23,7 +24,7 @@
 \maketitle
 
 \begin{abstract}
-Este trabajo desarrolla cuatro contribuciones analíticas y extensiones estructurales sobre el modelo de supervivencia óptima con rendimientos crecientes a escala, complementariedad bruta y trabajo endógeno de Milei y Reidel (2026, \emph{Minimum Viable Scale: Bellman Barriers and the Economics of Survival}). \textbf{Primero}, en el certificado de Barreras de Bellman de Primer Paso (FPBB) de la Sección 7.2, identificamos un término de holgura omitido en la construcción en bloques de dos períodos: al comparar cualquier transición individual $(x,y)\in M\times M$ con el par $(h,b)$ a igual esfuerzo laboral, la ganancia de consumo retiene simultáneamente el diferencial de capital inicial $q(h-x)$ y el diferencial de ahorro $(y-b)$. Mediante una barrera afín dependiente del estado $B_1(x)$ de un solo paso, reducimos el techo de la barrera en casi cinco unidades ($-43.0465$ frente a $-38.1442$), \textbf{casi triplicamos el margen de calibración de permanencia} (de $2.564$ a $7.4665$ uniforme y $7.7756$ en $b=0.10$) y \textbf{reducimos a la mitad el plazo máximo certificado de entrada} a $H=[0.28,\infty)$ (de $46$ a \textbf{$23$ períodos}, $24$ uniforme). Extendemos además el certificado a la banda previa $M_0=[0.05,0.10)$ con cota explícita $\tau_{.1}\le 10$ períodos, y certificamos analíticamente mediante descomposición de Wronskiano y aritmética de intervalos que la Tabla 5 de salidas adversas ($12$ subintervalos finitos) colapsa a dos evaluaciones en frontera sin mínimos interiores, elevando el margen de salida en $M$ de $0.0436$ a $>0.0947$ y el margen global FPBB de $0.0423$ ($0.04$) a \textbf{$>0.0571$} ($+35\%$). \textbf{Segundo}, resolvemos la pregunta abierta de la Nota al pie 1 estableciendo el isomorfismo finito $S_A^{\mathrm{fix}}(\overline{L}) = \overline{L}\,S_{A\overline{L}^r}^{\mathrm{fix}}(1)$, formulando una condición variacional precisa para $S_A^{\mathrm{fix}}(1) < S_A$, y demostrando bajo la condición de paciencia que cuando $A\to\infty$ tanto la frontera con trabajo endógeno como con trabajo fijo convergen a $s_\infty^*=(\delta/c_K)^{1/r}$ ($S_A/S_A^{\mathrm{fix}}(\overline{L})\to 1$), respaldado numéricamente por iteración de función de valor (VFI). \textbf{Tercero}, microfundamos la Sección 4.3 mediante gasto público productivo tipo Barro (1990) y carga regulatoria improductiva $(\tau_p,\tau_u)$, separando la curva en U exacta de la cota certificada $\overline{S}(\tau)$ y del piso físico $\kappa(\tau)$, la simetría por pares de $S(\tau)$ a $A_0$ finito y el perfil límite asintótico cuando $A_0\to\infty$. \textbf{Cuarto}, formalizamos la descentralización empresarial manteniendo la contabilidad factorial exacta $(\theta/\mu)Y_t$, el crecimiento sin techo en unidades de eficiencia y los certificados estocásticos de Bellman mediante parada opcional de Doob (\textbf{Teorema 11*}), derivando el plazo endógeno ajustado por riesgo $T^*(p)$ (frente al $23$ determinista), un sistema acoplado de barreras Markovianas $(B_G,B_B)$ y la dicotomía de política óptima bajo VFI estocástica anticipatoria.
+Este trabajo desarrolla cuatro contribuciones analíticas y extensiones estructurales sobre el modelo de supervivencia óptima con rendimientos crecientes a escala, complementariedad bruta y trabajo endógeno de Milei y Reidel (2026, \emph{Minimum Viable Scale: Bellman Barriers and the Economics of Survival}). \textbf{Primero}, en el certificado de Barreras de Bellman de Primer Paso (FPBB) de la Sección 7.2, identificamos un término de holgura omitido en la construcción en bloques de dos períodos: al comparar cualquier transición individual $(x,y)\in M\times M$ con el par $(h,b)$ a igual esfuerzo laboral, la ganancia de consumo retiene simultáneamente el diferencial de capital inicial $q(h-x)$ y el diferencial de ahorro $(y-b)$. Mediante una barrera afín dependiente del estado $B_1(x)$ de un solo paso, reducimos el techo de la barrera en casi cinco unidades ($-43.0465$ frente a $-38.1442$), \textbf{casi triplicamos el margen de calibración de permanencia} (de $2.564$ a $7.4665$ uniforme y $7.7756$ en $b=0.10$) y \textbf{reducimos a la mitad el plazo máximo certificado de entrada} a $H=[0.28,\infty)$ (de $46$ a \textbf{$23$ períodos}, $24$ uniforme). Extendemos además el certificado a la banda previa $M_0=[0.05,0.10)$ con cota explícita $\tau_{.1}\le 10$ períodos (reforzada a $\tau_{.1}\le 9$ y $\tau_H\le 21$--$22$ mediante un testigo factible de $25$ pasos y súper-barrera continua $\Psi^{(0)}$), y certificamos analíticamente mediante descomposición de Wronskiano y aritmética de intervalos que la MR-Tabla 5 de salidas adversas ($12$ subintervalos finitos) colapsa a dos evaluaciones en frontera sin mínimos interiores, elevando el margen de salida en $M$ de $0.0436$ a $>0.0947$ y el margen global FPBB de $0.0423$ ($0.04$) a \textbf{$>0.0571$} ($+35\%$). \textbf{Segundo}, resolvemos la pregunta abierta de la Nota al pie 1 estableciendo el isomorfismo finito $S_A^{\mathrm{fix}}(\overline{L}) = \overline{L}\,S_{A\overline{L}^r}^{\mathrm{fix}}(1)$, formulando una condición variacional precisa para $S_A^{\mathrm{fix}}(1) < S_A$, y demostrando bajo la condición de paciencia que cuando $A\to\infty$ tanto la frontera con trabajo endógeno como con trabajo fijo convergen a $s_\infty^*=(\delta/c_K)^{1/r}$ ($S_A/S_A^{\mathrm{fix}}(\overline{L})\to 1$), respaldado numéricamente por iteración de función de valor (VFI) continua hasta $A=10^8$. \textbf{Tercero}, microfundamos la Sección 4.3 mediante gasto público productivo tipo Barro (1990) y carga regulatoria improductiva $(\tau_p,\tau_u)$, separando rigurosamente la envolvente asintótica $\overline{S}_{\mathrm{asy}}(\tau)$ (válida numéricamente para $A_e\ge A_{\mathrm{cross}}=0.110038$) y la cota certificada a $A$ finito $\overline{S}_{\mathrm{cert}}(\tau)$ del Teorema 8 ($A_e\ge 0.749$ en $[0.117245,0.304799]$) respecto de la frontera verdadera $S(\tau)$ (inexistente en extinción económica para $A_e < A_*=A_{\mathrm{SN}}=0.0995245$) y del piso físico $\kappa(\tau)$, junto con la simetría por pares a $A_0$ finito y el perfil límite cuando $A_0\to\infty$. \textbf{Cuarto}, formalizamos la descentralización empresarial manteniendo la contabilidad factorial exacta $(\theta/\mu)Y_t$ (exponiendo la cuña marginal persistente $1/\theta<1$ incluso en $\mu=\theta$ y el colapso económico por fragmentación en $N_{f,\mathrm{SN}}=56.79$ firmas), el crecimiento sin techo en unidades de eficiencia (precisando el alcance del régimen $AK$ continuo de la Nota al pie 2) y los certificados estocásticos de Bellman mediante parada opcional de Doob (\textbf{Teorema 11*}), derivando el plazo endógeno ajustado por riesgo $T^*(p)=(22,25,30,40,84)$ hasta $p_{\mathrm{cert}}=2.0434\%$ (frente al $23$ determinista ingenuo), un sistema acoplado de barreras Markovianas $(B_G,B_B)$ certificado continuamente en $32$ subcajas sobre $p\in[0,12\%]$ y la dicotomía óptima entre $S^{\mathrm{ruin}}(p)$ y $(S_G(p),S_B^{\mathrm{kink}}(p),K_B^*(p))$ bajo VFI continua de sección áurea.
 
 \medskip
 \noindent\textbf{Palabras clave.} escala mínima viable; barreras de Bellman de primer paso (FPBB); cotas de tiempo de entrada; oferta laboral endógena; curva en U institucional.\\
@@ -37,16 +38,16 @@ En \emph{Minimum Viable Scale: Bellman Barriers and the Economics of Survival}, 
 Pese al rigor del marco de Milei y Reidel (2026), un análisis detenido de su construcción computacionalmente verificada en la Sección 7 y el Apéndice F, así como de las preguntas abiertas señaladas en el cuerpo del artículo, revela cuatro brechas analíticas susceptibles de cierre preciso sin alterar los axiomas del modelo ni ampliar su caja paramétrica:
 
 \begin{enumerate}
-\item \textbf{Afilamiento simultáneo de la barrera de permanencia y certificación global de las salidas adversas (Sección 3):} En el Teorema 9 de Milei y Reidel (2026), sobre la caja paramétrica (7.3) para la región de tránsito $M=[0.10,0.28)$ y la región objetivo $H=[0.28,\infty)$, una barrera constante es imposible porque en el extremo superior $h=0.28$ la recompensa de liquidar hacia $b=0.10$ supera el bienestar alcanzable desde $b$. Los autores sortean esta obstrucción construyendo una barrera de bloques de $N=2$ períodos que arroja $B(K)\le -38.144176$, un margen de permanencia $>2.564$, un plazo máximo de entrada de $\tau_H\le 46$ períodos y un margen global del certificado de $0.04$ (cuyo mínimo en su Tabla 5 es $0.0423$). Demostramos en el \textbf{Lema 1} y el \textbf{Teorema 9*} que el agrupamiento en pares de la ecuación (7.6) descarta aproximadamente la mitad de la disipación disponible en cada transición individual $(x,y)\in M\times M$: una barrera afín de \emph{un solo paso} $B_1(x)$ retiene ambos términos simultáneamente, mejora la cota superior de la barrera a $-43.046512$, eleva el margen de permanencia a \textbf{$>7.4665$} ($>7.7755$ en $b=0.10$) y reduce exactamente a la mitad el plazo máximo de entrada a \textbf{$\tau_H\le 23$ períodos} ($24$ uniforme). Asimismo, cerramos la brecha sin cota de la Figura 6 en la banda previa $M_0=[0.05,0.10)$ certificando \textbf{$\tau_{.1}\le 10$ períodos} (\textbf{Proposición 1*}) y demostramos mediante un certificado de aritmética de intervalos sobre el Wronskiano y la segunda derivada (\textbf{Proposición 1**}) la ausencia de mínimos interiores en $M$ y $H_1$, reduciendo la Tabla 5 original a dos evaluaciones en frontera que elevan el margen de salida en $M$ a $>0.0947$ y el margen global FPBB a \textbf{$>0.0571$} ($+35\%$).
+\item \textbf{Afilamiento simultáneo de la barrera de permanencia y certificación global de las salidas adversas (Sección 3):} En el Teorema 9 de Milei y Reidel (2026), sobre la caja paramétrica (7.3) para la región de tránsito $M=[0.10,0.28)$ y la región objetivo $H=[0.28,\infty)$, una barrera constante es imposible porque en el extremo superior $h=0.28$ la recompensa de liquidar hacia $b=0.10$ supera el bienestar alcanzable desde $b$. Los autores sortean esta obstrucción construyendo una barrera de bloques de $N=2$ períodos que arroja $B(K)\le -38.144176$, un margen de permanencia $>2.564$, un plazo máximo de entrada de $\tau_H\le 46$ períodos y un margen global del certificado de $0.04$ (cuyo mínimo en la Tabla 5 de Milei y Reidel, 2026 ---en adelante, \textbf{MR-Tabla 5}--- es $0.0423$). Demostramos en el \textbf{Lema 1} y el \textbf{Teorema 9*} que el agrupamiento en pares de la ecuación (7.6) descarta aproximadamente la mitad de la disipación disponible en cada transición individual $(x,y)\in M\times M$: una barrera afín de \emph{un solo paso} $B_1(x)$ retiene ambos términos simultáneamente, mejora la cota superior de la barrera a $-43.046512$, eleva el margen de permanencia a \textbf{$>7.4665$} ($>7.7755$ en $b=0.10$) y reduce exactamente a la mitad el plazo máximo de entrada a \textbf{$\tau_H\le 23$ períodos} ($24$ uniforme). Asimismo, cerramos la brecha sin cota de la Figura 6 en la banda previa $M_0=[0.05,0.10)$ certificando \textbf{$\tau_{.1}\le 10$ períodos} (\textbf{Proposición 1*}) ---reforzado en el Corolario a $\tau_{.1}\le 9$ y $\tau_H\le 21$--$22$ mediante testigo de $25$ pasos y $\Psi^{(0)}$ continua--- y demostramos mediante un certificado de aritmética de intervalos sobre el Wronskiano y la segunda derivada (\textbf{Proposición 1**}) la ausencia de mínimos interiores en $M$ y $H_1$, reduciendo la MR-Tabla 5 a dos evaluaciones en frontera que elevan el margen de salida en $M$ a $>0.0947$ y el margen global FPBB a \textbf{$>0.0571$} ($+35\%$).
 
-\item \textbf{Resolución asintótica e isomorfismo finito entre trabajo endógeno y fijo (Sección 4):} En la Nota al pie 1 (página 2), Milei y Reidel (2026) dejan como pregunta abierta la comparación entre la frontera $S_A$ con trabajo endógeno y la frontera $S_A^{\mathrm{fix}}(\overline{L})$ con trabajo exógenamente fijo. En el \textbf{Teorema 3*} probamos el isomorfismo exacto para todo $A$ finito, $S_A^{\mathrm{fix}}(\overline{L}) = \overline{L}\,S_{A\overline{L}^r}^{\mathrm{fix}}(1)$, formulamos la condición variacional exacta bajo la cual $S_A^{\mathrm{fix}}(1) < S_A$, y demostramos que bajo la condición de paciencia (2.3) (la cual fuerza $\beta\theta>1$) tanto $A^{1/r}S_A$ como $A^{1/r}S_A^{\mathrm{fix}}(\overline{L})$ convergen al límite físico común $(\delta/c_K)^{1/r}$, cerrando el cociente $S_A/S_A^{\mathrm{fix}}(\overline{L})\to 1$ cuando $A\to\infty$, junto con una verificación numérica directa de fronteras por VFI.
+\item \textbf{Resolución asintótica e isomorfismo finito entre trabajo endógeno y fijo (Sección 4):} En la Nota al pie 1 (página 2), Milei y Reidel (2026) dejan como pregunta abierta la comparación entre la frontera $S_A$ con trabajo endógeno y la frontera $S_A^{\mathrm{fix}}(\overline{L})$ con trabajo exógenamente fijo. En el \textbf{Teorema 3*} probamos el isomorfismo exacto para todo $A$ finito, $S_A^{\mathrm{fix}}(\overline{L}) = \overline{L}\,S_{A\overline{L}^r}^{\mathrm{fix}}(1)$, formulamos la condición variacional exacta bajo la cual $S_A^{\mathrm{fix}}(1) < S_A$, y demostramos que bajo la condición de paciencia (2.3) (la cual fuerza $\beta\theta>1$) tanto $A^{1/r}S_A$ como $A^{1/r}S_A^{\mathrm{fix}}(\overline{L})$ convergen al límite físico común $(\delta/c_K)^{1/r}$, cerrando el cociente $S_A/S_A^{\mathrm{fix}}(\overline{L})\to 1$ cuando $A\to\infty$, junto con una verificación numérica directa de fronteras por VFI hasta $A=10^8$.
 
-\item \textbf{Microfundación institucional y curva en U fiscal--regulatoria (Sección 5):} En la Sección 4.3, los autores modelan distorsiones mediante una pérdida multiplicativa exógena $A_e=(1-\tau)A$, advirtiendo expresamente que su aplicación a impuestos o regulaciones exige contabilizar los beneficios productivos de los ingresos recaudados. Acoplando la tecnología CES con provisión pública equilibrada de infraestructura y derechos de propiedad tipo Barro (1990) junto con carga burocrática improductiva ($\tau=\tau_p+\tau_u$), derivamos el \textbf{Teorema 10}: caracterizamos las dos trampas físicas de extinción ($\tau<\tau_{\min}$ y $\tau>\tau_{\max}$), establecemos la curva en U diferenciable exacta tanto para el piso físico $\kappa(\tau)$ como para la cota superior certificada $\overline{S}(\tau)$ con mínimo único en $\tau^*=\alpha/(1+\alpha)$, probamos la simetría de conjuntos de nivel de $S(\tau)$ para todo $A_0$ finito y su perfil límite exacto cuando $A_0\to\infty$, además de la monotonicidad estricta frente a burocracia improductiva $\tau_u$.
+\item \textbf{Microfundación institucional y curva en U fiscal--regulatoria (Sección 5):} En la Sección 4.3, los autores modelan distorsiones mediante una pérdida multiplicativa exógena $A_e=(1-\tau)A$, advirtiendo expresamente que su aplicación a impuestos o regulaciones exige contabilizar los beneficios productivos de los ingresos recaudados. Acoplando la tecnología CES con provisión pública equilibrada de infraestructura y derechos de propiedad tipo Barro (1990) junto con carga burocrática improductiva ($\tau=\tau_p+\tau_u$), derivamos el \textbf{Teorema 10}: caracterizamos las dos trampas de extinción física ($A_e\le A_{\mathrm{rep}}$, esto es $\tau<\tau_{\min}$ y $\tau>\tau_{\max}$) y la banda de extinción económica ($A_{\mathrm{rep}}<A_e<A_*=A_{\mathrm{SN}}=0.0995245$), distinguimos la envolvente asintótica $\overline{S}_{\mathrm{asy}}(\tau)$ (válida numéricamente para $A_e\ge A_{\mathrm{cross}}=0.110038$) de la cota certificada a $A$ finito $\overline{S}_{\mathrm{cert}}(\tau)$ del Teorema 8 ($A_e\ge 0.749$ en $[0.117245,0.304799]$), establecemos el mínimo único en la regla de Barro $\tau^*=\gamma=\alpha/(1+\alpha)$, probamos la simetría de conjuntos de nivel de $S(\tau)$ para todo $A_0$ finito y su perfil límite exacto cuando $A_0\to\infty$, además de la monotonicidad estricta frente a burocracia improductiva $\tau_u$ y la cuña de externalidad $(1-\gamma)$.
 
-\item \textbf{Descentralización empresarial, crecimiento sostenido y barreras estocásticas (Sección 6):} Finalmente, extendemos el núcleo determinista de planificador central con techo estacionario $K_p^+$ en tres direcciones: (i) descentralización bajo competencia monopolística (Dixit y Stiglitz, 1977) con contabilidad factorial exacta $(\theta/\mu)Y_t$ y externalidades (Romer, 1986), probando que fragmentar empresas en $M$ unidades equivale a destruir productividad según $A/M^{\theta-1}$ (\textbf{Proposición 2*}); (ii) crecimiento balanceado aumentador de trabajo a tasa $g>0$, que elimina el techo $K_p^+$ y genera despegue exponencial perpetuo («palo de hockey») preservando cada certificado en unidades de eficiencia (\textbf{Proposición 3*}); y (iii) extensión probabilística completa de las FPBB mediante el Teorema de Parada Opcional de Doob (\textbf{Teorema 11*}), reemplazando las cotas deterministas de $23$ períodos por plazos endógenos $T^*(p)$, barreras acopladas de Markov $(B_G,B_B)$ y VFI estocástica que caracteriza cómo responden inversión, trabajo y $S_p$ ante riesgo de ruina frente a recesiones recuperables.
+\item \textbf{Descentralización empresarial, crecimiento sostenido y barreras estocásticas (Sección 6):} Finalmente, extendemos el núcleo determinista de planificador central con techo estacionario $K_p^+$ en tres direcciones: (i) descentralización bajo competencia monopolística (Dixit y Stiglitz, 1977) con contabilidad factorial exacta $(\theta/\mu)Y_t$ y externalidades (Romer, 1986), probando que fragmentar empresas en $N_f$ unidades equivale a destruir productividad según $A/N_f^{\theta-1}$ (con extinción económica ya en $N_{f,\mathrm{SN}}=56.79$ frente al umbral físico $N_{f,\mathrm{rep}}=104.17$) y precisando que la cuña marginal $1/\theta<1$ persiste aun cuando $\mu=\theta$, abriendo la brecha descentralizada $K_{\mathrm{lo}}=0.003039>S_A=0.001587$ (\textbf{Proposición 2*}); (ii) crecimiento balanceado aumentador de trabajo a tasa $g>0$, que elimina el techo $K_p^+$ y genera despegue exponencial perpetuo («palo de hockey») preservando cada certificado en unidades de eficiencia, contrastado en la Nota al pie 2 con el régimen $AK$ continuo (\textbf{Proposición 3*}); y (iii) extensión probabilística completa de las FPBB mediante el Teorema de Parada Opcional de Doob (\textbf{Teorema 11*}), reemplazando las cotas deterministas de $23$ períodos por plazos estocásticos endógenos $T^*(p)=(22,25,30,40,84)$ bajo anticipación racional hasta $p_{\mathrm{cert}}=2.0434\%$, barreras acopladas de Markov $(B_G,B_B)$ certificadas continuamente en $32$ subcajas para $p\in[0,12\%]$ y VFI continua de sección áurea que caracteriza cómo responden la acumulación, el trabajo y los umbrales $S^{\mathrm{ruin}}(p)$ frente a $S_G(p), S_B^{\mathrm{kink}}(p), K_B^*(p)$ ante riesgos de ruina frente a recesiones recuperables.
 \end{enumerate}
 
-El resto del artículo se organiza como sigue. La Sección 2 sitúa nuestras contribuciones en la literatura económica y de control óptimo verificado. La Sección 3 desarrolla las barreras afines de un paso, la cota de cruce previo y la reducción de la Tabla 5. La Sección 4 resuelve la Nota al pie 1 y presenta la verificación numérica asintótica. La Sección 5 deriva la curva en U institucional y descompone gasto productivo frente a peso muerto regulatorio. La Sección 6 formaliza la descentralización, el crecimiento sin techo y las barreras estocásticas. La Sección 7 concluye.
+El resto del artículo se organiza como sigue. La Sección 2 sitúa nuestras contribuciones en la literatura económica y de control óptimo verificado. La Sección 3 desarrolla las barreras afines de un paso, la cota de cruce previo y la reducción de la MR-Tabla 5. La Sección 4 resuelve la Nota al pie 1 y presenta la verificación numérica asintótica. La Sección 5 deriva la curva en U institucional y descompone gasto productivo frente a peso muerto regulatorio. La Sección 6 formaliza la descentralización, el crecimiento sin techo y las barreras estocásticas. La Sección 7 concluye, y el Apéndice Técnico (Secciones A.1--A.4) documenta la tabla de desambiguación de notación y todos los testigos y certificados reproducibles.
 
 \section{Literatura Relacionada y Posicionamiento Teórico}
 
@@ -54,7 +55,7 @@ Nuestros resultados se articulan en la intersección de cuatro líneas de invest
 
 \subsection{Crecimiento óptimo no cóncavo, umbrales de Skiba y trampas de pobreza}
 
-Desde las contribuciones pioneras de Skiba (1978), Majumdar y Mitra (1982) y Dechert y Nishimura (1983), la teoría del crecimiento óptimo ha documentado que las tecnologías no convexas o con rendimientos crecientes locales dividen el espacio de estados mediante un umbral crítico de indiferencia donde coexisten trayectorias óptimas convergentes hacia la extinción o hacia un régimen próspero. Posteriormente, Mitra y Ray (1984) generalizaron las condiciones de existencia y monotonicidad a conjuntos factibles no convexos, mientras que Kamihigashi y Roy (2007) y Akao, Kamihigashi y Nishimura (2011) establecieron caracterizaciones globales en tiempo discreto sin diferenciabilidad ni concavidad, extendidas recientemente al tiempo continuo por Akao, Ishii, Kamihigashi y Nishimura (2022). En paralelo, la literatura de desarrollo económico formalizó trampas de pobreza basadas en externalidades de umbral en capital humano (Azariadis y Drazen, 1990) e imperfecciones crediticias con inversiones indivisibles (Galor y Zeira, 1993), mientras que Wagener (2020) caracterizó geométricamente los puntos de inflexión (\emph{tipping points}) mediante variedades de indiferencia y principios de envolvente. No obstante, como señalan Kraay y McKenzie (2014) al evaluar la evidencia empírica, la mayoría de los modelos teóricos clásicos de umbrales operan con trabajo fijo y solo demuestran convergencia asintótica cualitativa, sin acotar cuánto tiempo tarda una economía que supera el umbral crítico en alcanzar un régimen productivo autosostenido. Nuestro \textbf{Teorema 9*} y la \textbf{Proposición 1*} suplen precisamente esta carencia en el modelo con trabajo endógeno de Milei y Reidel (2026), proporcionando plazos explícitos de entrada garantizada ($\tau_{.1}\le 10$ y $\tau_H\le 23$ períodos).
+Desde las contribuciones pioneras de Skiba (1978), Majumdar y Mitra (1982) y Dechert y Nishimura (1983), la teoría del crecimiento óptimo ha documentado que las tecnologías no convexas o con rendimientos crecientes locales dividen el espacio de estados mediante un umbral crítico de indiferencia donde coexisten trayectorias óptimas convergentes hacia la extinción o hacia un régimen próspero. Posteriormente, Mitra y Ray (1984) generalizaron las condiciones de existencia y monotonicidad a conjuntos factibles no convexos, mientras que Kamihigashi y Roy (2007) y Akao, Kamihigashi y Nishimura (2011) establecieron caracterizaciones globales en tiempo discreto sin diferenciabilidad ni concavidad, extendidas recientemente al tiempo continuo por Akao, Ishii, Kamihigashi y Nishimura (2022). En paralelo, la literatura de desarrollo económico formalizó trampas de pobreza basadas en externalidades de umbral en capital humano (Azariadis y Drazen, 1990) e imperfecciones crediticias con inversiones indivisibles (Galor y Zeira, 1993), mientras que Wagener (2020) caracterizó geométricamente los puntos de inflexión (\emph{tipping points}) mediante variedades de indiferencia y principios de envolvente. No obstante, como señalan Kraay y McKenzie (2014) al evaluar la evidencia empírica, la mayoría de los modelos teóricos clásicos de umbrales operan con trabajo fijo y solo demuestran convergencia asintótica cualitativa, sin acotar cuánto tiempo tarda una economía que supera el umbral crítico en alcanzar un régimen productivo autosostenido. Nuestro \textbf{Teorema 9*} y la \textbf{Proposición 1*} suplen precisamente esta carencia en el modelo con trabajo endógeno de Milei y Reidel (2026), proporcionando plazos explícitos de entrada garantizada ($\tau_{.1}\le 10$ y $\tau_H\le 23$ períodos en la línea base, reforzados a $\tau_{.1}\le 9$ y $\tau_H\le 21$--$22$ con $\Psi^{(0)}$).
 
 \subsection{Oferta laboral endógena y complementariedad factorial bajo rendimientos crecientes}
 
@@ -62,37 +63,37 @@ La función de producción de elasticidad de sustitución constante (CES) introd
 
 \subsection{Barreras de Bellman, dualidad y certificados estocásticos de primer paso}
 
-El método FPBB de Milei y Reidel (2026) conecta la programación dinámica clásica (Bellman, 1957; Stokey, Lucas y Prescott, 1989) y los teoremas de envolvente sin diferenciabilidad (Milgrom y Segal, 2002) con cuatro tradiciones técnicas: la viabilidad en horizonte finito (Bertsekas, 1972), las funciones de almacenamiento disipativo (Willems, 1972; Grüne, Müller, Kellett y Weller, 2021), los iterados finitos de Lyapunov en control no lineal (Geiselhart, Gielen, Lazar y Wirth, 2014; Noroozi, Geiselhart, Grüne y Wirth, 2020) y la dualidad de programación lineal y valoración de opciones americanas (Haugh y Kogan, 2004; Gaitsgory, Parkinson y Shvartsman, 2019). Sin embargo, la construcción aplicada de la Sección 7.2 de Milei y Reidel (2026) utiliza bloques de dos pasos ($N=2$) con una función de referencia constante, descartando la mitad de las ganancias de consumo por arista, y discretiza la región $M\cup H$ en doce intervalos finitos en su Tabla 5 para acotar salidas adversas. Al sustituir la referencia constante por una barrera afín dependiente del estado en un solo paso ($N=1$) y probar monotonía estricta de las holguras de salida adversa (\textbf{Proposición 1**}), reducimos a la mitad la cota de tiempo de entrada y elevamos el margen global certificado en un $35\%$. Más aún, mientras el FPBB original es estrictamente determinista, nuestro \textbf{Teorema 11*} completa el enfoque estocástico vía supermartingalas y parada opcional de Doob (1953), resolviendo tanto certificados analíticos ajustados por anticipación ($T^*(p)$ y barreras acopladas de Markov) como la respuesta óptima de política mediante VFI estocástica.
+El método FPBB de Milei y Reidel (2026) conecta la programación dinámica clásica (Bellman, 1957; Stokey, Lucas y Prescott, 1989) y los teoremas de envolvente sin diferenciabilidad (Milgrom y Segal, 2002) con cuatro tradiciones técnicas: la viabilidad en horizonte finito (Bertsekas, 1972), las funciones de almacenamiento disipativo (Willems, 1972; Grüne, Müller, Kellett y Weller, 2021), los iterados finitos de Lyapunov en control no lineal (Geiselhart, Gielen, Lazar y Wirth, 2014; Noroozi, Geiselhart, Grüne y Wirth, 2020) y la dualidad de programación lineal y valoración de opciones americanas (Haugh y Kogan, 2004; Gaitsgory, Parkinson y Shvartsman, 2019). Sin embargo, la construcción aplicada de la Sección 7.2 de Milei y Reidel (2026) utiliza bloques de dos pasos ($N=2$) con una función de referencia constante, descartando la mitad de las ganancias de consumo por arista, y discretiza la región $M\cup H$ en doce intervalos finitos en la MR-Tabla 5 para acotar salidas adversas. Al sustituir la referencia constante por una barrera afín dependiente del estado en un solo paso ($N=1$) y probar monotonía estricta de las holguras de salida adversa (\textbf{Proposición 1**}), reducimos a la mitad la cota de tiempo de entrada y elevamos el margen global certificado en un $35\%$. Más aún, mientras el FPBB original es estrictamente determinista, nuestro \textbf{Teorema 11*} completa el enfoque estocástico vía supermartingalas y parada opcional de Doob (1953), resolviendo tanto certificados analíticos ajustados por anticipación ($T^*(p)$ y barreras acopladas de Markov) como la respuesta óptima de política mediante VFI estocástica.
 
 \subsection{Bienes públicos productivos, distorsiones regulatorias y estructura de mercado}
 
-Finalmente, la Sección 4.3 de Milei y Reidel (2026) se apoya en la literatura moderna de mala asignación factorial y costos regulatorios ---donde Restuccia y Rogerson (2008), Hsieh y Klenow (2009), Garicano, Lelarge y Van Reenen (2016) y Trebbi, Zhang y Simkovic (2026) cuantifican cómo cuñas regulatorias dependientes del tamaño empresarial y cargas de cumplimiento deprimen la productividad total de los factores (TFP). Como advierten los propios autores (pág. 10), modelar impuestos o regulaciones únicamente como una pérdida pura $A_e=(1-\tau)A$ ignora el retorno productivo del gasto público y la protección de derechos de propiedad (Barro, 1990; Futagami, Morita y Shibata, 1993; Acemoglu, Johnson y Robinson, 2005). Nuestro \textbf{Teorema 10} unifica ambas perspectivas en una fórmula cerrada bivariada $A_e(\tau_p,\tau_u)=A_0\tau_p^\alpha(1-\tau_p-\tau_u)$ que reproduce la monotonía anti-burocracia de Milei y Reidel sobre $\tau_u$ y genera la curva en U sobre $\tau_p$. Asimismo, las extensiones de la Sección 6 muestran cómo descentralizar rendimientos crecientes sin pérdidas operativas mediante competencia monopolística (Dixit y Stiglitz, 1977) o externalidades de escala (Romer, 1986), revelando que fragmentar empresas en $M$ unidades replica exactamente un colapso de TFP $A/M^{\theta-1}$.
+Finalmente, la Sección 4.3 de Milei y Reidel (2026) se apoya en la literatura moderna de mala asignación factorial y costos regulatorios ---donde Restuccia y Rogerson (2008), Hsieh y Klenow (2009), Garicano, Lelarge y Van Reenen (2016) y Trebbi, Zhang y Simkovic (2026) cuantifican cómo cuñas regulatorias dependientes del tamaño empresarial y cargas de cumplimiento deprimen la productividad total de los factores (TFP). Como advierten los propios autores (pág. 10), modelar impuestos o regulaciones únicamente como una pérdida pura $A_e=(1-\tau)A$ ignora el retorno productivo del gasto público y la protección de derechos de propiedad (Barro, 1990; Futagami, Morita y Shibata, 1993; Acemoglu, Johnson y Robinson, 2005). Nuestro \textbf{Teorema 10} unifica ambas perspectivas en una fórmula cerrada bivariada $A_e(\tau_p,\tau_u)=A_0\tau_p^\alpha(1-\tau_p-\tau_u)$ que reproduce la monotonía anti-burocracia de Milei y Reidel sobre $\tau_u$ y genera la curva en U sobre $\tau_p$. Asimismo, las extensiones de la Sección 6 muestran cómo descentralizar rendimientos crecientes sin pérdidas operativas mediante competencia monopolística (Dixit y Stiglitz, 1977) o externalidades de escala (Romer, 1986), revelando que fragmentar empresas en $N_f$ unidades replica exactamente un colapso de TFP $A/N_f^{\theta-1}$.
 
 \section{Barreras de Bellman Afines de Un Paso, Plazo de Entrada y Afilamiento del Certificado Global}
 
 \subsection{El marco paramétrico y la holgura en la construcción de dos períodos}
 
 Siguiendo la Sección 7 de Milei y Reidel (2026), consideramos la tecnología CES armónica con parámetros $(\theta,\rho,w)=(3/2,-1,1/2)$, donde la función de producción y la utilidad por período son:
-\begin{equation}
-F_A(K,L) = A\left(\frac{2KL}{K+L}\right)^{3/2}, \qquad u(C,L) = \eta\log C + (1-\eta)\log(1-L), \qquad C + K' \le qK + F_A(K,L),
-\end{equation}
-sobre la caja paramétrica (7.3) del artículo original:
-\begin{equation}
-A\in[0.749,0.751], \qquad \beta\in[0.9699,0.9701], \qquad q\in[0.9199,0.9201], \qquad \eta\in[0.6999,0.7001].
-\end{equation}
-Para la región de tránsito $M=[b,h)=[0.10,0.28)$ y la región objetivo $H=[h,\infty)=[0.28,\infty)$, sea $r(K,s)=\max_{0\le L<1}\{\eta\log(qK+F_A(K,L)-s)+(1-\eta)\log(1-L)\}$ el retorno reducido en un período. Las constantes verificadas racionalmente en las ecuaciones (7.5) y la página 59 de Milei y Reidel (2026) son:
 \[
-\widehat{R} = -0.996 > r(h,b), \qquad \Delta_2 = 0.2997 < \frac{\eta_-\beta_-q_-(h-b)}{q_+ h + F_{A_+}(h,1)-b} = 0.2997787,
+F_A(K,L) = A\left(\frac{2KL}{K+L}\right)^{3/2}, \qquad u(C,L) = \eta\log C + (1-\eta)\log(1-L), \qquad C + K' \le qK + F_A(K,L),
+\]
+sobre la caja paramétrica (7.3) del artículo original:
+\[
+A\in[0.749,0.751], \qquad \beta\in[0.9699,0.9701], \qquad q\in[0.9199,0.9201], \qquad \eta\in[0.6999,0.7001].
+\]
+Para la región de tránsito $M=[b,h)=[0.10,0.28)$ y la región objetivo $H=[h,\infty)=[0.28,\infty)$, sea $\varrho(K,s)=\max_{0\le L<1}\{\eta\log(qK+F_A(K,L)-s)+(1-\eta)\log(1-L)\}$ el retorno reducido en un período. Las constantes verificadas racionalmente en las ecuaciones (7.5) y la página 59 de Milei y Reidel (2026) son:
+\[
+\widehat{R} = -0.996 > \varrho(h,b), \qquad \Delta_2 = 0.2997 < \frac{\eta_-\beta_-q_-(h-b)}{q_+ h + F_{A_+}(h,1)-b} = 0.2997787,
 \]
 con consumo máximo factible $C_{\max}=qh+F_A(h,1)-b \le C_{\max}^+ = 0.37495167$, piso del testigo en $M$ dado por $W_M(K)\ge W_M(b) > -35.579855 > -35.58$ y techo de continuación irrestricto $\Psi^\sharp(K)=\Psi(K)-10/301\ge V(K)$, donde $\Psi(h)<-27.83$ (y más precisamente $\Psi(0.28)=-27.837112$, $\Psi^\sharp(0.28)=-27.870334$).
 
 En la página 22 de Milei y Reidel (2026), para una cadena de dos transiciones internas $x\to y\to z$ en $M$, los autores acotan cada arista por separado:
 \[
-r(x,y) \le r(h,b) - \frac{\eta(y-b)}{C_{\max}}, \qquad r(y,z) \le r(h,b) - \frac{\eta q(h-y)}{C_{\max}},
+\varrho(x,y) \le \varrho(h,b) - \frac{\eta(y-b)}{C_{\max}}, \qquad \varrho(y,z) \le \varrho(h,b) - \frac{\eta q(h-y)}{C_{\max}},
 \]
-sumando ambas para obtener $[\widehat{R}-r(x,y)]+\beta[\widehat{R}-r(y,z)]\ge\Delta_2$ y definiendo la barrera de dos períodos $B_0 = \widehat{R}/(1-\beta) - \Delta_2/(1-\beta^2) \le -38.144176$.
+sumando ambas para obtener $[\widehat{R}-\varrho(x,y)]+\beta[\widehat{R}-\varrho(y,z)]\ge\Delta_2$ y definiendo la barrera de dos períodos $B_0 = \widehat{R}/(1-\beta) - \Delta_2/(1-\beta^2) \le -38.144176$.
 
-Observemos, sin embargo, qué ocurre en \emph{una única transición} cualquiera $(x,y)\in M\times M$. Sea $L\in[0,1)$ el nivel de trabajo que alcanza el máximo $r(x,y)$, con consumo $c_0=qx+F_A(x,L)-y>0$. Evaluando la utilidad en el par $(h,b)$ con exactamente el \emph{mismo} trabajo $L$, el consumo resultante es $c_1=qh+F_A(h,L)-b \le C_{\max}$. La diferencia exacta de consumo entre $(h,b)$ y $(x,y)$ a igual esfuerzo laboral es:
+Observemos, sin embargo, qué ocurre en \emph{una única transición} cualquiera $(x,y)\in M\times M$. Sea $L\in[0,1)$ el nivel de trabajo que alcanza el máximo $\varrho(x,y)$, con consumo $c_0=qx+F_A(x,L)-y>0$. Evaluando la utilidad en el par $(h,b)$ con exactamente el \emph{mismo} trabajo $L$, el consumo resultante es $c_1=qh+F_A(h,L)-b \le C_{\max}$. La diferencia exacta de consumo entre $(h,b)$ y $(x,y)$ a igual esfuerzo laboral es:
 \[
 c_1 - c_0 = q(h-x) + \big[F_A(h,L) - F_A(x,L)\big] + (y-b).
 \]
@@ -100,82 +101,121 @@ Dado que $x<h$ y $F_A(\cdot,L)$ es no decreciente en el stock de capital para to
 
 \subsection{Construcción de la barrera afín de un paso y reducción del plazo de entrada}
 
-\begin{lemma}[Cota de pérdida unificada y barrera regional afín en $M$]
+El siguiente lema formaliza la cota de pérdida por arista individual y construye una barrera regional afín explícita que satisface la desigualdad de Bellman en un solo paso en todo $M$.
+
+\begin{thm_box}{Lema 1 (Cota de pérdida unificada y barrera regional afín en $M$)}
 Bajo la caja paramétrica (7.3), toda transición de permanencia $(x,y)\in M\times M=[b,h)\times[b,h)$ satisface:
-\begin{equation}
-r(x,y) \le r(h,b) - \frac{\eta}{C_{\max}}\big[q(h-x)+(y-b)\big] \le \widehat{R} - \frac{\eta}{C_{\max}}\big[q(h-x)+(y-b)\big].
-\end{equation}
+\[
+\varrho(x,y) \le \varrho(h,b) - \frac{\eta}{C_{\max}}\big[q(h-x)+(y-b)\big] \le \widehat{R} - \frac{\eta}{C_{\max}}\big[q(h-x)+(y-b)\big].
+\]
 En consecuencia, la función afín dependiente del estado definida sobre $M=[b,h)$ por:
-\begin{equation}
+\[
 B_1(x) = B_* - \frac{\eta q(h-x)}{C_{\max}}, \qquad B_* = \frac{\widehat{R}-\Delta_2}{1-\beta},
-\end{equation}
-es una barrera regional de Bellman acotada en $M$, es decir, satisface $B_1(x) \ge r(x,y) + \beta B_1(y)$ para todo $x,y\in M$. Más aún, uniformemente en (7.3):
+\]
+es una barrera regional de Bellman acotada en $M$, es decir, satisface $B_1(x) \ge \varrho(x,y) + \beta B_1(y)$ para todo $x,y\in M$. Más aún, uniformemente en (7.3):
 \[
 B_1(x) \le B_* \le -43.0465116, \qquad B_1(b) \le -43.355594,
 \]
 y el margen de calibración frente al testigo factible $W_M(x)$ satisface $W_M(x)-B_1(x) \ge W_M(b)-B_1(b) > 7.7755$ (y uniformemente $W_M(x)-B_* > 7.4665$).
-\end{lemma}
+\end{thm_box}
 
 \begin{proof}
-Para cualquier $(x,y)\in M\times M$, sea $L\in[0,1)$ el maximizador que define $r(x,y)$ con consumo $c_0=qx+F_A(x,L)-y>0$, y sea $c_1=qh+F_A(h,L)-b\le C_{\max}$. Como $(h,b,L)$ es factible en $(h,b)$ y el término de ocio $(1-\eta)\log(1-L)$ se cancela, la concavidad del logaritmo ($\log(c_1/c_0)\ge (c_1-c_0)/c_1$) y la monotonía $F_A(h,L)\ge F_A(x,L)$ implican:
+Para cualquier $(x,y)\in M\times M$, sea $L\in[0,1)$ el maximizador que define $\varrho(x,y)$ con consumo $c_0=qx+F_A(x,L)-y>0$, y sea $c_1=qh+F_A(h,L)-b\le C_{\max}$. Como $(h,b,L)$ es factible en $(h,b)$ y el término de ocio $(1-\eta)\log(1-L)$ se cancela, la concavidad del logaritmo ($\log(c_1/c_0)\ge (c_1-c_0)/c_1$) y la monotonía $F_A(h,L)\ge F_A(x,L)$ implican:
 \[
-r(h,b) - r(x,y) \ge \eta\log\!\left(\frac{c_1}{c_0}\right) \ge \eta\frac{c_1-c_0}{c_1} \ge \frac{\eta}{C_{\max}}\big[q(h-x)+(y-b)\big].
+\varrho(h,b) - \varrho(x,y) \ge \eta\log\!\left(\frac{c_1}{c_0}\right) \ge \eta\frac{c_1-c_0}{c_1} \ge \frac{\eta}{C_{\max}}\big[q(h-x)+(y-b)\big].
 \]
-Reemplazando $r(h,b)\le\widehat{R}$ se obtiene la primera desigualdad del enunciado. Evaluando $r(x,y)+\beta B_1(y)$ para cualquier par $x,y\in M$:
+Reemplazando $\varrho(h,b)\le\widehat{R}$ se obtiene la primera desigualdad del enunciado. Ahora evaluamos $\varrho(x,y)+\beta B_1(y)$ para cualquier par $x,y\in M$:
 \begin{align*}
-r(x,y) + \beta B_1(y) &\le \widehat{R} - \frac{\eta q(h-x)}{C_{\max}} - \frac{\eta(y-b)}{C_{\max}} + \beta B_* - \frac{\eta\beta q(h-y)}{C_{\max}}\\
+\varrho(x,y) + \beta B_1(y) &\le \widehat{R} - \frac{\eta q(h-x)}{C_{\max}} - \frac{\eta(y-b)}{C_{\max}} + \beta B_* - \frac{\eta\beta q(h-y)}{C_{\max}}\\
 &= \widehat{R} + \beta B_* - \frac{\eta q(h-x)}{C_{\max}} - \frac{\eta}{C_{\max}}\big[(y-b) + \beta q(h-y)\big].
 \end{align*}
-Dado que $y\in[b,h)$ y $\beta q<1$, se cumple $(y-b)+\beta q(h-y) = (1-\beta q)(y-b)+\beta q(h-b) \ge \beta q(h-b)$, por lo que el último término está acotado inferiormente por $(\eta\beta q(h-b))/C_{\max} > \Delta_2$. Como $\widehat{R}-\Delta_2+\beta B_* = B_*$, concluimos $r(x,y)+\beta B_1(y) \le B_* - \eta q(h-x)/C_{\max} = B_1(x)$ para todo $x,y\in M$. En la caja (7.3), $\widehat{R}-\Delta_2 = -1.2957 < 0$ y $\beta\ge 0.9699$, de modo que $B_* \le -1.2957/0.0301 = -43.04651162\ldots$ Asimismo, $(\eta q)/C_{\max} \ge (0.6999\times 0.9199)/0.37495167 = 1.717123$, lo que arroja $B_1(b)\le -43.0465116 - 1.717123(0.18) = -43.355594$. Finalmente, dado que el consumo del testigo en el primer paso $c_M(x)=qx+F_A(x,0.68)-0.135$ satisface $0<c_M(x)<C_{\max}$ y $F_{A,K}(x,0.68)>0$, se tiene $W'_M(x)=\eta[q+F_{A,K}(x,0.68)]/c_M(x) > (\eta q)/C_{\max} = B'_1(x)$ en todo $M$. Por ende, $W_M(x)-B_1(x)$ es estrictamente creciente en $[b,h)$ y alcanza su ínfimo en $x=b$: $\inf_{x\in M}[W_M(x)-B_1(x)] = W_M(b)-B_1(b) > -35.58 - (-43.355594) = 7.775594$.
+Dado que $y\in[b,h)$ y $\beta q<1$, la combinación lineal en $y$ cumple:
+\[
+(y-b)+\beta q(h-y) = (1-\beta q)(y-b)+\beta q(h-b) \ge \beta q(h-b).
+\]
+Por lo tanto, el último término está acotado inferiormente por $(\eta\beta q(h-b))/C_{\max} > \Delta_2$. Como $\widehat{R}-\Delta_2+\beta B_* = B_*$ por definición de $B_*$, concluimos que para todo $x,y\in M$:
+\[
+\varrho(x,y)+\beta B_1(y) \le B_* - \frac{\eta q(h-x)}{C_{\max}} = B_1(x).
+\]
+En la caja (7.3), $\widehat{R}-\Delta_2 = -0.996 - 0.2997 = -1.2957 < 0$ y $\beta\ge 0.9699$, de modo que $B_* \le -1.2957/0.0301 = -43.04651162\ldots$ Asimismo, $(\eta q)/C_{\max} \ge (0.6999\times 0.9199)/0.37495167 = 1.717123$, lo que arroja $B_1(b)\le -43.0465116 - 1.717123(0.18) = -43.355594$. Finalmente, dado que el consumo del testigo en el primer paso $c_M(x)=qx+F_A(x,0.68)-0.135$ satisface $0<c_M(x)<C_{\max}$ y $F_{A,K}(x,0.68)>0$, la derivada del piso del testigo verifica $W'_M(x)=\eta[q+F_{A,K}(x,0.68)]/c_M(x) > (\eta q)/C_{\max} = B'_1(x)$ en todo $M$. Por ende, la holgura $W_M(x)-B_1(x)$ es estrictamente creciente en $x\in[b,h)$ y alcanza su ínfimo en $x=b$:
+\[
+\inf_{x\in M}[W_M(x)-B_1(x)] = W_M(b)-B_1(b) > -35.58 - (-43.355594) = 7.775594. \qedhere
+\]
 \end{proof}
 
-\begin{theorem}[Teorema 9* --- Certificado CES reforzado y reducción a la mitad del plazo de entrada]
+Con el Lema 1 establecido, demostramos nuestra versión reforzada del Teorema 9 de Milei y Reidel (2026), que reduce el límite temporal de entrada de $46$ a $23$ períodos (y a $24$ bajo comparación uniforme no condicionada al estado inicial).
+
+\begin{thm_box}{Teorema 9* (Certificado CES reforzado y reducción a la mitad del plazo de entrada)}
 Bajo la caja paramétrica (7.3), sean $M=[0.10,0.28)$ y $H=[0.28,\infty)$.
 \begin{enumerate}
-\item La barrera regional afín $B_1(K)$ del Lema 1 y los testigos factibles de la Tabla 4 de Milei y Reidel (2026) conforman un certificado estricto de primer paso (FPBB) con margen de permanencia uniforme mayor a $7.466$ ($7.775$ estado a estado) y margen de salida adversa $>0.0423$ bajo la partición original (elevado a $>0.0571$ en la Proposición 1**).
-\item Toda trayectoria óptima que parte de $K_0\in M$ ingresa a la región productiva $H=[0.28,\infty)$ a más tardar en la fecha \textbf{$\tau_H \le 23$} (o $\tau_H \le 24$ usando únicamente cotas uniformes independientes de $K_0$) y permanece en $H$ para siempre. Si $K_0\in[0.10,0.105]$, su fecha de primera entrada satisface $3 \le \tau_H \le 23$.
+\item La barrera regional afín $B_1(K)$ del Lema 1 y los testigos factibles de la Tabla 4 de Milei y Reidel (2026) (en adelante, \textbf{MR-Tabla 4}) conforman un certificado estricto de primer paso (FPBB) con margen de permanencia uniforme mayor a $7.4665$ ($7.7755$ estado a estado) y margen de salida adversa $>0.0423$ bajo la partición original de la MR-Tabla 5 (elevado a $>0.0571$ en la Proposición 1**).
+\item Toda trayectoria óptima que parte de $K_0\in M$ ingresa a la región productiva $H=[0.28,\infty)$ a más tardar en la fecha \textbf{$\tau_H \le 23$} (o $\tau_H \le 24$ usando únicamente cotas uniformes independientes de $K_0$) y permanece en $H$ para siempre. Si $K_0\in[0.10,0.105]$, su fecha de primera entrada satisface:
+\[
+3 \le \tau_H \le 23.
+\]
 \end{enumerate}
-\end{theorem}
+\end{thm_box}
 
 \begin{proof}
-Las comparaciones de salida adversa desde $M$ y $H$ hacia acciones por debajo de $b$ y $h$ dependen únicamente de $W_M, W_H$ y del techo $\Psi^\sharp$, conservando margen $>0.0423$ bajo la Tabla 5 original (y $>0.0571$ mediante la Proposición 1**). Por el Teorema 5 (selección global FPBB), ninguna trayectoria óptima desde $M\cup H$ realiza jamás una transición adversa ni permanece indefinidamente en $M$.
+Las comparaciones de salida adversa desde $M$ y $H$ hacia acciones por debajo de $b$ y $h$ dependen únicamente de $W_M, W_H$ y del techo $\Psi^\sharp$, por lo que bajo la MR-Tabla 5 original conservan margen uniforme $>0.0423$ (y se mejoran a $>0.0571$ en la Proposición 1**). Por el Teorema 5 de selección global FPBB, ninguna trayectoria óptima desde $M\cup H$ realiza jamás una transición adversa ni permanece indefinidamente en $M$.
 
-Para acotar $\tau_H$, consideremos cualquier camino factible que permanezca en $M$ durante $T\ge 1$ transiciones consecutivas $x_0\to x_1\to\cdots\to x_T$ con $x_t\in M$ ($0\le t\le T$), seguido de cualquier continuación factible desde $x_T$. Iterando $r(x_t,x_{t+1})\le B_1(x_t)-\beta B_1(x_{t+1})$ para $t=0,\dots,T-1$ y acotando $V(x_T)\le\Psi^\sharp(x_T)\le\Psi(x_T)$, se obtiene:
+Para acotar la fecha máxima de entrada $\tau_H$, consideremos cualquier camino factible que permanezca en $M$ durante $T\ge 1$ transiciones consecutivas $x_0\to x_1\to\cdots\to x_T$ con $x_t\in M$ para todo $0\le t\le T$, seguido de cualquier continuación factible desde $x_T$. Iterando la desigualdad de un paso $\varrho(x_t,x_{t+1})\le B_1(x_t)-\beta B_1(x_{t+1})$ para $t=0,\dots,T-1$ y acotando el valor de continuación en $t=T$ mediante $V(x_T)\le\Psi^\sharp(x_T)\le\Psi(x_T)$, el bienestar total $J_{x_0}(\pi)$ de dicho camino verifica:
 \[
 J_{x_0}(\pi) \le B_1(x_0) + \beta^T\big[\Psi^\sharp(x_T) - B_1(x_T)\big].
 \]
-En $x\in[0.10,0.28)$, $(\Psi^\sharp)'(x) = 0.4 + 2.5 x^{-3/2} \ge 17.272 > 2 > B'_1(x)$, por lo que $\Psi^\sharp(x_T)-B_1(x_T)$ crece estrictamente en $[b,h)$ y está acotada superiormente por $\Psi^\sharp(h)-B_* < -27.83-B_*$.
-\textbf{Cota uniforme ($T=24$):} Con $B_1(x_0)\le B_*\le -43.0465116$ y $\Psi(h)<-27.83$:
+En el intervalo $x\in[0.10,0.28)$, la derivada de $\Psi^\sharp(x) = 0.4x - 5x^{-1/2} - 18.5 - 10/301$ es $(\Psi^\sharp)'(x) = 0.4 + 2.5 x^{-3/2} \ge 0.4 + 2.5(0.28)^{-3/2} = 17.272 > 2 > (\eta q)/C_{\max} = B'_1(x)$. En consecuencia, $\Psi^\sharp(x_T)-B_1(x_T)$ es estrictamente creciente en $x_T\in[b,h)$ y está acotada superiormente por su límite en $x_T\uparrow h$:
 \[
-J_{x_0}(\pi) \le -43.0465116 + (0.9701)^{24}\big(-27.83 - (-43.0465116)\big) = -35.70251 < -35.58 \le W_M(x_0).
+\sup_{x_T\in M}\big[\Psi^\sharp(x_T)-B_1(x_T)\big] = \Psi^\sharp(h) - B_* < -27.83 - B_*.
 \]
-\textbf{Cota estado a estado ($T=23$):} Como $W_M(x_0)-B_1(x_0)$ es estrictamente creciente en $[b,h)$ por el Lema 1, evaluando en $T=23$:
+\textbf{Cota uniforme ($T=24$):} Utilizando la cota uniforme $B_1(x_0)\le B_*\le -43.0465116$ y la cota superior conservadora $\Psi(h)<-27.83$ de la página 59 de Milei y Reidel (2026), para $T=24$ períodos obtenemos:
 \[
-W_M(x_0) - J_{x_0}(\pi) \ge \big[W_M(b)-B_1(b)\big] - \beta_+^{23}\big[\Psi(h)-B_*\big] \ge 7.775594 - (0.9701)^{23}(15.2165116) = +0.205614 > 0.
+J_{x_0}(\pi) \le -43.0465116 + (0.9701)^{24}\big(-27.83 - (-43.0465116)\big) = -43.0465116 + 7.34364 = -35.70287 < -35.58 \le W_M(x_0).
 \]
-(Usando las cotas exactas $\widehat{R}=-0.996799$, $\Delta_2=0.299778$ y $\Psi^\sharp(0.28)=-27.870334$, la holgura resulta positiva incluso en $T=22$ con $+0.0073$). Por tanto, ningún camino óptimo permanece en $M$ durante $23$ períodos, certificando $\tau_H\le 23$. La cota inferior $\tau_H\ge 3$ en $[0.10,0.105]$ se sigue de $\Phi(0.105)<0.16$ y $\Phi(0.16)<0.26<0.28$.
+\textbf{Cota estado a estado ($T=23$):} Dado que $W_M(x_0)-B_1(x_0)$ es estrictamente creciente en $x_0\in[b,h)$ por el Lema 1, la ventaja del testigo sobre el camino de $T$ pasos cumple para todo $x_0,x_T\in M$:
+\[
+W_M(x_0) - J_{x_0}(\pi) \ge \big[W_M(b)-B_1(b)\big] - \beta_+^T\big[\Psi(h)-B_*\big].
+\]
+Evaluando en $T=23$ (exactamente la mitad de los $46$ períodos del artículo original):
+\[
+W_M(x_0) - J_{x_0}(\pi) \ge 7.775594 - (0.9701)^{23}(15.2165116) = 7.775594 - 7.569980 = +0.205614 > 0.
+\]
+(Si además se emplean las cotas exactas $\widehat{R}=-0.996799$, $\Delta_2=0.299778$ y $\Psi^\sharp(0.28)=-27.870334$ ya demostradas en las páginas 57--59 de Milei y Reidel, la holgura resulta positiva incluso en $T=22$ con $+0.0073$). Por tanto, ningún camino óptimo puede permanecer en $M$ durante $23$ períodos, lo que certifica $\tau_H\le 23$. La cota inferior $\tau_H\ge 3$ para $K_0\in[0.10,0.105]$ se sigue de $\Phi(0.105)<0.16$ y $\Phi(0.16)<0.26<0.28$.
 \end{proof}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\linewidth]{fig1_barrier_es.png}
-\caption{Comparación entre la construcción por bloques de dos períodos de Milei y Reidel (2026) y nuestra barrera afín de un paso $B_1(K)$ sobre $M=[0.10,0.28)$. El Panel (a) ilustra la ganancia de calibración de casi $5$ unidades de bienestar; el Panel (b) muestra la reducción del plazo máximo certificado de entrada de $\tau_H\le 46$ a $\tau_H\le 23$--$24$ períodos.}
+\caption{Comparación entre la construcción por bloques de dos períodos de Milei y Reidel (2026) y nuestra barrera afín de un paso $B_1(K)$ sobre $M=[0.10,0.28)$ utilizando la MR-Tabla 4 y el techo $\Psi^\sharp$. El Panel (a) ilustra la ganancia de calibración de casi $5$ unidades de bienestar; el Panel (b) muestra la reducción del plazo máximo certificado de entrada de $\tau_H\le 46$ a $\tau_H\le 23$--$24$ períodos.}
 \end{figure}
 
-\subsection{Cota explícita de cruce en el tramo previo $M_0=[0.05,0.10)$}
+\subsection{\texorpdfstring{Cota explícita de cruce en el tramo previo $M_0=[0.05,0.10)$}{Cota explícita de cruce en el tramo previo M0=[0.05,0.10)}}
 
-En la Figura 6 (pág. 21) de Milei y Reidel (2026), el cruce desde $K_0>S_A$ hasta $0.10$ se garantiza únicamente en tiempo finito ($\tau_{.1}<\infty$) sin cota cuantitativa explícita. Aunque ninguna cota uniforme puede llegar hasta $K_0\to S_A^+$ debido a la desaceleración hiperbólica en $S_A$, nuestra barrera afín de un paso se extiende directamente al intervalo ancla $M_0=[0.05,0.10)$, donde el Teorema 8 ya excluye salidas adversas hacia abajo ($G(K)>K$).
+En la Figura 6 (página 21) de Milei y Reidel (2026), el cruce desde $K_0>S_A$ hasta $0.10$ se garantiza únicamente en tiempo finito ($\tau_{.1}<\infty$) sin cota cuantitativa explícita. Aunque ninguna cota uniforme puede llegar hasta $K_0\to S_A^+$ debido a la desaceleración hiperbólica en el punto de coexistencia $S_A$, sí es posible extender directamente nuestra barrera afín de un paso al intervalo ancla $M_0=[b_0,h_0)=[0.05,0.10)$, donde el Teorema 8 ya excluye salidas adversas hacia abajo ($G(K)>K$).
 
-\begin{proposition}[Proposición 1* --- Cota explícita de cruce en el tramo previo $M_0={[0.05,0.10)}$]
+\begin{thm_box}{Proposición 1* (Cota explícita de cruce en el tramo previo $M_0 = [0.05, 0.10)$)}
 Bajo la caja paramétrica (7.3), sea $M_0=[0.05,0.10)$. Toda trayectoria óptima con $K_0\in M_0$ supera el umbral $0.10$ en a lo sumo \textbf{$\tau_{.1}\le 10$ períodos}, y alcanza la región productiva $H=[0.28,\infty)$ en a lo sumo $\tau_H\le 33$ períodos totales.
-\end{proposition}
+\end{thm_box}
 
 \begin{proof}
-En $M_0=[b_0,h_0)=[0.05,0.10)$, la maximización directa sobre $L\in[0,1)$ da $r(0.10,0.05)\le -1.827072 < \widehat{R}_0:=-1.827$, consumo máximo $C_{\max,0}\le q_+(0.10)+F_{A_+}(0.10,1)-0.05=0.100233$ y pérdida por paso $\Delta^{(0)}:=0.3115 < (\eta_-\beta_-q_-(0.05))/C_{\max,0}=0.311503$. Por el Lema 1 aplicado a $M_0$, $B_*^{(0)} = (\widehat{R}_0-\Delta^{(0)})/(1-\beta) \le -2.1385/0.0301 = -71.046512$. Anteponiendo al testigo $W_M(0.10)>-35.58$ los tres primeros pasos de la progresión geométrica de la página 46 de Milei y Reidel ($0.05\to 0.065\to 0.0845\to 0.100$) con $L=0.75$, las utilidades de etapa superan $(-3.791,-3.504,-3.197)$, garantizando $W_{M_0}(K_0)\ge W_{M_0}(0.05) > -43.845$. Como $\Psi(0.10)<-34.271388$, en $T_0=10$ pasos dentro de $M_0$:
+En $M_0=[b_0,h_0)=[0.05,0.10)$, la maximización directa sobre $L\in[0,1)$ da $\varrho(0.10,0.05)\le -1.827072 < \widehat{R}_0:=-1.827$, consumo máximo $C_{\max,0}\le q_+(0.10)+F_{A_+}(0.10,1)-0.05=0.100233$ y pérdida por paso $\Delta^{(0)}:=0.3115 < (\eta_-\beta_-q_-(0.05))/C_{\max,0}=0.311503$. Por el Lema 1 aplicado a $M_0$, la barrera $B^{(0)}(x) = B_*^{(0)} - (\eta q(h_0-x))/C_{\max,0}$ satisface $B_*^{(0)} = (\widehat{R}_0-\Delta^{(0)})/(1-\beta) \le -2.1385/0.0301 = -71.046512$ (con la cota exacta $\widehat{R}_0=-1.827072$ se obtiene $B_*^{(0)}=-71.048986\le -71.046512$).
+
+Como testigo factible desde $K_0\in M_0$, anteponemos al testigo $W_M(0.10) = -35.579855$ (MR-Tabla 4) los tres primeros pasos de la progresión geométrica de la página 46 de Milei y Reidel ($0.05\to 0.065\to 0.0845\to 0.100$) con trabajo constante $L=0.75$. Evaluando exactamente en los extremos desfavorables $(A_-, q_-, \eta_+)$, los consumos de etapa valen $(0.002495, 0.006286, 0.022068)$ y las utilidades exactas de etapa son $(-4.611772, -3.964892, -3.085659)$, lo que garantiza en $K_0=0.05$ un piso de bienestar $W_{M_0}(0.05) = -43.844826 > -43.845$. Para cubrir todo $K_0\in[0.05,0.10)$, basta emplear la senda de liquidación temporal $K_0\to 0.065\to 0.0845\to 0.100$ con $L=0.75$: como el consumo de la primera etapa $c_0(K_0)=q_- K_0 + F_{A_-}(K_0,0.75) - 0.065$ es estrictamente creciente en $K_0$, se cumple $W_{M_0}(K_0)\ge W_{M_0}(0.05) = -43.844826 > -43.845$ uniformemente sobre todo $M_0$. Como en $h_0=0.10$ el techo irrestricto cumple $\Psi(0.10)<-34.271388$, en $T_0=10$ pasos dentro de $M_0$ se tiene:
 \[
-B_*^{(0)} + (0.9701)^{10}\big[\Psi(0.10)-B_*^{(0)}\big] = -71.046512 + (0.9701)^{10}(36.775124) = -43.8980 < -43.845 < W_{M_0}(K_0).
+B_*^{(0)} + (0.9701)^{10}\big[\Psi(0.10)-B_*^{(0)}\big] = -71.046512 + (0.9701)^{10}(36.775124) = -43.8997 < -43.845 < W_{M_0}(K_0).
 \]
-Como el orden monótono de sucesores (F.1) excluye transiciones óptimas debajo de $0.05$, toda trayectoria óptima desde $M_0$ cruza $0.10$ en $\tau_{.1}\le 10$ períodos y entra en $H$ en a lo sumo $10+23=33$ períodos.
+Como el orden monótono de sucesores (F.1) excluye transiciones óptimas desde $M_0$ hacia abajo de $0.05$, toda trayectoria óptima desde $M_0$ debe ingresar a $[0.10,\infty)$ en $\tau_{.1}\le 10$ períodos. Combinado con el Teorema 9*, entra en $H=[0.28,\infty)$ en a lo sumo $10+23=33$ períodos.
+\end{proof}
+
+\begin{thm_box}{Corolario (Refinamiento en $M_0$ y unificación mediante $W_M^{(0)}$ y $\Psi^{(0)}$)}
+Bajo la misma caja paramétrica (7.3):
+\begin{enumerate}
+\item Sustituyendo el testigo $L=0.75$ en $M_0$ por la progresión afilada $0.05\to 0.0595\to 0.0755\to 0.100$ con esfuerzos $(0.45,0.50,0.60)$ (y liquidación temporal $K_0\to 0.0595\to 0.0755\to 0.100$ para todo $K_0\in[0.05,0.10)$), las utilidades de etapa ascienden a $(-3.681867, -3.888538, -3.828711)$, elevando el piso a $W_{M_0}(0.05) = -43.540132$ con la cola de la MR-Tabla 4 (y $-43.500107$ con el testigo de $25$ pasos $W_M^{(0)}(0.10;\beta_+)=-35.536014$).
+\item Empleando la súper-barrera paramétrica continua $\Psi^{(0)}(K) = 0.45K - 5K^{-1/2} + c_{0,\mathrm{unif}}$ ($c_{0,\mathrm{unif}} = -18.713835$, certificada globalmente en $(0,\infty)$ sobre toda la caja (7.3) mediante ramificación y acotación 3D más colas analíticas), se obtiene $\Psi^{(0)}_{\mathrm{unif}}(0.10) = -34.480223$ y $\Psi^{(0)}_{\mathrm{unif}}(0.28) = -28.036947$. En consecuencia, el cruce de $M_0$ se acota en \textbf{$\tau_{.1}\le 9$ períodos} ($J(9;0.05)=-43.543050 < -43.540132$, holgura mínima $+0.0029$) y la entrada a $H$ desde $M$ mejora a \textbf{$\tau_H\le 22$ períodos} bajo extremos independientes de $\beta$ (holgura $+0.122408$ en $T=22$, frente a $-0.114831$ en $T=21$), o \textbf{$\tau_H\le 21$ períodos} bajo evaluación emparejada en $\beta\in[0.9699,0.9701]$ (holguras $+0.070042, +0.083959, +0.097882$).
+\end{enumerate}
+\end{thm_box}
+
+\begin{proof}
+Para (1), como $c_0(K_0)=q_- K_0 + F_{A_-}(K_0,0.45) - 0.0595$ crece estrictamente con $K_0\in[0.05,0.10)$, todo $K_0\in M_0$ satisface $W_{M_0}(K_0)\ge W_{M_0}(0.05)=-43.540132$ (o $-43.500107$ al acoplar $W_M^{(0)}(0.10;\beta_+)=-35.536014$). Para (2), el certificado 3D de $\Psi^{(0)}$ en forma centrada acota el defecto Bellman sobre $[8\times 10^{-5}, 45]$ en $d(\beta_+)\in[-0.564473,-0.564273]$ con margen analítico de cola $+1.0433$ en $(0,8\times 10^{-5}]\cup[45,\infty)$, rindiendo $c_0(\beta_+)=-18.855281$ y $c_{0,\mathrm{unif}}=\max_{\beta\in\{\beta_-,\beta_+\}} c_0(\beta)=-18.713835$. La comparación $W_{M_0}(K_0) - [B^{(0)}(K_0) + \beta_+^9(\Psi^{(0)}_{\mathrm{unif}}(0.10)-B_*^{(0)})] \ge +0.0029 > 0$ certifica $\tau_{.1}\le 9$. En $M$, con extremos independientes ($\beta_+$ en testigo/techo y $\beta_-$ en $B_1$), $T=22$ arroja holgura $+0.122408>0$; evaluando consistentemente en cada $\beta\in\{0.9699,0.9700,0.9701\}$ tanto $B_1$, $W_M^{(0)}$ como $c_0(\beta)$, $T=21$ resulta positivo en toda la caja (síntesis en la Tabla 1 y detalles en el Apéndice A.2).
 \end{proof}
 
 \begin{table}[htbp]
@@ -187,47 +227,73 @@ Como el orden monótono de sucesores (F.1) excluye transiciones óptimas debajo 
 \midrule
 Referencia regional en $M=[0.10,0.28)$ & Constante ($N=2$) & Afín en $K$ ($N=1$) & Retiene $q(h-x)$ y $(y-b)$ \\
 Cota superior de $B(K)$ en $M$ & $-38.144176$ & $-43.046512$ (a $-43.3556$) & $-4.90$ a $-5.21$ unidades \\
-Margen de calibración ($W_M-B$) & $>2.564$ & $>7.466$ ($>7.775$ en $b$) & $\times 2.91$ (a $\times 3.03$) \\
-Plazo máximo de entrada $M\to H$ ($\tau_H$) & $\le 46$ períodos & \textbf{$\le 23$ períodos} ($24$ unif.) & \textbf{Reducción del $50\%$} \\
-Ventana desde $K_0\in[0.10,0.105]$ & $3\le \tau_H\le 46$ & \textbf{$3\le \tau_H\le 23$} & Mitad del rango superior \\
-Plazo de cruce $[0.05,0.10)\to 0.10$ ($\tau_{.1}$) & Finito (sin cota) & \textbf{$\le 10$ períodos} & Elimina brecha sin cota \\
-Plazo total desde $K_0=0.05$ hasta $H$ & Finito (sin cota) & \textbf{$\le 33$ períodos} & $13$ períodos menos que $46$ \\
+Margen de calibración ($W_M-B$) & $>2.564$ & $>7.4665$ ($>7.7755$ en $b$) & $\times 2.91$ (a $\times 3.03$) \\
+Plazo máximo $M\to H$ ($\tau_H$, línea base $\Psi^\sharp$) & $\le 46$ períodos & \textbf{$\le 23$ períodos} ($24$ unif.) & \textbf{Reducción del $50\%$} \\
+Plazo máximo $M\to H$ ($\tau_H$, U1 con $\Psi^{(0)}$) & $\le 46$ períodos & \textbf{$\le 22$ indep.} / \textbf{$\le 21$ empar.} & $24$--$25$ períodos menos \\
+Ventana desde $K_0\in[0.10,0.105]$ & $3\le \tau_H\le 46$ & \textbf{$3\le \tau_H\le 23$} (U1: $\le 22$) & Mitad del rango superior \\
+Plazo de cruce $[0.05,0.10)\to 0.10$ ($\tau_{.1}$) & Finito (sin cota) & \textbf{$\le 10$ períodos} (U1: \textbf{$\le 9$}) & Elimina brecha sin cota \\
+Plazo total desde $K_0=0.05$ hasta $H$ & Finito (sin cota) & \textbf{$\le 33$ períodos} (U1: \textbf{$\le 30$--$31$}) & $13$--$16$ períodos $<46$ \\
 \bottomrule
 \end{tabular}
 \caption{Síntesis cuantitativa de las mejoras analíticas sobre la Sección 7.2 y el Teorema 9 de Milei y Reidel (2026) bajo exactamente los mismos parámetros (7.3).}
 \end{table}
 
-\subsection{Monotonía estado a estado de las salidas adversas y reducción de la Tabla 5}
+\subsection{Monotonía estado a estado de las salidas adversas y reducción de la MR-Tabla 5}
 
-Al elevar mediante $B_1(K)$ el margen de calibración de permanencia a $>7.4665$ ($>7.7755$ en $b=0.10$) y el margen del prefijo en $T=23$ a $+0.2056$, el bloque de permanencia en $M$ deja por completo de ser una restricción activa en el certificado global FPBB. En la Tabla 5 de Milei y Reidel (2026, pág. 23 y Apéndice F.3), las comparaciones de salida adversa sobre $M=[0.10,0.28)$ y $H_1=[0.28,0.80)$ dividen ambos dominios en $12$ subintervalos finitos $[k_-,k_+]$, evaluando $\underline{W}_X(k_-)$ en el extremo izquierdo frente a $E^+(k_+,a;l_0)+\beta_-\Psi^\sharp(a)$ en el extremo derecho para obtener un margen global de $0.0423$ (reportado como $.04$). Probamos ahora que dicha partición es innecesaria.
+Al elevar mediante $B_1(K)$ el margen de calibración de permanencia a $>7.4665$ ($>7.7755$ en $b=0.10$) y el margen del prefijo en $T=23$ a $+0.2056$, el bloque de permanencia en $M$ deja por completo de ser una restricción activa en el certificado global FPBB. En la MR-Tabla 5 (Milei y Reidel, 2026, pág. 23 y Apéndice F.3), las comparaciones de salida adversa sobre las regiones $M=[0.10,0.28)$ y $H_1=[0.28,0.80)$ se verifican dividiendo dichos intervalos en $12$ subintervalos finitos $[k_-,k_+]$ y evaluando $\underline{W}_X(k_-)$ en el extremo izquierdo frente a la cota superior $E^+(k_+,a;l_0)+\beta_-\Psi^\sharp(a)$ en el extremo derecho, lo que arroja un margen mínimo global de $0.0423$ (reportado conservadoramente como $.04$).
 
-\begin{proposition}[Proposición 1** --- Certificación analítica de monotonía y ampliación del margen global]
-Bajo la caja paramétrica (7.3), sean los testigos de la Tabla 4 de Milei y Reidel (2026) dados por $(l_M,s_M,\underline{T}_M,a,l_0)=(0.68,0.135,-33.103,0.10,0.44)$ sobre $M=[0.10,0.28)$ y $(l_H,s_H,\underline{T}_H,a,l_0)=(0.72,0.375,-27.164,0.28,0.57)$ sobre $H_1=[0.28,0.80)$. La ventaja puntual del testigo frente a la envolvente de salida adversa (F.19)--(F.20),
+La siguiente proposición demuestra que esa discretización por subintervalos es innecesaria: evaluando ambas funciones en el \emph{mismo} estado $K$, la ventaja del testigo frente a la envolvente tangente crece estrictamente con $K$ en todo $M$ y en todo $H_1$, reduciendo las $12$ filas finitas de la MR-Tabla 5 a únicamente dos evaluaciones puntuales en los bordes inferiores $K=0.10$ y $K=0.28$.
+
+\begin{thm_box}{Proposición 1** (Certificación analítica de monotonía y ampliación del margen global)}
+Bajo la caja paramétrica (7.3), sean los testigos de la MR-Tabla 4 definidos por $(l_M,s_M,\underline{T}_M,a,l_0)=(0.68,0.135,-33.103,0.10,0.44)$ sobre $M=[0.10,0.28)$ y $(l_H,s_H,\underline{T}_H,a,l_0)=(0.72,0.375,-27.164,0.28,0.57)$ sobre $H_1=[0.28,0.80)$. La ventaja puntual del testigo frente a la envolvente de salida adversa (F.19)--(F.20),
 \[
 \Delta_X(K) := \underline{W}_X(K) - \big[E^+(K,a;l_0)+\beta_-\Psi^\sharp(a)\big],
 \]
 es estrictamente creciente en todo punto de ambos intervalos, sin mínimos interiores. Más precisamente:
 \begin{enumerate}
-\item Un certificado de aritmética de intervalos sobre el cociente $R_X(K)=(S(K)-a)/c_X(K)$ en $4$ subintervalos de $M$ y $6$ de $H_1$ garantiza uniformemente $\Delta_M'(K)\ge +0.0722 > 0$ en $M$ y $\Delta_{H_1}'(K)\ge +0.0094 > 0$ en $H_1$; adicionalmente, cotas de intervalo de la segunda derivada certifican $\Delta_M''(K)\le -0.8564 < 0$ (en $8$ subintervalos) y $\Delta_{H_1}''(K)\le -0.0439 < 0$ (en $10$ subintervalos), ubicando el mínimo de $\Delta_X'$ en el extremo derecho:
+\item Un certificado de aritmética de intervalos sobre el cociente $R_X(K)=(\mathcal{S}(K)-a)/c_X(K)$ en $4$ subintervalos de $M$ y $6$ de $H_1$ garantiza uniformemente $\Delta_M'(K)\ge +0.0723 > 0$ en $M$ y $\Delta_{H_1}'(K)\ge +0.0095 > 0$ en $H_1$; adicionalmente, cotas de intervalo de la segunda derivada certifican $\Delta_M''(K)\le -2.5107 < 0$ (en $8$ subintervalos) y $\Delta_{H_1}''(K)\le -0.1889 < 0$ (en $10$ subintervalos), ubicando el ínfimo de $\Delta_X'$ en el límite lateral derecho de cada región:
 \[
-\min_{K\in M}\Delta_M'(K) = \Delta_M'(0.28) = +0.502666, \qquad \min_{K\in H_1}\Delta_{H_1}'(K) = \Delta_{H_1}'(0.80) = +0.100489.
+\inf_{K\in M}\Delta_M'(K) = \Delta_M'(0.28^-) = +0.502666, \qquad \inf_{K\in H_1}\Delta_{H_1}'(K) = \Delta_{H_1}'(0.80^-) = +0.100489.
 \]
-\item En consecuencia, $\inf\Delta_X$ se alcanza en el borde izquierdo de cada dominio y las $12$ particiones finitas de la Tabla 5 de Milei y Reidel (2026) se reducen a dos evaluaciones exactas en $K=0.10$ y $K=0.28$:
+\item En consecuencia, $\inf\Delta_X$ se alcanza en el borde izquierdo de cada dominio y las $12$ particiones finitas de la MR-Tabla 5 se reducen a dos evaluaciones exactas en $K=0.10$ y $K=0.28$:
 \begin{itemize}
 \item En $M=[0.10,0.28)$, el margen mínimo de salida adversa asciende de $>0.0436$ a \textbf{$>0.0947$} ($+117\%$).
 \item En $H_1=[0.28,0.80)$, el margen mínimo asciende de $>0.0423$ a $>0.0561$ (con $l_0=0.60$) y a \textbf{$>0.0571$} (con $l_0=0.57$), elevando el margen global certificado de todo el Teorema 9 en $M\cup H$ de $0.0423$ ($.04$) a \textbf{$>0.0571$} ($+35\%$).
 \end{itemize}
 \end{enumerate}
-\end{proposition}
+\end{thm_box}
 
 \begin{proof}
-Siguiendo el Apéndice F.3 (ecuaciones F.19--F.20 de Milei y Reidel), para cada región $X\in\{M,H_1\}$ con esfuerzo del testigo $l_X$, sucesor $s_X$, cola $\underline{T}_X$, umbral de salida $a$ y tangencia $l_0\ge K/2$, el consumo mínimo del testigo es $c_X(K)=q_- K + F_{A_-}(K,l_X)-s_X>0$, la pendiente tangente es $t(K)=\partial_L F_{A_+}(K,l_0)$ y $S(K)=q_+K+F_{A_+}(K,l_0)+(1-l_0)t(K)$. En $(K,a,l_0)=(0.28,0.28,0.57)$ se cumple $l_0=0.57\ge 0.80/2$ y $\beta_-\psi'(0.28)=16.7535 > 4.6539 = 1/(S(0.28)-0.28)$, por lo que la envolvente alcanza su máximo sobre $[0.05,a]$ en $s=a$ (la rama en $s=0$ es inferior por más de $5.37$ unidades en $M$ y $11.77$ en $H_1$).
+Por la construcción del Apéndice F.3 (ecuaciones F.19--F.20 de Milei y Reidel), para cada región $X\in\{M,H_1\}$ con esfuerzo del testigo $l_X$, sucesor $s_X$, cola $\underline{T}_X$, umbral de salida $a$ y punto de tangencia $l_0$, el consumo mínimo del testigo es $c_X(K)=q_- K + F_{A_-}(K,l_X)-s_X>0$, la pendiente tangente es $t(K)=\partial_L F_{A_+}(K,l_0)$ y el recurso virtual mayorante es $\mathcal{S}(K)=q_+K+F_{A_+}(K,l_0)+(1-l_0)t(K)$. Escribiendo $u=L/K$ y $g(u)=(u/(1+u))^{3/2}$, el intercepto en $u=0$ de la tangente en $u_0=l_0/K$ vale $g(u_0)-u_0 g'(u_0)=u_0^{3/2}(1+u_0)^{-5/2}(u_0-1/2)\ge 0$ si y solo si $l_0\ge K/2$, por lo que $l_0\ge \sup(X)/2$ ($0.44\ge 0.14$ en $M$ y $0.57\ge 0.40$ en $H_1$) garantiza la dominancia global de la tangente sobre todo $L\in[0,1)$. Además, por el teorema de la envolvente en la envolvente de salida adversa ($l_0>K/4$ implica $F_{A_+,LL}<0$), $\partial E^+/\partial l_0 = (\eta/c^*)(L^*(K;l_0)-l_0)F_{A_+,LL}(K,l_0)=0 \iff l_0=L^*(K;l_0)$, lo cual justifica variacionalmente la elección de $l_0$: $L^*(0.28)=0.569743\approx 0.57$ y $L^*(0.10)=0.437261$ (con $L_{\mathrm{tan}}(0.10;0.44)\in[0.433462,0.433840]$). En $(K,a,l_0)=(0.28,0.28,0.57)$ se verifica también $\beta_-\Psi'(0.28) = \beta_-(\Psi^\sharp)'(0.28) = 16.7535 > 4.6539 = 1/(\mathcal{S}(0.28)-0.28)$, por lo que la envolvente sobre $[0.05,a]$ alcanza su máximo en $s=a$ (la rama en $s=0$ es inferior por más de $5.37$ unidades en $M$ y $11.77$ en $H_1$). En todo $M$ y $H_1$, la fracción óptima de ocio de la envolvente tangente $u^*(K)=(1-\eta)(\mathcal{S}(K)-a)/t(K)$ permanece estrictamente interior: $u^*(K)\in[0.5662,0.6808]<1$ en $M$ ($L^*\ge 0.3192>0$) y $u^*(K)\in[0.4301,0.5427]<1$ en $H_1$ ($L^*\ge 0.4573>0$).
 
-La pendiente tangente cumple $t'(K)/t(K) = \frac{5l_0}{2K(K+l_0)} > 0$ y $(t'/t)'(K) = -\frac{5l_0(2K+l_0)}{2K^2(K+l_0)^2} < 0$. Diferenciando $\underline{W}_X$ y $E^+(K,a;l_0)$ y definiendo $R_X(K):=(S(K)-a)/c_X(K)>1$ se obtiene la cota inferior exacta en todo punto diferenciable y para ambas derivadas laterales:
+\emph{Descomposición exacta de $\Delta_X'(K)$ y ausencia de mínimos interiores:} La pendiente tangente satisface las identidades logarítmicas cerradas:
 \[
-\Delta_X'(K) \ge \frac{\eta_- c_X'(K)R_X(K) - S'(K)}{S(K)-a} + (1-\eta_+)\frac{5l_0}{2K(K+l_0)}.
+\frac{t'(K)}{t(K)} = \frac{5l_0}{2K(K+l_0)} > 0, \qquad \left(\frac{t'}{t}\right)'(K) = -\frac{5l_0(2K+l_0)}{2K^2(K+l_0)^2} < 0.
 \]
-Escribiendo $R_X'(K)=Q_X(K)/c_X(K)^2$ con Wronskiano $Q_X(K):=S'(K)c_X(K)-c_X'(K)(S(K)-a)$, se cancela $S'c'$ en $Q_X'(K)=S''(K)c_X(K)-c_X''(K)(S(K)-a)$. Como $F_{A,K}$ (pico único en $L/4$) y $t'$ (pico único en $3l_0/4$) carecen de mínimos interiores y $|Q_X'|$ se acota por las envolventes de extremo de $|F_{A,KK}|$ y $|t''|$, la cota de Lipschitz desde el punto medio $k_m=(k_L+k_R)/2$ certifica $Q_M(K)\le -0.06165,-0.05640,-0.04694,-0.03960 < 0$ en los $4$ subintervalos iguales de $M$ (`[0.100,0.145,0.190,0.235,0.280]`) y $Q_{H_1}(K)\le -0.18135,-0.15687,-0.13910,-0.12646,-0.12009,-0.12746 < 0$ en los $6$ subintervalos de $H_1$ (`[0.28,0.36,0.45,0.54,0.63,0.72,0.80]`). Por ende $R_X(K)\ge R_X(k_R)$ en cada $[k_L,k_R]$. Reemplazando $c_X'(K)\ge\min\{c_X'(k_L),c_X'(k_R)\}$ y $S'(K)\le S'_{[k_L,k_R],\max}$ por unimodalidad, se certifican analíticamente $\Delta_M'(K)\ge +3.0287,+0.3955,+0.1252,+0.0722 > 0$ en $M$ y $\Delta_{H_1}'(K)\ge +1.4674,+0.3242,+0.1022,+0.0348,+0.0094,+0.0119 > 0$ en $H_1$, excluyendo todo mínimo interior de $\Delta_X(K)$ sin mallas. Factorizando además $\Delta_X''(K)\le [(S')^2-\eta_-(c_X'R_X)^2]/(S-a)^2 + \eta_- c_X''/c_X - S''/(S-a) + (1-\eta_+)(t'/t)'(K)$ (usando $c_X''\le 0$ para $k_L\ge l_X/4$), las cotas de intervalo en $8$ subintervalos iguales de $M$ y $10$ de $H_1$ certifican $\Delta_M''(K)\le -0.8564 < 0$ y $\Delta_{H_1}''(K)\le -0.0439 < 0$, ubicando $\min\Delta_X'$ en el extremo derecho ($+0.502666$ y $+0.100489$) y $\inf\Delta_X$ en el extremo izquierdo: en $K=0.10$, $\underline{W}_M(0.10)-[E^+(0.10,0.10;0.44)+\beta_-\Psi^\sharp(0.10)]=0.094717>0.0947$ ($0.062495$ con $\Psi$); en $K=0.28$, $\underline{W}_H(0.28)-[E^+(0.28,0.28;0.57)+\beta_-\Psi^\sharp(0.28)]=0.057148>0.0571$ ($0.056121$ con $l_0=0.60$, y $0.024926$ con $\Psi$). Combinado con la cota (F.21) en $H_2=[0.80,\infty)$ ($>2.2984$), el margen global sobre $M\cup H$ asciende a $>0.0571$.
+Diferenciando cada rama de $\underline{W}_X$ y de $E^+(K,a;l_0)$ y definiendo el cociente $R_X(K):=(\mathcal{S}(K)-a)/c_X(K)>1$ se obtiene la cota inferior exacta en todo punto diferenciable (y para ambas derivadas laterales en eventuales quiebres de $\min/\max$):
+\[
+\Delta_X'(K) \ge \frac{\eta_- c_X'(K)R_X(K) - \mathcal{S}'(K)}{\mathcal{S}(K)-a} + (1-\eta_+)\frac{5l_0}{2K(K+l_0)}.
+\]
+Para certificar $R_X'(K)<0$, escribimos $R_X'(K)=Q_X(K)/c_X(K)^2$ con Wronskiano $Q_X(K):=\mathcal{S}'(K)c_X(K)-c_X'(K)(\mathcal{S}(K)-a)$, cuya derivada cancela idénticamente el producto $\mathcal{S}'c_X'$: $Q_X'(K)=\mathcal{S}''(K)c_X(K)-c_X''(K)(\mathcal{S}(K)-a)$. Como $\partial_K F_{A,K}(K,L)\propto (L-4K)K^{-1/2}(K+L)^{-7/2}$ y $t''(K)\propto (3l_0/2 - 2K)K^{1/2}(K+l_0)^{-9/2}$, tanto $F_{A,K}$ (pico único en $L/4$) como $t'$ (pico único en $3l_0/4$) carecen de mínimos interiores, mientras $|Q_X'|$ queda acotado en cada subintervalo $[k_L,k_R]$ por las envolventes de extremo y puntos críticos interiores de $|F_{A,KK}|$ y $|t''|$. La cota de Lipschitz desde el punto medio $k_m=(k_L+k_R)/2$, $Q_X(K)\le Q_X(k_m) + (k_R-k_L)|Q_X'|_{[k_L,k_R]}/2$, arroja:
+\begin{itemize}
+\item en los $4$ subintervalos iguales de $M$ (\texttt{[0.100,0.145,0.190,0.235,0.280]}): $Q_M(K)\le -0.06341,-0.05880,-0.05061,-0.04375 < 0$;
+\item en los $6$ subintervalos de $H_1$ (\texttt{[0.28,0.36,0.45,0.54,0.63,0.72,0.80]}): $Q_{H_1}(K)\le -0.18976,-0.16941,-0.15171,-0.13844,-0.13124,-0.13540 < 0$.
+\end{itemize}
+Así $R_X(K)$ es estrictamente decreciente en todo $M$ y $H_1$, cumpliendo $R_X(K)\ge R_X(k_R)$ en cada $[k_L,k_R]$. Reemplazando $c_X'(K)\ge\min\{c_X'(k_L),c_X'(k_R)\}$, $\mathcal{S}'(K)\le \mathcal{S}'_{[k_L,k_R],\max}$ (por unimodalidad de $F_{A,K}$ y $t'$) y el denominador $\mathcal{S}(K)-a$ por el extremo apropiado según el signo del numerador, se obtienen las cotas de intervalo analíticas:
+\begin{itemize}
+\item en $M$ ($4$ subintervalos): $\Delta_M'(K)\ge +3.0288,+0.3955,+0.1252,+0.0723 > 0$;
+\item en $H_1$ ($6$ subintervalos): $\Delta_{H_1}'(K)\ge +1.4675,+0.3243,+0.1022,+0.0348,+0.0095,+0.0119 > 0$.
+\end{itemize}
+Esto excluye rigurosamente todo mínimo interior de $\Delta_X(K)$ en ambos dominios sin depender de mallas. Factorizando además la segunda derivada en regiones suaves como:
+\[
+\Delta_X''(K) \le \frac{(\mathcal{S}')^2 - \eta_-(c_X' R_X)^2}{(\mathcal{S}-a)^2} + \frac{\eta_{\pm} c_X''}{c_X} - \frac{\mathcal{S}''}{\mathcal{S}-a} + (1-\eta_+)\left(\frac{t'}{t}\right)'(K),
+\]
+donde el término $\eta c_X''/c_X$ debe evaluarse con \textbf{$\eta_+$} cuando $c_X'' > 0$ (lo cual ocurre en $[0.10, l_M/4 = 0.17)\subset M$) y con \textbf{$\eta_-$} cuando $c_X'' \le 0$ (en $[0.17, 0.28)$ y en todo $H_1$, pues $l_H/4=0.18 < 0.28$), una evaluación de intervalo análoga en $8$ subintervalos iguales de $M$ y $10$ de $H_1$ certifica $\Delta_M''(K)\le -2.5107 < 0$ (desde $-421.1331$ en el primer subintervalo) y $\Delta_{H_1}''(K)\le -0.1889 < 0$ (desde $-40.4320$). Los dos únicos puntos de no diferenciabilidad en $H_1$ se localizan en $k_W = 0.406819$ (donde $c_{H_1}(K)=1-l_H$ y $W'_{H_1}$ cae de $3.954006$ a $3.952877$) y en $k_E = 0.573570$ (donde $(-E^+)'$ cae de $-1.652310$ a $-1.652744$); ambos son quiebres hacia abajo que preservan la concavidad global de $\Delta_X$. Por concavidad estricta, $\Delta_X'$ decrece monótonamente y alcanza su ínfimo en el borde derecho ($\Delta_M'(0.28^-)=+0.502666$ y $\Delta_{H_1}'(0.80^-)=+0.100489$), mientras $\Delta_X$ alcanza su mínimo en el borde izquierdo:
+\begin{itemize}
+\item En $K=0.10$ ($l_0=0.44$): $\underline{W}_M(0.10)-[E^+(0.10,0.10;0.44)+\beta_-\Psi^\sharp(0.10)]=0.094717>0.0947$ (y $0.062495>0.0624$ usando $\Psi$).
+\item En $K=0.28$: con $l_0=0.60$, $\underline{W}_H(0.28)-[E^+(0.28,0.28;0.60)+\beta_-\Psi^\sharp(0.28)]=0.056121>0.0561$; optimizando $l_0=0.57$, se eleva a $0.057148>0.0571$ (y $0.024926>0.0249$ usando $\Psi$ con $l_0=0.57$).
+\end{itemize}
+Combinado con la cota (F.21) para $H_2=[0.80,\infty)$ ($>2.2984$), el mínimo global certificado sobre todo $M\cup H$ asciende a $>0.0571$ (resumido en la Tabla 2).
 \end{proof}
 
 \begin{table}[htbp]
@@ -237,127 +303,191 @@ Escribiendo $R_X'(K)=Q_X(K)/c_X(K)^2$ con Wronskiano $Q_X(K):=S'(K)c_X(K)-c_X'(K
 \toprule
 \textbf{Región y dominio} & \textbf{Método de comparación} & \textbf{Margen usando $\Psi$} & \textbf{Margen usando $\Psi^\sharp$} \\
 \midrule
-$M=[0.10,0.28)$ & Tabla 5 original ($4$ intervalos) & $>0.0114$ & $>0.0436$ \\
+$M=[0.10,0.28)$ & MR-Tabla 5 original ($4$ intervalos) & $>0.0114$ & $>0.0436$ \\
 $M=[0.10,0.28)$ & \textbf{Prop. 1** en $K=0.10$ ($l_0=0.44$)} & \textbf{$>0.0624$} & \textbf{$>0.0947$} \\
-$H_1=[0.28,0.80)$ & Tabla 5 original ($8$ intervalos) & $>0.01008$ & $>0.0423$ \\
+$H_1=[0.28,0.80)$ & MR-Tabla 5 original ($8$ intervalos) & $>0.01008$ & $>0.0423$ \\
 $H_1=[0.28,0.80)$ & \textbf{Prop. 1** en $K=0.28$ ($l_0=0.57$)} & \textbf{$>0.0249$} & \textbf{$>0.0571$} \\
 $H_2=[0.80,\infty)$ & Cota global ec. (F.21) & $>2.2662$ & $>2.2984$ \\
 \midrule
 \textbf{Margen global FPBB} & \textbf{Mínimo sobre $M\cup H$} & \textbf{$>0.0249$} (vs. $0.01008$) & \textbf{$>0.0571$} (vs. $0.0423$) \\
 \bottomrule
 \end{tabular}
-\caption{Eliminación de las $12$ particiones finitas de la Tabla 5 de Milei y Reidel (2026) mediante la monotonía estado a estado de la Proposición 1**.}
+\caption{Eliminación de las $12$ particiones finitas de la MR-Tabla 5 mediante la monotonía estado a estado de la Proposición 1**.}
 \end{table}
 
 \section{Equivalencia Asintótica entre Trabajo Endógeno y Trabajo Fijo (Nota al pie 1 y Teorema 3)}
 
-En la página 2 de Milei y Reidel (2026), la Nota al pie 1 plantea como problema abierto la comparación entre la frontera de escala mínima viable $S_A$ del modelo con trabajo endógeno y la frontera $S_A^{\mathrm{fix}}(\overline{L})$ de una economía idéntica con trabajo fijo exógeno $L_t\equiv\overline{L}\in(0,1]$ (utilidad $\eta\log C_t$). En la Sección 4.2 (\textbf{Teorema 3}, ec. 4.6), prueban que cuando $A\to\infty$ con $r=\theta-1$ y $c_K=w^{\theta/\rho}$:
+En la página 2 de Milei y Reidel (2026), la Nota al pie 1 plantea como problema abierto la comparación entre la frontera de escala mínima viable $S_A$ del modelo con trabajo endógeno y la frontera $S_A^{\mathrm{fix}}(\overline{L})$ de una economía por lo demás idéntica donde la oferta de trabajo está fija exógenamente en $L_t\equiv\overline{L}\in(0,1]$ (de modo que la utilidad de período es simplemente $\eta\log C_t$). Asimismo, en la Sección 4.2 (\textbf{Teorema 3}, ec. 4.6), los autores demuestran que cuando $A\to\infty$ con $r=\theta-1$ y $c_K=w^{\theta/\rho}$:
 \[
 \left(\frac{\delta}{c_K}\right)^{1/r} \le \liminf_{A\to\infty} A^{1/r} S_A \le \limsup_{A\to\infty} A^{1/r} S_A \le \left(\frac{D}{c_K}\right)^{1/r}, \qquad D = \delta + \frac{1-\beta}{\beta}.
 \]
 
-\subsection{Isomorfismo exacto para $A$ finito y equivalencia asintótica cuando $A\to\infty$}
+\subsection{\texorpdfstring{Isomorfismo exacto para $A$ finito y equivalencia asintótica cuando $A\to\infty$}{Isomorfismo exacto para A finito y equivalencia asintótica cuando A -> infinito}}
 
-\begin{theorem}[Teorema 3* --- Isomorfismo de trabajo fijo y convergencia asintótica de fronteras]
+Demostramos a continuación que esta pregunta abierta admite una respuesta exacta en el límite asintótico $A\to\infty$ para todo $\overline{L}\in(0,1]$, junto con una ley de isomorfismo exacto para $A$ finito y la condición estructural precisa de comparación frente a pleno empleo.
+
+\begin{thm_box}{Teorema 3* (Isomorfismo de trabajo fijo y convergencia asintótica de fronteras)}
 Fijemos los seis parámetros primitivos distintos de $A$ en la región paciente $E=D-\theta\delta<0$, con $d=-\rho>0$ y $r=\theta-1\in(0,1)$.
 \begin{enumerate}
 \item \textbf{Régimen de alta productividad ($A\to\infty$) y convergencia de fronteras:} Reescalando en la escala crítica del Teorema 3, $K_t = A^{-1/r}k_t$ y $C_t = A^{-1/r}c_t$ con $k_t,c_t=\Theta(1)$, a lo largo de toda acción óptima interior la oferta laboral y la razón capital-trabajo obedecen:
-\begin{equation}
+\[
 L_t = \Theta\!\left(A^{-\frac{d}{r(1+d)}}\right) \to 0, \qquad \frac{K_t}{L_t} = \Theta\!\left(A^{-\frac{1}{r(1+d)}}\right) \to 0 \qquad (A\to\infty).
-\end{equation}
+\]
 En consecuencia, en compactos de $(k,L)$, la pérdida de utilidad por ocio se anula como $(1-\eta)|\log(1-L_t)| = O(A^{-d/[r(1+d)]})\to 0$ y el producto reescalado converge uniformemente al mismo límite convexo $c_K k^\theta$ que con trabajo fijo $\overline{L}\in(0,1]$. Más aún, dado que la condición de paciencia (2.3) implica necesariamente $\beta\theta > \beta[q+\theta\delta] > 1$, para todo $\overline{L}\in(0,1]$ ambas fronteras reescaladas convergen al límite físico común y satisfacen la equivalencia asintótica estricta:
 \[
 \lim_{A\to\infty} A^{1/r} S_A = \lim_{A\to\infty} A^{1/r} S_A^{\mathrm{fix}}(\overline{L}) = \left(\frac{\delta}{c_K}\right)^{1/r}, \qquad \lim_{A\to\infty} \frac{S_A}{S_A^{\mathrm{fix}}(\overline{L})} = 1.
 \]
-\item \textbf{Isomorfismo exacto para $A$ finito y criterio variacional de ordenamiento:} Para todo $A$ finito y todo $\overline{L}\in(0,1]$, el cambio de escala $\tilde{K}_t=K_t/\overline{L}$ induce un isomorfismo exacto con pleno empleo ($\overline{L}=1$) a productividad $A\overline{L}^r$:
+\item \textbf{Isomorfismo exacto para $A$ finito y criterio variacional de ordenamiento:} Para todo $A$ finito y todo $\overline{L}\in(0,1]$, el cambio de escala $\tilde{K}_t=K_t/\overline{L}$ induce un isomorfismo exacto con la economía de capacidad plena ($\overline{L}=1$) a productividad $A\overline{L}^r$:
 \[
 S_A^{\mathrm{fix}}(\overline{L}) = \overline{L}\,S_{A\overline{L}^r}^{\mathrm{fix}}(1), \qquad \kappa_A^{\mathrm{fix}}(\overline{L}) = \overline{L}\,\kappa_{A\overline{L}^r} \ge \kappa_A^{\mathrm{fix}}(1) = \kappa_A.
 \]
-Frente a trabajo endógeno, la economía a capacidad plena ($\overline{L}=1$ sin costo de ocio) domina en bienestar ($V_A^{\mathrm{fix}}(K;1) > V_A(K)$ para todo $K>0$). A la escala crítica $S_A$, sea $\Delta W_A^+ := J_A^{\mathrm{fix}}(\pi^+|_{L=1}) - V_A(S_A) > 0$ el excedente de aplicar pleno empleo a la trayectoria productiva óptima $\pi^+$ desde $S_A$, y sea $\Delta W_A^- := \sup_{\pi^-\in\mathcal{O}_-^{\mathrm{fix}}}[J_A^{\mathrm{fix}}(\pi^-) - V_A(S_A)]$ la máxima ganancia de cualquier senda extinta bajo trabajo fijo desde $S_A$. Entonces $\Delta W_A^- = O(A^{-d/[r(1+d)]})$ y la desigualdad estricta $S_A^{\mathrm{fix}}(1) < S_A$ se cumple en todo $A$ tal que $\Delta W_A^+ > \Delta W_A^-$.
+Frente a la economía con trabajo endógeno, la economía a capacidad plena ($\overline{L}=1$ sin costo de ocio) domina en bienestar ($V_A^{\mathrm{fix}}(K;1) > V_A(K)$ para todo $K>0$). A la escala crítica $S_A$, sea $\Delta W_A^+ := J_A^{\mathrm{fix}}(\pi^+|_{L=1}) - V_A(S_A) > 0$ el excedente de aplicar pleno empleo a la trayectoria productiva óptima $\pi^+$ desde $S_A$, y sea $\Delta W_A^- := \sup_{\pi^-\in\mathcal{O}_-^{\mathrm{fix}}}[J_A^{\mathrm{fix}}(\pi^-) - V_A(S_A)]$ la máxima ganancia sobre la clase $\mathcal{O}_-^{\mathrm{fix}}$ de trayectorias óptimas extintas bajo trabajo fijo desde $S_A$ (o, más generalmente, sendas factibles extintas confinadas en $(0,S_A]$ que satisfacen la cota de consumo de la Proposición 4 $C_t \ge \chi_p^{\mathrm{fix}} K_t$, excluyendo sendas de liquidación diferida por encima de $S_A$). Entonces $\Delta W_A^- = O(A^{-d/[r(1+d)]})$ y la desigualdad estricta $S_A^{\mathrm{fix}}(1) < S_A$ se cumple en todo $A$ tal que $\Delta W_A^+ > \Delta W_A^-$.
 \end{enumerate}
-\end{theorem}
+\end{thm_box}
 
 \begin{proof}
 \emph{Parte 1 (Escalado de operadores y convergencia de fronteras).} Sea $K=A^{-1/r}k$ y $C=A^{-1/r}c$. Usando $1-\theta/r=-1/r$ y $\rho=-d<0$:
 \[
 f_A(k,L) := A^{1/r}F_A(A^{-1/r}k,L) = c_K k^\theta \left[1 + c_w\left(\frac{k}{A^{1/r}L}\right)^d\right]^{-\theta/d}, \qquad c_w = \frac{1-w}{w}.
 \]
-Con trabajo fijo $L\equiv\overline{L}\in(0,1]$, $(A^{1/r}\overline{L})^{-d}=O(A^{-d/r})\to 0$ y $f_A(k,\overline{L})\to c_K k^\theta$. Con trabajo endógeno, multiplicando $F_{A,L}(K,L)=\nu C/(1-L)$ ($\nu=(1-\eta)/\eta$) por $A^{1/r}$ queda $\theta c_K c_w k^{\theta+d} A^{-d/r} L^{-1-d}[1+c_w(A^{1/r}L/k)^{-d}]^{-1-\theta/d}=\nu c/(1-L)$, lo que fuerza $L = [\theta c_K c_w k^{\theta+d}/(\nu c)]^{1/(1+d)} A^{-d/[r(1+d)]}(1+o(1))\to 0$ y $K/L=\Theta(A^{-1/[r(1+d)]})\to 0$, anulando uniformemente los residuos de producto y de ocio.
+Con trabajo fijo $L\equiv\overline{L}\in(0,1]$, $(A^{1/r}\overline{L})^{-d}=O(A^{-d/r})\to 0$ y $f_A(k,\overline{L})\to c_K k^\theta$. Con trabajo endógeno, multiplicando la condición de primer orden $F_{A,L}(K,L)=\nu C/(1-L)$ ($\nu=(1-\eta)/\eta$) por $A^{1/r}$ queda:
+\[
+\theta c_K c_w k^{\theta+d} A^{-d/r} L^{-1-d}\left[1+c_w\left(\frac{A^{1/r}L}{k}\right)^{-d}\right]^{-1-\theta/d} = \frac{\nu c}{1-L},
+\]
+lo que fuerza $L = [\theta c_K c_w k^{\theta+d}/(\nu c)]^{1/(1+d)} A^{-d/[r(1+d)]}(1+o(1))\to 0$ y $K/L=\Theta(A^{-1/[r(1+d)]})\to 0$, de modo que $f_A(k,L)=c_K k^\theta[1+O(A^{-d/[r(1+d)]})]$, $(1-\eta)\log(1-L)=-O(A^{-d/[r(1+d)]})$ y el operador normalizado converge en compactos al de trabajo fijo.
 
-Para la convergencia de fronteras, nótese que $\theta - (q + \theta\delta) = q(\theta-1) > 0$, por lo que la paciencia (2.3) ($\beta[q+\theta\delta]>1$) implica $\beta\theta > 1$. Fijemos $k_0 > (\delta/c_K)^{1/r}$ y $K_0 = A^{-1/r}k_0$. Con esfuerzo constante $L_0=3/4$ (válido en trabajo endógeno y con costo nulo en trabajo fijo $\overline{L}=1$), elijamos $\epsilon_1\in(0,1)$ con $c_K(1-\epsilon_1)k_0^r > \delta$ y un umbral fijo $K_{\mathrm{esc}}>0$ tal que $[1+c_w(K_{\mathrm{esc}}/L_0)^d]^{-\theta/d}\ge 1-\epsilon_1/2$. Desde $k_0$, una expansión de tres fases —(i) escape de mantenimiento en $T_1(k_0)<\infty$ pasos independientes de $A$ hasta un nivel fijo $k_1$ donde $c_K(1-\epsilon_1/2)k_1^{\theta-\tilde{\theta}}\ge 2$ con $\tilde{\theta}\in(\beta^{-1},\theta)$; (ii) crecimiento superexponencial $C_t=K_{t+1}=[qK_t+F_A(K_t,L_0)]/2$ con $k_{t+1}\ge k_t^{\tilde{\theta}}$ hasta $K_{\mathrm{esc}}$ en $J(A)\le \log\log A / \log\tilde{\theta} + O(1)$ pasos; y (iii) meseta estacionaria en $K_{\mathrm{esc}}$ con consumo $\Omega(A)$— alcanza un excedente descontado de orden $\beta^{J(A)}\log A \ge c_1(\log A)^{1-|\log\beta|/\log\tilde{\theta}} - O(1) \to +\infty$ (pues $\beta\tilde{\theta}>1$) por encima de la cota de permanencia en $(0,K_0]$ dada por el Lema 9 ($-(\eta/[r(1-\beta)])\log A + O(1)$). Por contradicción con el Teorema 1, $\limsup_{A\to\infty} A^{1/r}S_A \le (\delta/c_K)^{1/r}$ tanto en trabajo endógeno como fijo; junto con la cota física (4.5), ambos límites coinciden en $(\delta/c_K)^{1/r}$ y su cociente converge a $1$.
+Para demostrar la convergencia de las fronteras mismas, nótese primero que para $q\in(0,1)$ y $\theta>1$, $\theta - (q+\theta\delta)=q(\theta-1)>0$. Por ende, la condición de paciencia (2.3), $\beta[q+\theta\delta]>1$, implica necesariamente $\beta\theta > 1$. Fijemos cualquier stock reescalado $k_0 > (\delta/c_K)^{1/r}$ y sea $K_0 = A^{-1/r}k_0$. Construimos una expansión factible con trabajo constante $L_0$: fijamos $L_0=3/4$ en el problema con trabajo endógeno, $L_0=1$ en el problema de capacidad plena con trabajo fijo $\overline{L}=1$ (donde el costo de ocio es nulo), y $L_0=\overline{L}$ para $\overline{L}\in(0,1)$:
+\begin{itemize}
+\item Elegimos $\epsilon_1\in(0,1)$ tal que $c_K(1-\epsilon_1)k_0^r > \delta$ y un umbral macroscópico fijo $K_{\mathrm{esc}}>0$ (independiente de $A$) suficientemente pequeño para que $[1+c_w(K_{\mathrm{esc}}/L_0)^d]^{-\theta/d}\ge 1-\epsilon_1/2$, de modo que $f_A(k,L_0)\ge c_K(1-\epsilon_1/2)k^\theta$ mientras $K_t\le K_{\mathrm{esc}}$.
+\item \emph{Fase I (escape del cuello de botella):} Consumiendo la mitad del excedente neto sobre $k_t$, se alcanza en $T_1(k_0)<\infty$ pasos (independientes de $A$) un nivel $k_{T_1} \ge k_1$, donde fijamos $\tilde{\theta}\in(\beta^{-1},\theta)$ (factible por $\beta\theta>1$) y elegimos $k_1 \ge \max\!\big\{2,\,\big(2/[c_K(1-\epsilon_1/2)]\big)^{1/(\theta-\tilde{\theta})}\big\}$ (exigir $k_1\ge 2$ evita que $k_t<1$ cuando $c_K>2$, como ocurre en la tecnología CES armónica donde $c_K=2\sqrt{2}$).
+\item \emph{Fase II (crecimiento superexponencial):} Ahorrando la mitad de los recursos ($C_t=K_{t+1}=[qK_t+F_A(K_t,L_0)]/2$), mientras $k_t\le A^{1/r}K_{\mathrm{esc}}$ se verifica $k_{t+1}\ge k_t^{\tilde{\theta}}\ge 2^{\tilde{\theta}^t}$ por inducción, alcanzándose por primera vez $K_{T_1+J}\ge K_{\mathrm{esc}}$ en a lo sumo $J(A)\le (\log\log A)/(\log\tilde{\theta}) + O(1)$ pasos. En el eventual exceso $K_{T_1+J}>K_{\mathrm{esc}}$, basta ahorrar exactamente $K_{T_1+J+1}=K_{\mathrm{esc}}$, lo cual es factible y eleva el consumo de esa transición por monotonía de $F_A(\cdot,L_0)$.
+\item \emph{Fase III (meseta macroscópica):} Desde el paso siguiente $t\ge T_1+J+1$, mantener constante $K_{\mathrm{esc}}$ rinde consumo $AF_1(K_{\mathrm{esc}},L_0)-\delta K_{\mathrm{esc}}=\Omega(A)$, aportando utilidad descontada al menos $\beta^{T_1+J+1}\frac{\eta}{1-\beta}\log A - O(1)$.
+\end{itemize}
+Sumando además la utilidad a lo largo de las Fases I--II ($0\le t \le T_1+J$), donde $C_t=A^{-1/r}c_t$ con $c_t=\Omega(1)$ da $u(C_t,L_0)\ge -\frac{\eta}{r}\log A - O(1)$ y la serie descontada aporta $-(1-\beta^{T_1+J+1})\frac{\eta}{r(1-\beta)}\log A - O(1)$ (con residuo $-O(1)$ uniformemente acotado pues $\sum_{t=0}^\infty \beta^t = \frac{1}{1-\beta}$), el bienestar total de la expansión asciende al menos a:
+\[
+-\big(1-\beta^{T_1+J+1}\big)\frac{\eta}{r(1-\beta)}\log A + \beta^{T_1+J+1}\frac{\eta}{1-\beta}\log A - O(1).
+\]
+En contraste, por la cota de recursos del Lema 9 en $(0,K_0]$ (con tasa $G_A(K_0)=q+F_A(K_0,1)/K_0 \to q+c_K k_0^r=O(1)$), toda trayectoria confinada en $(0,K_0]$ ---incluida cualquier senda óptima extinta desde $K_0$--- tiene bienestar acotado superiormente por $-\frac{\eta}{r(1-\beta)}\log A + O(1)$. Al sustraer la cota del Lema 9, el término dominante $-\frac{\eta}{r(1-\beta)}\log A$ se cancela exactamente y el excedente neto escala al menos como:
+\[
+\beta^{T_1+J(A)+1}\frac{\theta\eta}{r(1-\beta)}\log A - O(1) \ge c_1(\log A)^{1-|\log\beta|/\log\tilde{\theta}} - O(1) \to +\infty,
+\]
+pues $T_1$ es independiente de $A$ y $\beta\tilde{\theta}>1\implies 1-|\log\beta|/\log\tilde{\theta}>0$. Por contradicción con el Teorema 1, ningún óptimo puede extinguirse desde $K_0=A^{-1/r}k_0$ para $A$ grande, luego $\limsup_{A\to\infty}A^{1/r}S_A\le (\delta/c_K)^{1/r}$ (y análogamente para $S_A^{\mathrm{fix}}(\overline{L})$). Combinado con la cota física inferior (4.5) del Teorema 3 y (2.4) para $\kappa_A^{\mathrm{fix}}(\overline{L})$, ambos límites coinciden exactamente en $(\delta/c_K)^{1/r}$ y su cociente converge a $1$.
 
-\emph{Parte 2 (Isomorfismo finito y condición variacional).} Homogeneidad de grado $\theta=1+r$ da $F_A(\overline{L}\tilde{K},\overline{L})=\overline{L}F_{A\overline{L}^r}(\tilde{K},1)$ y $\eta\log(\overline{L}\tilde{C}_t)=\eta\log\tilde{C}_t+\eta\log\overline{L}$. En $K_0=S_A$, evaluar el óptimo productivo $\pi^+$ en $L\equiv 1$ rinde $V_A^{\mathrm{fix}}(S_A;1)\ge V_A(S_A)+\Delta W_A^+$. Inversamente, si $S_A^{\mathrm{fix}}(1)\ge S_A$, algún óptimo extinto decreciente $\pi^-=(C_t^{\mathrm{f}},K_{t+1}^{\mathrm{f}})$ en trabajo fijo cumple $K_t^{\mathrm{f}}\le S_A\le c_+ A^{-1/r}$ para todo $t\ge 0$; equipándolo con $\tilde{L}_t=c_0 A^{-d/[r(1+d)]}$ y usando la Proposición 4 ($C_t^{\mathrm{f}}\ge \chi_p^{\mathrm{fix}}K_t^{\mathrm{f}}$), la pérdida relativa de producto $\Delta F_t/C_t^{\mathrm{f}}$ y la de ocio $(1-\eta)|\log(1-\tilde{L}_t)|$ quedan uniformemente en $O(A^{-d/[r(1+d)]})$, dando $\Delta W_A^-=O(A^{-d/[r(1+d)]})$. Si $\Delta W_A^+ > \Delta W_A^-$, $J_A^{\mathrm{fix}}(\pi^+|_{L=1}) > \sup_{\mathcal{O}_-^{\mathrm{fix}}}J_A^{\mathrm{fix}}(\pi^-)$ e implica $S_A^{\mathrm{fix}}(1) < S_A$.
+\emph{Parte 2 (Isomorfismo finito y condición variacional).} Homogeneidad de grado $\theta=1+r$ da $F_A(\overline{L}\tilde{K},\overline{L})=\overline{L}F_{A\overline{L}^r}(\tilde{K},1)$ y $\eta\log(\overline{L}\tilde{C}_t)=\eta\log\tilde{C}_t+\eta\log\overline{L}$, estableciendo el isomorfismo finito exacto. Por el Teorema 1, en $K_0=S_A$ coexisten un óptimo productivo $\pi^+$ y uno extinto que alcanzan $V_A(S_A)$. Evaluar $\pi^+$ con $L\equiv 1$ (sin desutilidad de ocio) es factible en trabajo fijo y eleva su bienestar en $\Delta W_A^+>0$, luego $V_A^{\mathrm{fix}}(S_A;1)\ge J_A^{\mathrm{fix}}(\pi^+|_{L=1}) = V_A(S_A)+\Delta W_A^+$. Inversamente, supóngase $S_A^{\mathrm{fix}}(1)\ge S_A$: existiría entonces un óptimo extinto decreciente $\pi^-=(C_t^{\mathrm{f}},K_{t+1}^{\mathrm{f}})_{t\ge 0}\in\mathcal{O}_-^{\mathrm{fix}}$ en trabajo fijo con $K_t^{\mathrm{f}}\le S_A\le c_+ A^{-1/r}$ para todo $t\ge 0$. A lo largo de cualquier óptimo extinto decreciente confinado en $(0,S_A]$, los consumos futuros satisfacen $C_s^{\mathrm{f}}\le G_{\max}K_t^{\mathrm{f}}$ para $s\ge t+1$ con $G_{\max}:=q+c_K c_+^r \le 1/\beta + o(1)$, de modo que la comparación con la senda de consumo de torta $V_A^{\mathrm{fix}}(K_t^{\mathrm{f}};1)\ge V_{\mathrm{cake}}(K_t^{\mathrm{f}})$ cancela $\log K_t^{\mathrm{f}}$ y garantiza la cota inferior uniforme de la Proposición 4:
+\[
+\frac{C_t^{\mathrm{f}}}{K_t^{\mathrm{f}}} \ge \chi_p^{\mathrm{fix}} \ge (1-\beta)q\left(\frac{\beta q}{G_{\max}}\right)^{\beta/(1-\beta)} \ge 2.598\times 10^{-4} = \Omega(1),
+\]
+uniformemente para $A\to\infty$ (y en todo $A>A_*$). Equipando esta trayectoria de capital con esfuerzo $\tilde{L}_t = c_0 A^{-d/[r(1+d)]}$ y consumiendo $\tilde{C}_t = C_t^{\mathrm{f}} - [F_A(K_t^{\mathrm{f}},1)-F_A(K_t^{\mathrm{f}},\tilde{L}_t)] > 0$, la pérdida relativa de producto verifica:
+\[
+\frac{F_A(K_t^{\mathrm{f}},1) - F_A(K_t^{\mathrm{f}},\tilde{L}_t)}{C_t^{\mathrm{f}}} \le \frac{\theta c_K c_w}{d\,\chi_p^{\mathrm{fix}}} A(K_t^{\mathrm{f}})^r \left(\frac{K_t^{\mathrm{f}}}{\tilde{L}_t}\right)^d = O\!\left(A^{-\frac{d}{r(1+d)}}\right),
+\]
+idéntico orden que $(1-\eta)|\log(1-\tilde{L}_t)|=O(\tilde{L}_t)$. Sumando con descuento $\beta$, $V_A(S_A)\ge J_A^{\mathrm{endo}}(\pi^-|_{\tilde{L}})\ge J_A^{\mathrm{fix}}(\pi^-)-C_2 A^{-d/[r(1+d)]}$, luego $\Delta W_A^-=O(A^{-d/[r(1+d)]})$. Si $\Delta W_A^+ > \Delta W_A^-$, entonces $J_A^{\mathrm{fix}}(\pi^+|_{L=1}) > \sup_{\pi^-\in\mathcal{O}_-^{\mathrm{fix}}} J_A^{\mathrm{fix}}(\pi^-)$, descartando la extinción óptima en $S_A$ (pues $\mathcal{O}_-^{\mathrm{fix}}$ excluye sendas de liquidación diferida por encima de $S_A$) e implicando $S_A^{\mathrm{fix}}(1)<S_A$.
 \end{proof}
 
 \subsection{Verificación numérica de la condición de primer orden y de fronteras (VFI)}
 
-La Figura 2 y la Tabla 3 distinguen dos niveles complementarios de verificación en el modelo CES armónico ($\theta=3/2,d=1,r=1/2,\beta=0.97,q=0.92,\eta=0.70$) para $A\in[0.75,100]$: (i) la evaluación exacta de la condición de primer orden $L^*_A$ en $(k,c)=(0.002,0.0001)$ ($A\cdot L^*_A\to 0.133074$); y (ii) la resolución directa de la ecuación de Bellman normalizada (VFI) continua sobre una malla de dos zonas de $880$ puntos en $k=A^2 K$ para las fronteras verdaderas $A^2 S_A^{\mathrm{fix}}(1)$ y $A^2 S_A^{\mathrm{endo}}$. En todo $A\in[0.75,100]$ se verifica $S_A^{\mathrm{fix}}(1) < S_A^{\mathrm{endo}}$ (con excedente $\Delta W_A^+\in[3.20,9.73]$) y $S_A^{\mathrm{endo}}/S_A^{\mathrm{fix}}(1)\to 1$ ($1.02078$ a $1.00198$), mientras el acercamiento al límite físico $(\delta/c_K)^2=0.000800$ progresa a tasa logarítmica $O(1/\log\log A)$ debido a $\beta\theta=1.455>1$.
+La Figura 2 y la Tabla 3 distinguen explícitamente entre dos niveles complementarios de verificación en el modelo CES armónico ($\theta=3/2, d=1, r=1/2, \beta=0.97, q=0.92, \eta=0.70$) para $A\in[0.75, 10^8]$: (i) la evaluación exacta de la condición de primer orden del trabajo $L^*_A$ en el punto de referencia fijo reescalado $(k,c)=(0.002, 10^{-4})$, donde $A\cdot L^*_A$ converge hacia la constante teórica $0.133074$ mientras el costo de ocio y la brecha relativa de producto decaen como $O(A^{-1})$; y (ii) la \emph{resolución directa de la ecuación de Bellman normalizada (VFI)} continua mediante optimización por sección áurea sobre una malla de dos zonas de $880$ puntos en $k=A^2 K$, comparando explícitamente las fronteras verdaderas de supervivencia $A^2 S_A^{\mathrm{fix}}(1)$ y $A^2 S_A^{\mathrm{endo}}$. Se verifica numéricamente en todo el rango $A\in[0.75, 10^8]$ que $S_A^{\mathrm{fix}}(1) < S_A^{\mathrm{endo}}$ (de acuerdo con el criterio variacional de la Parte 2, con excedente productivo VFI $\Delta W_A^+\in[0.66, 8.70]$ en $A\in[0.75, 100]$, descendiendo a $0.29$ en $A=10^8$) y que el cociente de fronteras $S_A^{\mathrm{endo}}/S_A^{\mathrm{fix}}(1)$ converge monótonamente hacia $1$ ($1.01997$ en $A=0.75$ hasta $1.00125$ en $A=100$, $1.00090$ en $A=10^3$ y $1.00039$ en $A=10^8$). Nótese además que la aproximación conjunta de $A^2 S_A$ hacia el límite físico $(\delta/c_K)^2=0.000800$ se produce a ritmo ultralentamente logarítmico $O(1/\log\log A)$ debido al factor $\beta\theta=1.455>1$, alcanzando $0.000848$ en $A=10^3$ y $0.000835$ en $A=10^8$.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\linewidth]{fig2_scaling_es.png}
-\caption{Escalamiento asintótico y resolución numérica de fronteras para la Nota al pie 1 ($\theta=3/2,d=1,r=1/2$). El Panel (a) muestra la banda entre $\kappa_A$ y las cotas superiores de $S_A$ ($A^{-2}$); el Panel (b) combina las magnitudes FOC exactas en $(k,c)=(0.002,0.0001)$ con la brecha relativa de fronteras $S_A^{\mathrm{endo}}/S_A^{\mathrm{fix}}(1)-1\to 0$ calculada por VFI.}
+\caption{Escalamiento asintótico y resolución numérica de fronteras para la Nota al pie 1 ($\theta=3/2, d=1, r=1/2$) en $A\in[0.75, 100]$. El Panel (a) muestra la banda certificada a $A$ finito del Teorema 8 entre $\kappa_A$ y $0.0014025025/A^2$ junto con las fronteras VFI $S_A^{\mathrm{endo}}$ y $S_A^{\mathrm{fix}}(1)$; el Panel (b) combina las magnitudes FOC evaluadas en el punto fijo de referencia $(k,c)=(0.002, 10^{-4})$ (decaimiento en $A^{-1}$ y $A^{-2}$) con la brecha relativa de fronteras VFI $S_A^{\mathrm{endo}}/S_A^{\mathrm{fix}}(1)-1\to 0$.}
 \end{figure}
 
 \begin{table}[htbp]
 \centering
-\small
-\begin{tabular}{@{}ccccccccc@{}}
+\scriptsize
+\setlength{\tabcolsep}{3.2pt}
+\begin{tabular}{@{}cccccccccc@{}}
 \toprule
-$A$ & $\kappa_A$ & $A^2\kappa_A$ & $L^*_A$ $(k,c)$ & $A\cdot L^*_A$ & Brecha $F_A$ & $A^2 S_A^{\mathrm{fix}}(1)$ (VFI) & $A^2 S_A^{\mathrm{endo}}$ (VFI) & $S_A^{\mathrm{endo}}/S_A^{\mathrm{fix}}(1)$ \\
+$A$ & $\kappa_A$ & $A^2\kappa_A$ & $L^*_A$ $(k,c)$ & $A\cdot L^*_A$ & Brecha $F_A$ & $A^2 S_A^{\mathrm{fix}}(1)$ (VFI) & $A^2 S_A^{\mathrm{endo}}$ (VFI) & $S_A^{\mathrm{endo}}/S_A^{\mathrm{fix}}(1)$ & $\Delta W_A^+$ \\
 \midrule
-$0.75$ & $1.428\times 10^{-3}$ & $0.000803$ & $1.583\times 10^{-1}$ & $0.11874$ & $3.276\%$ & $0.000875$ & $0.000893$ & \textbf{$1.02078$} \\
-$1.50$ & $3.559\times 10^{-4}$ & $0.000801$ & $8.381\times 10^{-2}$ & $0.12571$ & $1.570\%$ & $0.000867$ & $0.000877$ & \textbf{$1.01183$} \\
-$3.00$ & $8.891\times 10^{-5}$ & $0.000800$ & $4.311\times 10^{-2}$ & $0.12934$ & $0.768\%$ & $0.000863$ & $0.000869$ & \textbf{$1.00717$} \\
-$10.0$ & $8.000\times 10^{-6}$ & $0.000800$ & $1.319\times 10^{-2}$ & $0.13194$ & $0.227\%$ & $0.000858$ & $0.000861$ & \textbf{$1.00371$} \\
-$30.0$ & $8.889\times 10^{-7}$ & $0.000800$ & $4.423\times 10^{-3}$ & $0.13270$ & $0.075\%$ & $0.000855$ & $0.000857$ & \textbf{$1.00255$} \\
-$100.0$ & $8.000\times 10^{-8}$ & $0.000800$ & $1.330\times 10^{-3}$ & $0.13296$ & $0.023\%$ & $0.000852$ & $0.000853$ & \textbf{$1.00198$} \\
+$0.75$ & $1.428\times 10^{-3}$ & $0.000803$ & $1.583\times 10^{-1}$ & $0.11874$ & $3.276\%$ & $0.000875$ & $0.000893$ & \textbf{$1.01997$} & $8.70$ \\
+$1.50$ & $3.559\times 10^{-4}$ & $0.000801$ & $8.380\times 10^{-2}$ & $0.12571$ & $1.570\%$ & $0.000868$ & $0.000877$ & \textbf{$1.01089$} & $5.24$ \\
+$3.00$ & $8.891\times 10^{-5}$ & $0.000800$ & $4.311\times 10^{-2}$ & $0.12934$ & $0.768\%$ & $0.000864$ & $0.000869$ & \textbf{$1.00621$} & $3.19$ \\
+$10.0$ & $8.000\times 10^{-6}$ & $0.000800$ & $1.319\times 10^{-2}$ & $0.13194$ & $0.227\%$ & $0.000859$ & $0.000862$ & \textbf{$1.00279$} & $1.46$ \\
+$30.0$ & $8.889\times 10^{-7}$ & $0.000800$ & $4.423\times 10^{-3}$ & $0.13270$ & $0.075\%$ & $0.000856$ & $0.000857$ & \textbf{$1.00172$} & $0.94$ \\
+$100.0$ & $8.000\times 10^{-8}$ & $0.000800$ & $1.330\times 10^{-3}$ & $0.13296$ & $0.023\%$ & $0.000853$ & $0.000854$ & \textbf{$1.00125$} & $0.66$ \\
+$10^3$ & $8.000\times 10^{-10}$ & $0.000800$ & $1.331\times 10^{-4}$ & $0.13306$ & $0.002\%$ & $0.000848$ & $0.000848$ & \textbf{$1.00090$} & $0.53$ \\
+$10^8$ & $8.000\times 10^{-20}$ & $0.000800$ & $1.331\times 10^{-9}$ & $0.13307$ & $0.000\%$ & $0.000835$ & $0.000835$ & \textbf{$1.00039$} & $0.29$ \\
 \midrule
-$\to\infty$ & $\to 0$ & \textbf{$0.000800$} & $\to 0$ & \textbf{$0.133074$} & \textbf{$0\%$} & \textbf{$0.000800$} & \textbf{$0.000800$} & \textbf{$1.00000$} \\
+$\to\infty$ & $\to 0$ & \textbf{$0.000800$} & $\to 0$ & \textbf{$0.133074$} & \textbf{$0\%$} & \textbf{$0.000800$} & \textbf{$0.000800$} & \textbf{$1.00000$} & --- \\
 \bottomrule
 \end{tabular}
-\caption{Verificación numérica combinada del Teorema 3* en el modelo CES armónico: columnas 2--6 en el punto FOC $(k,c)=(0.002,0.0001)$ y columnas 7--9 mediante resolución VFI directa de ambas fronteras de supervivencia ($c_K=2\sqrt{2}$, $(\delta/c_K)^2=0.000800$).}
+\caption{Verificación numérica combinada del Teorema 3* en el modelo CES armónico: columnas 2--6 en el punto FOC fijo $(k,c)=(0.002, 10^{-4})$ y columnas 7--10 mediante resolución VFI continua de sección áurea en $880$ puntos de ambas fronteras de supervivencia ($c_K=2\sqrt{2}$, $(\delta/c_K)^2=0.000800$).}
 \end{table}
 
 \section{Regulación, Impuestos e Infraestructura Pública: La Curva en U Institucional}
 
 \subsection{Microfundación Barro--CES y el Teorema 10}
 
-En la Sección 4.3 de Milei y Reidel (2026), la pérdida permanente de eficiencia $A_e=(1-\tau)A$ contrae el intervalo sostenible $[\kappa(A_e),K^+(A_e)]$ y produce extinción global para $\tau > 1-A_{\mathrm{rep}}/A$. Para contabilizar los ingresos devueltos y los bienes públicos productivos señalados por los autores en la página 10, incorporemos provisión pública equilibrada período a período tipo Barro (1990): el Estado recauda $\tau=\tau_p+\tau_u\in(0,1)$ sobre $Y_t$, destinando $G_t=\tau_p Y_t$ a infraestructura pública y protección de derechos de propiedad (con elasticidad $\gamma\in(0,1)$) mientras $\tau_u Y_t$ representa gasto improductivo o costo regulatorio de cumplimiento:
-\[
-Y_t = \widetilde{A}_0 G_t^\gamma [wK_t^\rho + (1-w)L_t^\rho]^{\theta_0/\rho}, \qquad G_t = \tau_p Y_t.
-\]
-Despejando $Y_t$, el producto privado neto disponible $(1-\tau_p-\tau_u)Y_t$ toma exactamente la forma (2.1) de Milei y Reidel:
-\begin{equation}
-Y_t^{\mathrm{priv}} = A_e(\tau_p,\tau_u)[wK_t^\rho + (1-w)L_t^\rho]^{\theta/\rho}, \qquad A_e(\tau_p,\tau_u) = A_0\tau_p^\alpha(1-\tau_p-\tau_u),
-\end{equation}
-donde $\theta:=\theta_0/(1-\gamma)$, $\alpha:=\gamma/(1-\gamma)>0$ y $A_0:=\widetilde{A}_0^{1/(1-\gamma)}$. Esta microfundación genera además rendimientos crecientes endógenos $\theta=1/(1-\gamma)\in(1,2)$ incluso si la tecnología privada exhibe rendimientos constantes ($\theta_0=1$).
+En la Sección 4.3 de Milei y Reidel (2026), los autores estudian una pérdida permanente de eficiencia productiva de la forma $A_e=(1-\tau)A$ con $\tau\in(0,1)$, probando en la Proposición 2 que el intervalo sostenible $[\kappa(A_e),K^+(A_e)]$ se contrae monótonamente con $\tau$ y colapsa al conjunto vacío cuando $\tau > \tau^* := 1-A_{\mathrm{rep}}/A$. El artículo académico advierte explícitamente en su página 10 que aplicar dicho experimento a impuestos o regulaciones exige contabilizar los recursos devueltos y los beneficios productivos de las instituciones o bienes públicos.
 
-\begin{theorem}[Teorema 10 --- Curva en U institucional de cotas certificadas, simetría y límite de $S(\tau)$]
-Sea una economía con productividad efectiva $A_e(\tau)=A_0\tau^\alpha(1-\tau)$ ($\tau_u=0$), $\alpha>0$ y condición de paciencia (2.3). Defina $\tau^*=\alpha/(1+\alpha)\in(0,1)$ y $A_{\max}:=A_e(\tau^*)=A_0\alpha^\alpha/(1+\alpha)^{1+\alpha}$.
+Para cerrar analíticamente esa brecha sin abandonar la tratabilidad exacta del modelo de un sector, incorporemos el canal institucional clásico de Barro (1990) con presupuesto público equilibrado período a período. Supongamos que el Estado recauda una alícuota total $\tau=\tau_p+\tau_u\in(0,1)$ sobre el producto bruto $Y_t$, destinando $G_t=\tau_p Y_t$ a infraestructura pública, justicia y protección de derechos de propiedad, mientras que $\tau_u Y_t$ representa gasto improductivo o costo regulatorio puro de cumplimiento. Si el flujo de bienes públicos productivos $G_t$ entra en la tecnología agregada con elasticidad $\gamma\in(0,1)$ junto con el agregador privado CES de grado $\theta_0$:
+\[
+Y_t = \widetilde{A}_0 G_t^\gamma \big[wK_t^\rho + (1-w)L_t^\rho\big]^{\theta_0/\rho}, \qquad G_t = \tau_p Y_t,
+\]
+al sustituir $G_t=\tau_p Y_t$ y despejar $Y_t$, el ingreso privado neto disponible para consumo e inversión $(1-\tau_p-\tau_u)Y_t$ toma \emph{exactamente la forma funcional (2.1) de Milei y Reidel (2026)}:
+\[
+Y_t^{\mathrm{priv}} = (1-\tau_p-\tau_u)Y_t = A_e(\tau_p,\tau_u)\big[wK_t^\rho + (1-w)L_t^\rho\big]^{\theta/\rho},
+\]
+donde el exponente de escala efectivo es $\theta:=\theta_0/(1-\gamma)$, la elasticidad institucional inducida es $\alpha:=\gamma/(1-\gamma)>0$, la productividad base es $A_0:=\widetilde{A}_0^{1/(1-\gamma)}$ y la productividad efectiva neta resulta:
+\[
+A_e(\tau_p,\tau_u) = A_0\tau_p^\alpha(1-\tau_p-\tau_u) \qquad \text{(y en ausencia de peso muerto $\tau_u=0$, } A_e(\tau)=A_0\tau^\alpha(1-\tau)\text{).}
+\]
+Notablemente, esta microfundación explica además el origen de los rendimientos crecientes agregados ($\theta>1$): aun cuando la tecnología privada exhiba rendimientos constantes a escala ($\theta_0=1$), la retroalimentación fiscal de la infraestructura pública ($\gamma\in(0,1/2)$) genera endógenamente $\theta=1/(1-\gamma)\in(1,2)$, y la condición de eficiencia productiva $\tau^*=\alpha/(1+\alpha)=\gamma$ coincide exactamente con la regla clásica de Barro (1990) ($\tau^*=\gamma=0.20$ cuando $\alpha=0.25$). Al sustituir $G_t=\tau_p Y_t$ antes de resolver el problema dinámico, el Teorema 10 caracteriza la solución del \emph{planificador fiscal} que internaliza la externalidad pública $G_t$; si firmas y hogares descentralizados toman $G_t$ como un agregado exógeno (incluso bajo $\theta_0=1$), sus retornos marginales privados después de impuestos retienen una cuña adicional $(1-\gamma)=1/(1+\alpha)$ frente al planificador, de modo que $\tau^*=\gamma$ sigue maximizando los incentivos privados pero el umbral descentralizado excede a $S_{A_e(\tau)}$ (en analogía directa con la cuña $1/\theta$ de la Proposición 2*).
+
+Dado que $A_e(\tau)$ actúa como un escalar multiplicativo puro sobre la tecnología CES (2.1), \emph{todos} los resultados estructurales de Milei y Reidel (2026) ---la Proposición 1, el Teorema 1, el Teorema 2 y el Teorema 3--- se transfieren de forma exacta componiéndolos con la función unimodal $A_e(\tau)$.
+
+\begin{thm_box}{Teorema 10 (Curva en U institucional de cotas certificadas, simetría y límite de $S(\tau)$)}
+Sea una economía con productividad efectiva $A_e(\tau)=A_0\tau^\alpha(1-\tau)$ ($\tau_u=0$), donde $\alpha>0$ ($\gamma=\alpha/(1+\alpha)$) y los seis parámetros restantes cumplen la condición de paciencia (2.3). Defina la carga institucional óptima (regla de Barro):
+\[
+\tau^* = \frac{\alpha}{1+\alpha} = \gamma \in (0,1), \qquad A_{\max} := A_e(\tau^*) = A_0 \frac{\alpha^\alpha}{(1+\alpha)^{1+\alpha}}.
+\]
 \begin{enumerate}
-\item \textbf{Doble umbral de extinción física (Anarquía vs. Hiper-regulación):} Si $A_{\max}>A_{\mathrm{rep}}$, existen dos cargas críticas únicas $0<\tau_{\min}<\tau^*<\tau_{\max}<1$ raíces de $\tau^\alpha(1-\tau)=A_{\mathrm{rep}}/A_0$ tales que para $\tau\in(0,\tau_{\min})$ (trampa de anarquía) y $\tau\in(\tau_{\max},1)$ (trampa confiscatoria), $\mathcal{M}(\tau)=\emptyset$ y toda historia factible se extingue geométricamente. Para $\tau\in(\tau_{\min},\tau_{\max})$, $[\kappa(\tau),K^+(\tau)]$ alcanza su amplitud máxima en $\tau^*$ y $\kappa(\tau)$ describe una curva en U diferenciable exacta con mínimo global único en $\tau^*$.
-\item \textbf{Distinción entre la envolvente certificada $\overline{S}(\tau)$ y la frontera verdadera $S(\tau)$:} Si $A_{\max}>A_*$, para todo $\tau\in(\tau_1,\tau_2)\subset(\tau_{\min},\tau_{\max})$ donde $A_e(\tau)>A_*$ existe una única frontera continua $S(\tau)>\kappa(\tau)$. Dado que $S_A=\Theta(A^{-1/(\theta-1)})$ provee cotas de orden sin implicar por sí sola diferenciabilidad ni monotonicidad a $A_0$ finito (Milei y Reidel, 2026, págs. 10 y 20):
+\item \textbf{Doble umbral de extinción física (Anarquía vs. Hiper-regulación):} Si $A_{\max}>A_{\mathrm{rep}}$, existen exactamente dos cargas críticas $0<\tau_{\min}<\tau^*<\tau_{\max}<1$, raíces únicas de $\tau^\alpha(1-\tau)=A_{\mathrm{rep}}/A_0$, tales que:
 \begin{itemize}
-\item[(a)] \textbf{Curva en U exacta de $\overline{S}(\tau)$:} Toda cota superior escalada $\overline{S}(\tau):=\bar{c}_+[A_e(\tau)]^{-1/(\theta-1)}$ (como la envolvente del Teorema 3 tabulada en la Tabla 4 o la cota explícita del Teorema 8 donde $A_e(\tau)\ge 0.749$) describe una curva diferenciable estrictamente convexa en U con mínimo único en $\tau^*$ y derivada logarítmica exacta $\frac{\partial\log\overline{S}(\tau)}{\partial\tau} = -\frac{1}{\theta-1}[\frac{\alpha}{\tau}-\frac{1}{1-\tau}] = \frac{\tau-\tau^*}{(\theta-1)(1-\tau^*)\tau(1-\tau)}$.
-\item[(b)] \textbf{Simetría de conjuntos de nivel a $A_0$ finito:} Como $S(\tau)=S_{A_e(\tau)}$, todo $\tau_-\in(\tau_1,\tau^*)$ posee un único conjugado $\tau_+\in(\tau^*,\tau_2)$ con $A_e(\tau_-)=A_e(\tau_+)$ y $S(\tau_-)=S(\tau_+)$, permaneciendo en $\kappa(\tau)<S(\tau)<1.798\kappa(\tau)$ en el dominio del Teorema 8.
-\item[(c)] \textbf{Curva en U asintótica exacta ($A_0\to\infty$):} Por el Teorema 3* ($\lim_{A\to\infty}A^{1/(\theta-1)}S_A = s_\infty^* := (\delta/c_K)^{1/(\theta-1)}$), $\lim_{A_0\to\infty} A_0^{1/(\theta-1)} S(\tau) = s_\infty^* [\tau^\alpha(1-\tau)]^{-1/(\theta-1)}$ uniformemente sobre compactos de $(0,1)$, con mínimo global único en $\tau^*=\alpha/(1+\alpha)$.
+\item Para $\tau\in(0,\tau_{\min})$ (\emph{trampa de anarquía / déficit institucional}) y para $\tau\in(\tau_{\max},1)$ (\emph{trampa de confiscación / sobre-regulación}), el conjunto físicamente sostenible es vacío ($\mathcal{M}(\tau)=\emptyset$) y toda historia factible se extingue geométricamente: $K_t\le [q+A_e(\tau)\Lambda_a]^t K_0 \to 0$, donde $\Lambda_a := \sup_{K>0} F_1(K,1)/K = \delta/A_{\mathrm{rep}}$.
+\item Para $\tau\in(\tau_{\min},\tau_{\max})$, el intervalo sostenible $[\kappa(\tau),K^+(\tau)]$ es no vacío, alcanza su amplitud máxima en $\tau=\tau^*$, y $\kappa(\tau)$ describe una curva en U diferenciable exacta con mínimo global único en $\tau^*$ ($\partial\log\kappa(\tau)/\partial\tau < 0$ para $\tau<\tau^*$ y $>0$ para $\tau>\tau^*$).
+\end{itemize}
+\item \textbf{Distinción entre envolvente asintótica $\overline{S}_{\mathrm{asy}}(\tau)$, cota certificada $\overline{S}_{\mathrm{cert}}(\tau)$ y frontera verdadera $S(\tau)$:} Si $A_{\max}>A_*=A_{\mathrm{SN}}$, sea $(\tau_1,\tau_2)\subset(\tau_{\min},\tau_{\max})$ el intervalo abierto donde $A_e(\tau)>A_*$, en el cual existe una única frontera continua $S(\tau)>\kappa(\tau)$ (mientras en $(\tau_{\min},\tau_1]\cup[\tau_2,\tau_{\max})$ ocurre \emph{extinción económica}: $\mathcal{M}(\tau)\neq\emptyset$, pero $S(\tau)$ no existe y todo óptimo liquida). Como advierten Milei y Reidel (2026, págs. 10 y 20), la relación $S_A=\Theta(A^{-1/(\theta-1)})$ provee cotas de orden sin implicar por sí sola diferenciabilidad, monotonicidad ni validez uniforme a $A_0$ finito. Separando los tres niveles:
+\begin{itemize}
+\item[(a)] \textbf{Envolvente asintótica $\overline{S}_{\mathrm{asy}}(\tau)$ frente a cota certificada $\overline{S}_{\mathrm{cert}}(\tau)$:} Toda cota escalada $\overline{S}(\tau):=\bar{c}_+[A_e(\tau)]^{-1/(\theta-1)}$ describe una curva diferenciable estrictamente log-convexa en U con mínimo único en $\tau^*=\alpha/(1+\alpha)$ y derivada logarítmica cerrada exacta:
+\[
+\frac{\partial}{\partial\tau}\log\overline{S}(\tau) = -\frac{1}{\theta-1}\left[\frac{\alpha}{\tau} - \frac{1}{1-\tau}\right] = \frac{\tau-\tau^*}{(\theta-1)(1-\tau^*)\tau(1-\tau)}.
+\]
+Sin embargo, la envolvente asintótica del Teorema 3, $\overline{S}_{\mathrm{asy}}(\tau) := (D/c_K)^{1/(\theta-1)}[A_e(\tau)]^{-1/(\theta-1)}$ (tabulada en la Tabla 4), constituye únicamente una cota asintótica ($A\to\infty$): en el modelo CES armónico acota $S(\tau)$ para $A_e(\tau)\ge A_{\mathrm{cross}}=0.110038$, pero es superada por la frontera verdadera $S(\tau)$ cuando $A_e(\tau)\in(A_*, A_{\mathrm{cross}})$ (tendiendo $S(\tau)\to K_{\mathrm{SN}}=0.18874$). Por el contrario, sobre el dominio $A_e(\tau)\ge 0.749$ ($\tau\in[0.117245, 0.304799]$ en la calibración de la Tabla 4), la cota explícita del Teorema 8, $\overline{S}_{\mathrm{cert}}(\tau) := (0.0014025025)^{1/2}[A_e(\tau)]^{-2}$, sí certifica rigurosamente $\kappa(\tau) < S(\tau) \le \overline{S}_{\mathrm{cert}}(\tau) < 1.798\kappa(\tau)$ a $A_0$ finito.
+\item[(b)] \textbf{Simetría de conjuntos de nivel de $S(\tau)$ a todo $A_0$ finito:} Como $S(\tau)=S_{A_e(\tau)}$ depende de $\tau$ únicamente mediante el escalar unimodal $A_e(\tau)$, todo $\tau_-\in(\tau_1,\tau^*)$ posee un único conjugado $\tau_+\in(\tau^*,\tau_2)$ con $A_e(\tau_-)=A_e(\tau_+)$ donde las fronteras coinciden exactamente ($S(\tau_-)=S(\tau_+)$).
+\item[(c)] \textbf{Curva en U asintótica exacta de $S(\tau)$ ($A_0\to\infty$):} Por el Teorema 3* ($\lim_{A\to\infty}A^{1/(\theta-1)}S_A = s_\infty^* := (\delta/c_K)^{1/(\theta-1)}$), la frontera verdadera reescalada converge uniformemente sobre subconjuntos compactos de $(0,1)$ al perfil diferenciable exacto:
+\[
+\lim_{A_0\to\infty} A_0^{1/(\theta-1)} S(\tau) = s_\infty^*\big[\tau^\alpha(1-\tau)\big]^{-1/(\theta-1)},
+\]
+cuyo único mínimo global ocurre exactamente en la tasa óptima de Barro $\tau^*=\alpha/(1+\alpha)=\gamma$.
 \end{itemize}
 \end{enumerate}
-\end{theorem}
+\end{thm_box}
 
 \begin{proof}
-La función $g(\tau)=\tau^\alpha(1-\tau)$ es estrictamente log-cóncava en $(0,1)$ con $g'(\tau)/g(\tau)=(\tau^*-\tau)/[(1-\tau^*)\tau(1-\tau)]$, creciendo en $(0,\tau^*)$ y decreciendo en $(\tau^*,1)$. La Proposición 1 aplicada a $A=A_e(\tau)$ prueba el punto 1, y la diferenciación implícita (ec. 4.2) da $\partial\log\kappa(\tau)/\partial\tau = (\tau-\tau^*)/([\theta s(\kappa(\tau))-1](1-\tau^*)\tau(1-\tau))$. Para 2(a), derivar $\log\overline{S}(\tau)$ arroja la identidad exacta y estricta log-convexidad en $\tau$; la unimodalidad de $A_e(\tau)$ da la simetría de 2(b); y sustituir $A=A_e(\tau)$ en el Teorema 3* prueba el perfil asintótico exacto de 2(c).
+La función $g(\tau)=\tau^\alpha(1-\tau)$ es estrictamente log-cóncava sobre $(0,1)$, con derivada logarítmica $g'(\tau)/g(\tau)=\alpha/\tau - 1/(1-\tau) = (\tau^*-\tau)/[(1-\tau^*)\tau(1-\tau)]$. Por ende, $g(\tau)$ crece estrictamente en $(0,\tau^*)$, alcanza su único máximo global en $\tau^*=\alpha/(1+\alpha)$ y decrece estrictamente en $(\tau^*,1)$, anulándose en ambos extremos. Si $A_{\max}=A_0 g(\tau^*)>A_{\mathrm{rep}}$, el teorema del valor intermedio garantiza dos raíces únicas $\tau_{\min}\in(0,\tau^*)$ y $\tau_{\max}\in(\tau^*,1)$ de $A_e(\tau)=A_{\mathrm{rep}}$. Aplicando la Proposición 1 de Milei y Reidel a $A=A_e(\tau)$ resulta el punto 1, cuya diferenciación implícita exacta en la ecuación (4.2) original da:
+\[
+\frac{\partial\log\kappa(\tau)}{\partial\tau} = -\frac{1}{\theta s(\kappa(\tau))-1}\frac{\partial\log A_e(\tau)}{\partial\tau} = \frac{\tau-\tau^*}{[\theta s(\kappa(\tau))-1](1-\tau^*)\tau(1-\tau)},
+\]
+negativa en $(\tau_{\min},\tau^*)$ y positiva en $(\tau^*,\tau_{\max})$ porque $\theta s(\kappa)-1>0$. Para el punto 2(a), derivar $\log\overline{S}(\tau)=\log\bar{c}_+ - (\theta-1)^{-1}\log A_e(\tau)$ entrega inmediatamente la identidad diferencial exacta y estricta log-convexidad en $\tau$ (con segunda derivada $>0$); la transferencia del Teorema 8 rige exclusivamente cuando $A_e(\tau)\ge 0.749$ ($[0.117245, 0.304799]$), mientras la comparación con $A_*=A_{\mathrm{SN}}=0.0995245$ y $A_{\mathrm{cross}}=0.110038$ separa la banda de extinción económica $(\tau_{\min},\tau_1]\cup[\tau_2,\tau_{\max})$ y la zona de cruce donde $S(\tau)>\overline{S}_{\mathrm{asy}}(\tau)$. Para 2(b), la unimodalidad estricta de $A_e(\tau)$ garantiza dos preimágenes únicas para cada nivel $A\in(A_*, A_{\max})$. Para 2(c), sustituyendo $A=A_0\tau^\alpha(1-\tau)$ en el límite $A^{1/(\theta-1)}S_A\to (\delta/c_K)^{1/(\theta-1)}$ probado en el Teorema 3* se obtiene la convergencia uniforme sobre cualquier compacto $[\underline{\tau},\overline{\tau}]\subset(0,1)$ hacia la curva en U asintótica exacta.
 \end{proof}
 
-\subsection{Descomposición entre gasto productivo ($\tau_p$) y carga improductiva ($\tau_u$)}
+\subsection{\texorpdfstring{Descomposición entre gasto productivo ($\tau_p$) y carga improductiva ($\tau_u$)}{Descomposición entre gasto productivo (tau\_p) y carga improductiva (tau\_u)}}
 
-Bajo $A_e(\tau_p,\tau_u)=A_0\tau_p^\alpha(1-\tau_p-\tau_u)$ se cumplen dos leyes complementarias: (i) para todo $\tau_p$ fijo, $\partial A_e/\partial\tau_u=-A_0\tau_p^\alpha<0$ implica $\partial\kappa/\partial\tau_u>0$ y $\partial\overline{S}/\partial\tau_u>0$ \emph{en todo punto} (y $\partial S/\partial\tau_u>0$ cuando $A_0\to\infty$), recuperando la Proposición 2 original sobre $\tau_u$; y (ii) la provisión productiva que minimiza $\kappa$ y $\overline{S}$ es $\tau_p^*(\tau_u)=\frac{\alpha}{1+\alpha}(1-\tau_u)$, con $\overline{S}^*(\tau_u)=\bar{c}_+[A_e^*(\tau_u)]^{-1/(\theta-1)}\propto (1-\tau_u)^{-(1+\alpha)/(\theta-1)}$.
+El Teorema 10 reconcilia formalmente la matemática de Milei y Reidel (2026) con el debate de política económica sobre el tamaño óptimo del Estado. Si la carga agregada se descompone en $\tau=\tau_p+\tau_u\in(0,1)$, donde $\tau_p>0$ financia bienes públicos productivos ($\tau_p^\alpha$) y $\tau_u\in[0,1-\tau_p)$ representa gasto improductivo o costo regulatorio puro de cumplimiento (burocracia sin contrapartida productiva), la productividad efectiva neta adopta la forma bivariada $A_e(\tau_p,\tau_u)=A_0\tau_p^\alpha(1-\tau_p-\tau_u)$, de donde se desprenden dos leyes complementarias:
+
+\begin{enumerate}
+\item \textbf{Monotonía frente a la carga improductiva $\tau_u$:} Para cualquier nivel dado de provisión institucional $\tau_p$, se verifica $\partial A_e/\partial\tau_u = -A_0\tau_p^\alpha < 0$, lo que contrae monótonamente el conjunto sostenible ($\partial\kappa/\partial\tau_u>0$ y $\partial\overline{S}/\partial\tau_u>0$ \emph{en todo punto}, y en el límite $A_0\to\infty$ también $\partial S/\partial\tau_u>0$), recuperando la Proposición 2 de Milei y Reidel (2026) sobre la dimensión $\tau_u$.
+\item \textbf{Curva en U y efecto desplazamiento (\emph{crowding-out}) sobre la dimensión productiva $\tau_p$:} Para cada $\tau_u\in[0,1)$ fijo, la alícuota productiva que maximiza $A_e(\tau_p,\tau_u)$ y minimiza tanto $\kappa(\tau_p,\tau_u)$ como $\overline{S}(\tau_p,\tau_u)$ es $\tau_p^*(\tau_u)=\frac{\alpha}{1+\alpha}(1-\tau_u)=\gamma(1-\tau_u)$, donde la productividad máxima escala como $A_e^*(\tau_u)\propto (1-\tau_u)^{1+\alpha}$ y la envolvente mínima certificada crece como $\overline{S}^*(\tau_u)=\bar{c}_+[A_e^*(\tau_u)]^{-1/(\theta-1)}\propto (1-\tau_u)^{-(1+\alpha)/(\theta-1)}$. Así, recortar burocracia improductiva $\tau_u$ o exceso fiscal ($\tau_p>\tau_p^*$) abate drásticamente las barreras de viabilidad, mientras en la rama izquierda ($\tau_p<\tau_p^*$) la infraestructura y los derechos de propiedad evitan la trampa de anarquía.
+\end{enumerate}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\linewidth]{fig3_ucurve_es.png}
-\caption{Extensión institucional de la Sección 4.3 ($A_e(\tau)=A_0\tau^\alpha(1-\tau)$ con $A_0=1.45,\alpha=0.25,\tau^*=0.20,A_{\mathrm{rep}}=0.0735$). El Panel (a) contrasta la productividad neta con infraestructura pública frente a la pérdida lineal pura $A(1-\tau)$ y ubica las dos raíces de extinción ($\tau_{\min}=6.60\times 10^{-6}$, $\tau_{\max}=0.9486$); el Panel (b) muestra la curva en U exacta de $\kappa(\tau)$ y la cota superior certificada $\overline{S}(\tau)=(D/c_K)^2 A_e(\tau)^{-2}$.}
+\caption{Extensión institucional de la Sección 4.3 ($A_e(\tau)=A_0\tau^\alpha(1-\tau)$ con $A_0=1.45,\alpha=0.25,\tau^*=0.20,A_{\mathrm{rep}}=0.073485, A_*=A_{\mathrm{SN}}=0.0995245$). El Panel (a) contrasta $A_e(\tau)$ con la pérdida lineal pura y delimita la extinción física ($[0,\tau_{\min}]$ y $[\tau_{\max},0.98]$, $\tau_{\min}=6.60\times 10^{-6}, \tau_{\max}=0.9486$, rojo), la extinción económica ($(\tau_{\min},\tau_1]$ y $[\tau_2,\tau_{\max}]$, $\tau_1=2.22\times 10^{-5}, \tau_2=0.9301$, ámbar) y la banda del Teorema 8 ($A_e\ge 0.749$); el Panel (b) muestra $\kappa(\tau)$, la frontera VFI verdadera $S(\tau)$ (sólida), la envolvente asintótica $\overline{S}_{\mathrm{asy}}(\tau)=(D/c_K)^2 A_e(\tau)^{-2}$ (discontinua, superada por $S(\tau)$ más allá de $A_{\mathrm{cross}}=0.110038$, $\tau_{c2}=0.9226$) y la cota certificada a $A$ finito del Teorema 8 sobre $[0.117245, 0.304799]$.}
 \end{figure}
 
 \begin{table}[htbp]
@@ -365,99 +495,168 @@ Bajo $A_e(\tau_p,\tau_u)=A_0\tau_p^\alpha(1-\tau_p-\tau_u)$ se cumplen dos leyes
 \small
 \begin{tabular}{@{}cccccl@{}}
 \toprule
-\textbf{Carga $\tau$} & $A_e(\tau)$ & $A_e(\tau)/A_{\mathrm{rep}}$ & $\kappa(\tau)$ & \textbf{Cota $\overline{S}(\tau)$} & \textbf{Régimen institucional} \\
+\textbf{Carga $\tau$} & $A_e(\tau)$ & $A_e(\tau)/A_{\mathrm{rep}}$ & $\kappa(\tau)$ & \textbf{Envolv. $\overline{S}_{\mathrm{asy}}(\tau)$} & \textbf{Régimen institucional} \\
 \midrule
-$5.0\times 10^{-6}$ & $0.0685$ & $0.93$ & --- & --- & Extinción (trampa de anarquía) \\
-$2.0\times 10^{-5}$ & $0.0970$ & $1.32$ & $0.119322$ & $0.163590$ & Borde de anarquía ($\tau>\tau_{\min}$) \\
+$5.0\times 10^{-6}$ & $0.0686$ & $0.93$ & --- & --- & Extinción física (trampa de anarquía) \\
+$2.0\times 10^{-5}$ & $0.0970$ & $1.32$ & $0.119322$ & $0.163590^\dagger$ & Extinción económica ($\mathcal{M}\neq\emptyset$, $S$ no existe) \\
 $0.02$ & $0.5344$ & $7.27$ & $0.002825$ & $0.005386$ & Rama izquierda (provisión subóptima) \\
 $0.05$ & $0.6514$ & $8.86$ & $0.001896$ & $0.003625$ & Expansión de infraestructura \\
 $0.10$ & $0.7339$ & $9.99$ & $0.001492$ & $0.002856$ & Cercano al óptimo institucional \\
-\textbf{$0.20$ ($\tau^*$)} & \textbf{$0.7757$} & \textbf{$10.56$} & \textbf{$0.001335$} & \textbf{$0.002556$} & \textbf{Carga óptima única (mínimo de $\overline{S},\kappa$)} \\
+\textbf{$0.20$ ($\tau^*$)} & \textbf{$0.7757$} & \textbf{$10.56$} & \textbf{$0.001335$} & \textbf{$0.002556$} & \textbf{Carga óptima única (mínimo; Teo. 8: $0.002331$)} \\
 $0.40$ & $0.6919$ & $9.42$ & $0.001680$ & $0.003213$ & Rama derecha (sobrecarga fiscal) \\
 $0.60$ & $0.5105$ & $6.95$ & $0.003099$ & $0.005903$ & Fuerte contracción sostenible \\
 $0.80$ & $0.2743$ & $3.73$ & $0.010990$ & $0.020448$ & Deterioro severo de viabilidad \\
 $0.90$ & $0.1412$ & $1.92$ & $0.045887$ & $0.077114$ & Antesala de colapso \\
-$0.94$ & $0.0857$ & $1.17$ & $0.178378$ & $0.209599$ & Borde de sobre-regulación ($\tau<\tau_{\max}$) \\
-$0.95$ & $0.0716$ & $0.97$ & --- & --- & Extinción (hiper-regulación) \\
+$0.94$ & $0.0857$ & $1.17$ & $0.178378$ & $0.209599^\dagger$ & Extinción económica ($\mathcal{M}\neq\emptyset$, $S$ no existe) \\
+$0.95$ & $0.0716$ & $0.97$ & --- & --- & Extinción física (hiper-regulación) \\
 \bottomrule
 \end{tabular}
-\caption{Cuantificación de los regímenes institucionales del Teorema 10 en el modelo CES armónico ($A_0=1.45,\alpha=0.25,A_{\mathrm{rep}}=0.073485,\tau_{\min}=6.60\times 10^{-6},\tau_{\max}=0.948649$). La columna 5 reporta $\overline{S}(\tau)=(D/c_K)^2 A_e(\tau)^{-2}$ (dominada además por $0.0014025025\,A_e(\tau)^{-2}=0.002331$ en $\tau^*$ donde $A_e\ge 0.749$ por el Teorema 8).}
+\caption{Cuantificación de los regímenes institucionales del Teorema 10 en el modelo CES armónico ($A_0=1.45,\alpha=0.25,A_{\mathrm{rep}}=0.073485,\tau_{\min}=6.60\times 10^{-6},\tau_{\max}=0.948649$, umbral nodo-silla endógeno $A_*=A_{\mathrm{SN}}=0.0995245$, $(\tau_1,\tau_2)=(2.2197\times 10^{-5}, 0.930108)$, $A_{\mathrm{cross}}=0.110038$). La columna 5 reporta la envolvente asintótica $\overline{S}_{\mathrm{asy}}(\tau)=(D/c_K)^2 A_e(\tau)^{-2}$; el símbolo $\dagger$ identifica filas con $\mathcal{M}(\tau)\neq\emptyset$ pero $A_e(\tau)<A_*$ en extinción económica (donde $S(\tau)$ no existe y $\overline{S}_{\mathrm{asy}}$ carece de validez como cota). En la banda certificada del Teorema 8 ($\tau\in[0.117245, 0.304799]$, $A_e\ge 0.749$) rige la cota finita $\overline{S}_{\mathrm{cert}}(\tau)=0.0014025025\,A_e(\tau)^{-2}$ ($0.002331$ en $\tau^*$).}
 \end{table}
 
 \section{Extensiones Estructurales: Descentralización Empresarial, Crecimiento Sostenido y Barreras Estocásticas}
 
+Mientras que las discusiones de política económica en torno a la escala mínima viable enfatizan el rol de las grandes empresas, las leyes antimonopolio, el crecimiento exponencial de largo plazo («palo de hockey») y las crisis macroeconómicas, el modelo matemático base de Milei y Reidel (2026) se formula para un planificador central determinista acotado por un techo estacionario $K_p^+$. Demostramos a continuación cómo incorporar formalmente estas tres dimensiones precisando con exactitud el alcance de sus teoremas y certificados.
+
 \subsection{Descentralización, poder de mercado y el costo de fragmentar empresas}
 
-Con rendimientos crecientes $\theta\in(1,2)$, las firmas perfectamente competitivas sufrirían pérdidas $(1-\theta)Y_t<0$. Dos descentralizaciones estándar respaldan (2.1): competencia monopolística (Dixit y Stiglitz, 1977) con margen $\mu\ge\theta>1$ cubriendo costos fijos operativos $(1-\theta/\mu)Y_t$, o externalidades agregadas de escala (Romer, 1986).
+Con rendimientos crecientes a escala $\theta\in(1,2)$, el Teorema de Euler implica $KF_{A,K}+LF_{A,L}=\theta F_A(K,L) > F_A(K,L)$, por lo que firmas tomadoras de precios en competencia perfecta sin externalidades incurrirían en pérdidas operativas $(1-\theta)Y_t<0$. Existen dos descentralizaciones canónicas compatibles con la tecnología CES (2.1): (i) \emph{competencia monopolística u oligopolio simétrico} (Dixit y Stiglitz, 1977) con margen de precios (\emph{markup}) $\mu\ge\theta>1$, donde cada firma remunera a los factores según $R_t^K=(1/\mu)F_{A,K}$ y $w_t=(1/\mu)F_{A,L}$ y la fracción restante $(1-\theta/\mu)Y_t\ge 0$ cubre costos fijos operativos de intermediación y entrada (o se transfiere como dividendo de suma fija); o bien (ii) \emph{externalidades agregadas de escala} (Romer, 1986), donde cada firma opera con rendimientos constantes sobre sus insumos privados y productividad externa dada por la escala agregada.
 
-\begin{proposition}[Proposición 2* --- Descentralización con escala empresarial, contabilidad factorial y fragmentación]
+\begin{thm_box}{Proposición 2* (Descentralización con escala empresarial, contabilidad factorial y fragmentación)}
 Bajo la tecnología CES (2.1) con $\theta\in(1,2)$ y $r=\theta-1>0$:
 \begin{enumerate}
-\item \textbf{Fragmentación regulatoria o antimonopolio:} Fragmentar $(K_t,L_t)$ en $M\ge 1$ firmas simétricas aisladas ($K_{i,t}=K_t/M, L_{i,t}=L_t/M$) contrae el producto agregado a $\sum_{i=1}^M F_A(K_t/M,L_t/M) = M^{-r}F_A(K_t,L_t) = F_{A/M^r}(K_t,L_t)$, multiplicando la Escala Mínima Viable por $M$ ($S_A(M)=\Theta(M\cdot S_A)$) y provocando extinción global si $M\ge (A/A_{\mathrm{rep}})^{1/(\theta-1)}$.
-\item \textbf{Contabilidad exacta y brecha de subinversión descentralizada:} Si las firmas pagan $r_t=(1/\mu)F_{A,K}$ y $w_t=(1/\mu)F_{A,L}$ bajo competencia monopolística con margen $\mu\ge\theta>1$, el Teorema de Euler implica que los pagos factoriales totales suman exactamente $r_t K_t + w_t L_t = (\theta/\mu)F_A(K_t,L_t) = F_{(\theta/\mu)A}(K_t,L_t)$ ($A_{\mathrm{mkt}}:=(\theta/\mu)A\le A$). Cuando la fracción residual $(1-\theta/\mu)Y_t\ge 0$ es absorbida por costos fijos operativos (beneficio neto nulo), el problema del hogar coincide exactamente con el operador de Bellman en $A_{\mathrm{mkt}}=(\theta/\mu)A$, induciendo para $\mu>\theta$ la trampa de coordinación $[S_A, S_{(\theta/\mu)A})$. Alternativamente, si $(1-\theta/\mu)Y_t$ se reembolsa en suma fija a los hogares, la cuña $1/\mu < 1/\theta$ en los retornos marginales privados $(r_t,w_t)$ deprime igualmente la acumulación respecto del óptimo social.
+\item \textbf{Teorema de fragmentación regulatoria o antimonopolio:} Si una regulación o intervención estatal fragmenta los insumos agregados $(K_t,L_t)$ en $N_f\ge 1$ empresas simétricas aisladas ($K_{i,t}=K_t/N_f$, $L_{i,t}=L_t/N_f$), el producto agregado se contrae exactamente como:
+\[
+Y_t^{(N_f)} = \sum_{i=1}^{N_f} F_A\!\left(\frac{K_t}{N_f},\frac{L_t}{N_f}\right) = N_f \cdot N_f^{-\theta} F_A(K_t,L_t) = F_{A/N_f^r}(K_t,L_t).
+\]
+En consecuencia, fragmentar la escala empresarial en $N_f$ unidades es \emph{matemáticamente isomorfo} a destruir la productividad total de los factores a $A_{\mathrm{ef}}(N_f)=A/N_f^{\theta-1}$, lo que multiplica la Escala Mínima Viable por un factor $N_f$ en el régimen asintótico ($S_A(N_f)=\Theta(N_f\cdot S_A)$), provoca \emph{extinción económica} ($\mathcal{M}(N_f)\neq\emptyset$, pero $S_A(N_f)$ no existe y todo óptimo liquida) ya desde $N_f\ge N_{f,\mathrm{SN}}:=(A/A_*)^{1/(\theta-1)}=56.79$ firmas bajo la calibración de referencia ($A=0.75, \theta=1.5$), y conduce a \emph{extinción física global} ($\mathcal{M}(N_f)=\emptyset$) cuando $N_f\ge N_{f,\mathrm{rep}}:=(A/A_{\mathrm{rep}})^{1/(\theta-1)}=104.17$.
+\item \textbf{Contabilidad exacta y brecha de subinversión en el equilibrio descentralizado:} Si las firmas remuneran los factores a $R_t^K=(1/\mu)F_{A,K}$ y $w_t=(1/\mu)F_{A,L}$ bajo competencia monopolística con margen $\mu\ge\theta>1$, por el Teorema de Euler el ingreso factorial agregado percibido por los hogares asciende exactamente a:
+\[
+R_t^K K_t + w_t L_t = \frac{\theta}{\mu} F_A(K_t,L_t) = F_{A_{\mathrm{mkt}}}(K_t,L_t), \qquad A_{\mathrm{mkt}} := \frac{\theta}{\mu} A \le A.
+\]
+Sin embargo, como los hogares tomadores de precios optimizan sobre la restricción presupuestaria lineal $C_t+K_{t+1}\le (q+R_t^K)K_t+w_t L_t+\Pi_t$, enfrentan productos marginales privados $R_t^K=\frac{1}{\mu}F_{A,K}=\frac{1}{\theta}F_{A_{\mathrm{mkt}},K}$ y $w_t=\frac{1}{\mu}F_{A,L}=\frac{1}{\theta}F_{A_{\mathrm{mkt}},L}$ deprimidos por una \emph{cuña marginal persistente $1/\theta<1$} incluso después de reescalar $A\to A_{\mathrm{mkt}}$ y aun cuando $\mu=\theta$ ($A_{\mathrm{mkt}}=A$; el mismo factor $1/\theta$ rige bajo externalidades tipo Romer, 1986). Por ello, el problema descentralizado \emph{no} es isomorfo al operador de Bellman del planificador en $A_{\mathrm{mkt}}$:
+\begin{itemize}
+\item \emph{(Cierre con costos fijos operativos / libre entrada):} Cuando la participación residual $(1-\theta/\mu)Y_t\ge 0$ es absorbida por costos fijos ($\Pi_t=0$), la cuña $1/\theta$ abre una trampa de coordinación descentralizada $[S_A, K_{\mathrm{lo}}(\mu))$ ya en $\mu=\theta$ ($K_{\mathrm{lo}}=0.003039 > S_A=0.001587$ para $\mu=\theta=1.5$), que se amplía monótonamente con $\mu$ ($K_{\mathrm{lo}}=0.004490 > S_{A_{\mathrm{mkt}}}=0.002302$ en $\mu=1.8$, y $K_{\mathrm{lo}}=0.005644 > S_{A_{\mathrm{mkt}}}=0.002856$ en $\mu=2.0$).
+\item \emph{(Cierre con reembolso de beneficios puros):} Si $\Pi_t=(1-\theta/\mu)Y_t$ se transfiere en suma fija a los hogares ($\partial\Pi_t/\partial K_t=0$), las condiciones privadas de Euler e intratemporal conservan la cuña $1/\mu\le 1/\theta<1$ frente al óptimo social. Más aún, para $\mu>\theta$ el reembolso positivo $\Pi_t>0$ ejerce un efecto riqueza que eleva el consumo $C_t$, reduce la oferta laboral $L_t$ (en $\mu=1.8$, $L_{\mathrm{hi}}$ cae de $0.6755$ a $0.6226$), deprime $R_{t+1}^K$ y eleva aún más el umbral inestable de la trampa ($K_{\mathrm{lo}}$ sube a $0.004670$ en $\mu=1.8$ y a $0.006055$ en $\mu=2.0$).
+\end{itemize}
 \end{enumerate}
-\end{proposition}
+\end{thm_box}
 
 \begin{proof}
-Por homogeneidad de grado $\theta=1+r$, $F_A(K/M,L/M)=M^{-\theta}F_A(K,L)$, sumando $M^{1-\theta}F_A(K,L)=F_{AM^{-r}}(K,L)$. Aplicando la Proposición 1 y el Teorema 3 a $\tilde{A}=AM^{-r}$ resulta extinción iff $AM^{-r}\le A_{\mathrm{rep}}$ y $S_{\tilde{A}}=M\cdot\Theta(A^{-1/r})$. La identidad de Euler $KF_{A,K}+LF_{A,L}=\theta F_A(K,L)$ garantiza pagos factoriales iguales a $(\theta/\mu)F_A(K_t,L_t)=F_{(\theta/\mu)A}(K_t,L_t)$, generando el isomorfismo con $A_{\mathrm{mkt}}=(\theta/\mu)A<A$ cuando $\mu>\theta$ y costos fijos absorben $(1-\theta/\mu)Y_t$, o cuñas marginales $1/\mu$ bajo transferencia de beneficios de suma fija.
+Por homogeneidad de grado $\theta=1+r$ de $F_A(K,L)=A[wK^\rho+(1-w)L^\rho]^{\theta/\rho}$, se verifica $F_A(K/N_f,L/N_f)=N_f^{-\theta}F_A(K,L)$. Sumando sobre las $N_f$ firmas se obtiene $Y_t^{(N_f)}=N_f^{1-\theta}F_A(K,L)=F_{AN_f^{-r}}(K,L)$. Aplicando la Proposición 1, el Teorema 3 y el Teorema 10 a $\widetilde{A}=AN_f^{-r}$ resultan el umbral físico $N_{f,\mathrm{rep}}=(A/A_{\mathrm{rep}})^{1/r}=104.17$, el umbral nodo-silla económico $N_{f,\mathrm{SN}}=(A/A_*)^{1/r}=56.79$ y el escalado $S_{\widetilde{A}}=N_f\cdot\Theta(A^{-1/r})$. Para la Parte 2, la identidad de Euler $KF_{A,K}+LF_{A,L}=\theta F_A(K,L)$ garantiza $R_t^K K_t + w_t L_t = (\theta/\mu)F_A(K_t,L_t)=F_{A_{\mathrm{mkt}}}(K_t,L_t)$. Sin embargo, la restricción presupuestaria lineal del hogar implica las condiciones marginales privadas $1/C_t = \beta(q+R_{t+1}^K)/C_{t+1}$ y $(1-\eta)/(1-L_t)=(\eta/C_t)w_t$, donde $R_t^K=(1/\mu)F_{A,K}=(1/\theta)F_{A_{\mathrm{mkt}},K}$ y $w_t=(1/\mu)F_{A,L}=(1/\theta)F_{A_{\mathrm{mkt}},L}$ conservan siempre la cuña $1/\theta<1$ respecto de la envolvente social en $A_{\mathrm{mkt}}$, descartando el isomorfismo con el Bellman del planificador incluso en $\mu=\theta$. Trazando la variedad estable hacia el estado estacionario alto $K_{\mathrm{hi}}$ (Apéndice A.4) se confirma $K_{\mathrm{lo}}(\mu) > S_{A_{\mathrm{mkt}}} \ge S_A$ en todo $\mu\ge\theta$, mientras bajo transferencia $\Pi_t=(1-\theta/\mu)Y_t>0$ el efecto riqueza sobre el ocio reduce $L_t$ y $R_{t+1}^K$, incrementando $K_{\mathrm{lo}}$ y reduciendo $K_{\mathrm{hi}}$ en relación con el cierre de costos fijos.
 \end{proof}
 
-\subsection{Eliminación del techo estacionario $K_p^+$ y el «palo de hockey» del crecimiento sostenido}
+\subsection{\texorpdfstring{Eliminación del techo estacionario $K_p^+$ y el «palo de hockey» del crecimiento sostenido}{Eliminación del techo estacionario K\_p\^+ y el palo de hockey del crecimiento sostenido}}
 
-\begin{proposition}[Proposición 3* --- Isomorfismo de crecimiento balanceado y despegue exponencial sin techo]
-Con progreso técnico aumentador de trabajo $E_t=(1+g)^t$ ($g>0$) y $Y_t=(1+g)^t F_A(K_t/(1+g)^t, L_t)$, las variables en unidades de eficiencia $\hat{K}_t=K_t/(1+g)^t$ y $\tilde{C}_t=C_t/(1+g)^{t+1}$ satisfacen $\tilde{C}_t+\hat{K}_{t+1}\le \tilde{q}\hat{K}_t+F_{\tilde{A}}(\hat{K}_t,L_t)$ con $\tilde{q}=q/(1+g)$ y $\tilde{A}=A/(1+g)$, difiriendo la utilidad solo en la constante aditiva $\eta(t+1)\log(1+g)$. El problema en $(\hat{K}_t,\tilde{C}_t,L_t)$ es 100\% idéntico al de Milei y Reidel con parámetros $(\tilde{A},\beta,\tilde{q},\eta,\theta,\rho,w)$: si $K_0>\hat{S}_p$, $\hat{K}_t$ ingresa a $\hat{H}=[\hat{h},\hat{K}_p^+]$ (en $\tau_H\le 23$ períodos si los parámetros reescalados caen en 7.3) y el capital real crece exponencialmente sin techo: $K_t=(1+g)^t\hat{K}_t\ge (1+g)^t\hat{h}\to\infty$.
-\end{proposition}
+En el modelo base de Milei y Reidel (2026), la cota laboral $L_t\le 1$ y la complementariedad bruta $\rho<0$ imponen una asíntota horizontal al producto $F_A(K,1)<A(1-w)^{\theta/\rho}$, generando un techo estacionario $K_p^+<\infty$. La siguiente proposición muestra que al incorporar progreso técnico aumentador de trabajo exógeno a tasa $g>0$, se elimina el techo $K_p^+$ y se obtiene crecimiento exponencial perpetuo («palo de hockey») preservando de manera exacta toda la estructura y las pruebas en unidades de eficiencia (véase la Nota al pie 2 para el contraste con un derrame endógeno tipo Romer sobre $H$).
+
+\begin{thm_box}{Proposición 3* (Isomorfismo de crecimiento balanceado y despegue exponencial sin techo)}
+Sea una economía con progreso técnico aumentador de trabajo $E_t=(1+g)^t$ ($g>0$) y tecnología homogénea de grado $1$ en $(K_t, E_t)$:
+\[
+Y_t = (1+g)^t F_A\!\left(\frac{K_t}{(1+g)^t}, L_t\right) = A(1+g)^{(1-\theta)t}\big[wK_t^\rho + (1-w)\big((1+g)^t L_t\big)^\rho\big]^{\theta/\rho}.
+\]
+Definiendo las variables en unidades de eficiencia $\hat{K}_t=K_t/(1+g)^t$ y $\tilde{C}_t=C_t/(1+g)^{t+1}$, la ley de acumulación se reduce exactamente a:
+\[
+\tilde{C}_t + \hat{K}_{t+1} \le \tilde{q}\hat{K}_t + F_{\tilde{A}}(\hat{K}_t,L_t), \qquad \tilde{q}:=\frac{q}{1+g}, \qquad \tilde{A}:=\frac{A}{1+g},
+\]
+mientras que la utilidad de período difiere de $u(\tilde{C}_t,L_t)$ únicamente en una constante aditiva $\eta[(t+1)\log(1+g)]$ independiente de la política elegida. En consecuencia:
+\begin{enumerate}
+\item El problema dinámico en $(\hat{K}_t,\tilde{C}_t,L_t)$ es \emph{100\% idéntico} al modelo de Milei y Reidel con parámetros $(\tilde{A},\beta,\tilde{q},\eta,\theta,\rho,w)$, existiendo una única frontera relativa $\hat{S}_p > \hat{\kappa}_p$.
+\item Si $K_0<\hat{S}_p$, la economía cae en la trampa de liquidación ($\hat{K}_t\to 0$). Si $K_0>\hat{S}_p$, $\hat{K}_t$ ingresa en tiempo finito (en a lo sumo $\tau_H\le 23$ períodos desde $M$ si $(\tilde{A},\beta,\tilde{q},\eta)$ pertenece a la caja 7.3) a la banda productiva $\hat{H}=[\hat{h},\hat{K}_p^+]$ de $(0,\infty)$, lo que en niveles reales implica que \emph{el capital y el producto crecen exponencialmente sin techo para siempre}:
+\[
+K_t = (1+g)^t\hat{K}_t \ge (1+g)^t\hat{h} \to \infty \qquad (t\to\infty).
+\]
+\end{enumerate}
+\end{thm_box}
 
 \begin{proof}
-Dividir $C_t+K_{t+1}\le qK_t+(1+g)^t F_A(K_t/(1+g)^t,L_t)$ por $(1+g)^{t+1}$ produce inmediatamente la ley estacionaria en $\tilde{q},\tilde{A}$, y $\sum_{t=0}^\infty \beta^t\eta(t+1)\log(1+g)<\infty$ no afecta al ordenamiento de trayectorias óptimas.
+Dividiendo la restricción física $C_t+K_{t+1}\le qK_t+(1+g)^t F_A(K_t/(1+g)^t, L_t)$ por $(1+g)^{t+1}$ se obtiene de inmediato $\tilde{C}_t+\hat{K}_{t+1}\le \tilde{q}\hat{K}_t+F_{\tilde{A}}(\hat{K}_t,L_t)$. Dado que $\sum_{t=0}^\infty \beta^t\eta(t+1)\log(1+g)<\infty$ es constante respecto de las decisiones $(\hat{K}_{t+1},L_t)$, el conjunto de trayectorias óptimas de $\hat{K}_t$ coincide punto por punto con el del modelo estacionario de parámetros $(\tilde{A},\tilde{q})$.\footnote{Una alternativa endógena consiste en introducir un factor de conocimiento $\Gamma_t$ sobre el trabajo efectivo $\Gamma_t L_t$, con $\Gamma_t=1$ para $K_t<h$ (etapa pre-industrial) y derrame proporcional $\Gamma_t=K_t/h$ al cruzar el umbral $h$ (Romer, 1986). A diferencia del caso exógeno $E_t=(1+g)^t$, dicho mecanismo \emph{no} deja inalterados los techos ni las constantes certificadas de la Sección 3: (i) conservar la tecnología CES con $\theta=3/2$ junto a $\Gamma_t=K_t/h$ produce crecimiento superlineal $K_t^{3/2}$ y explosión del valor ($V(K)=+\infty$ pues $\beta\theta=1.455>1$), mientras que imponer $\theta=1$ sobre $H$ introduce un salto discontinuo al alza de $+51.2\%$ en el producto en $K=h=0.28, L=1$ ($0.217034\to 0.328125$); (ii) aun bajo el régimen $AK$ continuo por tramos $Y_t=(K_t/h)F_A(h,L_t)$ sobre $H=[h,\infty)$, optimizar tasa de ahorro y trabajo constantes desde $h=0.28$ ($s=0.9700, L=0.9244, R_{\mathrm{AK}}=1.6748$) alcanza $V_{\mathrm{AK}}(0.28)\ge +240.7598 \gg \Psi^\sharp(0.28)=-27.870334$, invalidando el techo de continuación $\Psi^\sharp$ sobre $H$, multiplicando la cota $\tau_H$ ($\ge 119$) y revirtiendo el margen de salida en $K=0.28$ ($-260.49<0$), lo cual exige re-derivar la súper-barrera en $H$ y recalibrar los certificados de salida.}
 \end{proof}
 
 \subsection{Incertidumbre macroeconómica y Barreras de Bellman Estocásticas (Teorema de Doob)}
 
-Limitarnos a evaluar $(1-p)^{23}$ con el horizonte determinista de $p=0$ supondría agentes miopes ante el riesgo de crisis. El \textbf{Teorema 11*} cierra completamente esta brecha mediante plazos endógenos ajustados por riesgo $T^*(p)$, barreras acopladas de Markov $(B_G,B_B)$ y VFI estocástica anticipatoria.
+Una ventaja metodológica fundamental de las \emph{Barreras de Bellman de Primer Paso (FPBB)} de la Sección 6 de Milei y Reidel (2026) frente a las pruebas deterministas clásicas de Dechert y Nishimura (1983) es que las desigualdades de barrera se extienden naturalmente a entornos estocásticos mediante la teoría de martingalas y el \emph{Teorema de Parada Opcional de Doob} (Doob, 1953). Sin embargo, limitarse a evaluar una cota ex-post como $(1-p)^{23}$ con el horizonte determinista de $p=0$ ignoraría que agentes con expectativas racionales (actuando con $\beta=0.97$) que anticipan probabilidad anual de crisis $p>0$ modifican ex ante su ahorro $K'^{(p)}(K)$, su esfuerzo laboral $L^{(p)}(K)$ y su factor efectivo de impaciencia.
 
-\begin{theorem}[Teorema 11* --- Barreras Estocásticas de Doob, plazos endógenos $T^*(p)$ y política anticipatoria]
-Sea $(\omega_t)_{t\ge 0}$ un proceso Markoviano de shocks macroeconómicos sobre $(\Omega,\mathcal{F},\mathbb{P})$ sujeto a la condición de integrabilidad $\sup_{t\le T}\mathbb{E}[|V(K_{t\wedge\tau},\omega_{t\wedge\tau})|]<\infty$ para todo horizonte finito $T\ge 1$.
+El siguiente teorema cierra por completo esta dimensión en cuatro frentes verificables: (1) el certificado abstracto de supermartingala de Doob con extensión al dominio $[b,\infty)$ y verificación de salidas; (2) el plazo estocástico endógeno $T^*(p)$ y el umbral de ruptura de certificación $p_{\mathrm{cert}}$ bajo riesgo de expropiación o ruina irreversible; (3) el sistema matricial cerrado $(B_G, B_B)$ para recesiones Markovianas recuperables certificado en $32$ subcajas; y (4) la caracterización cuantitativa vía VFI estocástica continua de la dicotomía conductual entre riesgo de ruina y crisis recuperables.
+
+\begin{thm_box}{Teorema 11* (Barreras Estocásticas de Doob, plazos endógenos $T^*(p)$ y política óptima anticipatoria)}
+Sea $(\omega_t)_{t\ge 0}$ un proceso de shocks macroeconómicos Markovianos sobre un espacio $(\Omega,\mathcal{F},\mathbb{P})$ que afecta los parámetros primitivos en cada período, bajo la condición de integrabilidad $\sup_{t\le T}\mathbb{E}[|V(K_{t\wedge\tau},\omega_{t\wedge\tau})|]<\infty$ para todo horizonte finito $T\ge 1$.
 \begin{enumerate}
-\item \textbf{Certificado de Supermartingala (Stochastic FPBB):} Si una función medible y acotada $B:M\times\Omega\to\mathbb{R}$ satisface $B(K,\omega)\ge r(K,\omega,a)+\beta\mathbb{E}[B(K',\omega')\mid K,\omega,a]$ en $M$ y $\mathbb{E}[\sum_{j=0}^{t-1}\beta^j|r_j|]<\infty$, entonces $Z_t:=\beta^t B(K_t,\omega_t)+\sum_{j=0}^{t-1}\beta^j r_j$ es una supermartingala respecto de $\mathcal{F}_t$ hasta $\tau=\inf\{t\ge 0:K_t\notin M\}$ y por Doob (1953), $\mathbb{E}[J(\pi)]\le B(x_0,\omega_0)+\mathbb{E}[\beta^{T\wedge\tau}(V(K_{T\wedge\tau},\omega_{T\wedge\tau})-B(K_{T\wedge\tau},\omega_{T\wedge\tau}))]$.
-\item \textbf{Plazo endógeno $T^*(p)$ bajo riesgo anticipado de ruina ($\tilde{\beta}_p:=\beta(1-p)$):} Si en cada fecha rige caja (7.3) con probabilidad $1-p$ y un colapso absorbente de pago común $U_0$ con probabilidad $p$, la cancelación exacta de $\frac{\beta p U_0}{1-\tilde{\beta}_p}$ reduce optimización y supermartingala a $\tilde{\beta}_p$. Con barrera $B_1^{(p)}(x)=B_*^{(p)}-\frac{\eta q(h-x)}{C_{\max}}$, testigos de $25$ pasos $W_X^{(p)}$ y cota global $\Psi^{(p)}(K)=a_p K - b_p K^{-1/2}+c_p$, tanto permanencia como salidas adversas (heredando monotonía de la Proposición 1**) permanecen positivas para $p\in[0,2.00\%]$ hasta la ruptura $p_{\mathrm{cert}}\approx 2.07\%$, mientras $T^*(p)$ crece endógenamente ($21,24,29,38,74$) y $\mathbb{P}_{\mathrm{Doob}}(p=2\%)\ge 0.2242$ frente al $0.6283$ ingenuo de $(1-0.02)^{23}$.
-\item \textbf{Sistema acoplado de Markov $(B_G,B_B)$:} Entre normalidad ($A_G=0.75$) y recesión recuperable ($A_B=0.35$) con matriz $P=\begin{pmatrix}1-p & p\\ r_{\mathrm{rec}} & 1-r_{\mathrm{rec}}\end{pmatrix}$ ($r_{\mathrm{rec}}=1/3$), $(I-\beta_- P)\mathbf{B}_* = \hat{\mathbf{R}}-\boldsymbol{\Delta}$ certifica márgenes positivos para todo $p\in[0,12\%]$ ($\mathbb{P}(\tau=\infty)=0$) y horizontes $T^*_G\in[21,40]$.
-\item \textbf{Dicotomía óptima (VFI estocástica):} Bajo riesgo de ruina ($\tilde{\beta}_p$), $K'_p(0.10)$ y $L_p(0.10)$ disminuyen y $S_p$ casi se triplica ($0.001588\to 0.004589$ en $p=8\%$); bajo crisis recuperables ($A_G\leftrightarrow A_B$), un efecto precautorio eleva $K'_G(0.10)$ ($0.13369\to 0.13474$) y $L_G(0.10)$ ($0.6632\to 0.6759$) para acelerar el arribo a $H$.
+\item \textbf{Certificado de Supermartingala (Stochastic FPBB):} Sea $B:[b,\infty)\times\Omega\to\mathbb{R}$ una función medible y acotada definida en todo el semieje $[b,\infty)$ (con $M=[b,h)$). Si $B$ satisface la desigualdad de Bellman en un paso sobre $K\in M$ para toda acción factible con sucesor $K'\ge b$ (incluyendo tanto permanencia $K'\in M$ como salida superior $K'\ge h$):
+\[
+B(K,\omega) \ge \varrho(K,\omega,a) + \beta\,\mathbb{E}\big[B(K',\omega')\mid K,\omega,a\big],
+\]
+y toda historia de bienestar finito en $M$ satisface $\mathbb{E}[\sum_{j=0}^{t-1}\beta^j|\varrho_j|]<\infty$, entonces a lo largo de toda política que evita salidas adversas por debajo de $b$ hasta el tiempo de parada $\tau=\inf\{t\ge 0: K_t\notin M\}$ (garantizado cuando los testigos y cotas certifican $\varrho(x,y)+\beta\mathbb{E}[V(y,\omega')|\omega] < W_\omega(x)$ para todo $y<b$), el proceso detenido $Z_{t\wedge\tau}:=\beta^{t\wedge\tau}B(K_{t\wedge\tau},\omega_{t\wedge\tau})+\sum_{j=0}^{(t\wedge\tau)-1}\beta^j \varrho_j$ es una \emph{supermartingala} respecto de la filtración natural $\mathcal{F}_t$. Por el Teorema de Parada Opcional de Doob, para todo horizonte $T\ge 1$:
+\[
+\mathbb{E}_{x_0,\omega_0}[J(\pi)] \le B(x_0,\omega_0) + \mathbb{E}_{x_0,\omega_0}\!\left[\beta^{T\wedge\tau}\big(V(K_{T\wedge\tau},\omega_{T\wedge\tau}) - B(K_{T\wedge\tau},\omega_{T\wedge\tau})\big)\right].
+\]
+\item \textbf{Certificado endógeno $T^*(p)$ bajo riesgo anticipado de ruina/colapso ($\tilde{\beta}_p:=\beta(1-p)$):} Supongamos que en cada fecha $t$ (con anticipación ex ante de los agentes), con probabilidad $1-p$ rige la caja normal (7.3) y con probabilidad $p\in(0,1)$ ocurre un shock catastrófico absorbente con valor presente de continuación de ruina común $U_0\in\mathbb{R}$ (si el flujo tras la catástrofe es $u_0$, entonces $U_0=u_0/(1-\beta)$). Sustrayendo el valor constante invariante $\frac{\beta p U_0}{1-\tilde{\beta}_p}$, tanto la optimización dinámica como la supermartingala de Doob se reducen exactamente al problema de descuento efectivo $\tilde{\beta}_p=\beta(1-p)$. Definiendo la barrera afín estocástica extendida a $[b,\infty)$ por $B_1^{(p)}(x):=B_*^{(p)}-\frac{\eta q(h-x)_+}{C_{\max}}$ con $B_*^{(p)}=\frac{\widehat{R}-\Delta_2(p)}{1-\tilde{\beta}_p}$, el testigo factible de $25$ pasos $W_X^{(p)}$ evaluado en el extremo peor $\tilde{\beta}_{p,+}$ y la súper-barrera continua lineal a tramos en logaritmo (\texttt{log-PWL}) $\Psi^{(p)}$ certificada uniformemente en toda la caja sobre $(0,\infty)$:
+\begin{itemize}
+\item Mientras la familia paramétrica $x^{-1/2}$ presenta singularidad en la cola inferior $(0,0.0014]$ por encima de $p_{\mathrm{sing}} = 1-\sqrt{q_+}/\beta_+ = 1.1217\%$, la súper-barrera continua \texttt{log-PWL} $\Psi^{(p)}$ certifica todos los márgenes de permanencia, no salida por debajo de $b$ (continuamente sobre $M$) y salida adversa ($M$ y $H_1$, preservando la monotonía de la Proposición 1** respecto de $K$) en todo $p\in[0,2.00\%]$ ---aun más allá del límite asintótico de paciencia local $p_{\mathrm{pat}}=1-\frac{1}{\beta(q+\theta\delta)}=0.8723\%$ ($0.8573\%$ en esquina adversa), ya que en $M$ los retornos marginales brutos $q+F_{A,K}\in[1.631, 1.667]$ (hasta $1.831$ en $A_+$) superan $1.0398$ en $\kappa_A$--- hasta la ruptura de calibración en un paso en \textbf{$p_{\mathrm{cert}} = 2.0434\%$}.
+\item El plazo máximo certificado de entrada antes de una crisis \textbf{$T^*(p)$ crece endógenamente con $p$} ($T^*(0)=22$, $T^*(0.5\%)=25$, $T^*(1.0\%)=30$, $T^*(1.5\%)=40$, $T^*(2.0\%)=84$), demostrando que la probabilidad certificada genuina $\mathbb{P}_p(\text{Supervivencia hasta } H)\ge (1-p)^{T^*(p)}$ cae hasta \textbf{$0.1832$} en $p=2.0\%$ frente al $0.6283$ sobreestimado de usar el plazo miope $(1-0.02)^{23}$.
+\end{itemize}
+\item \textbf{Sistema acoplado de barreras Markovianas $(B_G,B_B)$ para recesiones recuperables:} Bajo un proceso de Markov sobre $\Omega=\{G,B\}$ entre normalidad ($A_G\in[0.749,0.751]$) y recesión severa recuperable ($A_B\in[0.349,0.351]$, donde $\kappa(A_B)=0.0066<b$), con matriz de transición $P=\begin{pmatrix}1-p & p\\ p_{\mathrm{rec}} & 1-p_{\mathrm{rec}}\end{pmatrix}$ ($p_{\mathrm{rec}}=1/3$), el par acoplado extendido a $[b,\infty)$ mediante $B_\omega(x)=B_{*,\omega}-m_\omega(h-x)_+$ con $m_\omega=\eta_- q_-/C_{\max,\omega}$ resuelve en forma cerrada el sistema lineal $2\times 2$:
+\[
+(I-\beta_- P)\begin{pmatrix}B_{*,G}\\ B_{*,B}\end{pmatrix} = \begin{pmatrix}\widehat{R}_G\\ \widehat{R}_B\end{pmatrix} - \begin{pmatrix}\Delta_G(p,p_{\mathrm{rec}})\\ \Delta_B(p,p_{\mathrm{rec}})\end{pmatrix}, \qquad \Delta_\omega := (h-b)\min\!\left(\frac{\eta_-}{C_{\max,\omega}},\,\beta_-(P\mathbf{m})_\omega\right).
+\]
+Bajo evaluación emparejada en $\beta\in[0.9699,0.9701]$ con testigos estacionarios factibles en malla $(W_G, W_B)$, súper-barreras continuas \texttt{log-PWL} $(\Psi_G,\Psi_B)$ sobre $(0,\infty)$, verificación continua de no salida $<b$ en todo $M$ ($\ge +0.032$) y partición de $32$ subcajas ($4\times 2\times 2\times 2$ sobre $A_G,A_B,q,\eta$) certificada por ramificación y acotación en $H$ (\texttt{mExitHB\_32bx} $\ge +0.013$), se certifican márgenes estrictamente positivos puntualmente para $p\in\{0\%,0.5\%,1\%,1.5\%,2\%,5\%,8\%,12\%\}$, descartando trampas en $M$ ($\mathbb{P}(\tau=\infty)=0$) con horizontes $T^*_G\in[21,33]$ y $T^*_B\in[45,88]$.
+\item \textbf{Dicotomía de política óptima anticipatoria (VFI estocástica continua):} Cuando los optimizadores internalizan $p>0$ cada año, la VFI continua por sección áurea en $880$ puntos (Tabla 5) muestra que un peligro de ruina irreversible ($\tilde{\beta}_p$) deprime la inversión $K'^{(p)}(0.10)$ ($0.13364\to 0.12757$) y el trabajo $L^{(p)}(0.10)$ ($0.6626\to 0.6008$) y casi triplica la frontera crítica $S^{\mathrm{ruin}}(p)$ ($0.001588\to 0.004589$ en $p=8\%$); en cambio, una crisis recuperable ($A_G\leftrightarrow A_B$) activa un \emph{efecto precautorio de «huida hacia la seguridad»} en el que $K'_G(0.10)$ ($0.13364\to 0.13475$) y $L_G(0.10)$ ($0.6626\to 0.6759$) \emph{aumentan} con $p$, conteniendo el alza de $S_G(p)$ ($0.001588\to 0.001774$, $+11.7\%$) mientras en recesión el umbral de salto Skiba $S_B^{\mathrm{kink}}(p)$ sube ($0.00166\to 0.00187$) y el punto de inversión neta nula $K_B^*(p)$ cae ($0.01086\to 0.00991$).
 \end{enumerate}
-\end{theorem}
+\end{thm_box}
 
 \begin{proof}
-Por la desigualdad condicional e integrabilidad, $\mathbb{E}[Z_{t+1}-Z_t\mid\mathcal{F}_t]\le 0$ en $\{\tau>t\}$ y Doob en $T\wedge\tau$ da el punto 1. En el punto 2, el flujo acumulado de ruina hasta $T\wedge\tau$ más $\tilde{\beta}_p^{T\wedge\tau}\frac{\beta p U_0}{1-\tilde{\beta}_p}$ iguala $\frac{\beta p U_0}{1-\tilde{\beta}_p}$ en ambos miembros y $\partial(W_X^{(p)}-E^+)/\partial K$ es independiente de $\tilde{\beta}_p$, conservando la monotonía estado a estado sobre $[0,2.00\%]$ con cota $\Psi^{(p)}$ verificada sobre $[0.0014,45.0]$ más colas contractivas. En el punto 3, la linealidad en $y\in[b,h]$ fija $\Delta_\omega=(h-b)\min(\eta_-/C_{\max,\omega},\beta_-(P\mathbf{m})_\omega)$ y $\rho(\beta_- P)=\beta_-<1$ asegura inversión positiva de $(I-\beta_- P)$ y las cotas de escape vía Doob. El punto 4 proviene de VFI estocástica continua de $880$ puntos acelerada por Howard.
+En el punto 1, por la desigualdad de un paso para todo $K'\ge b$, la ausencia de salidas óptimas $<b$ y la integrabilidad, el incremento detenido satisface:
+\[
+\mathbb{E}\big[Z_{(t+1)\wedge\tau} - Z_{t\wedge\tau} \mid \mathcal{F}_t\big] = \mathbf{1}_{\{\tau>t\}}\beta^t\big\{\varrho(K_t,\omega_t,a_t) + \beta\,\mathbb{E}[B(K_{t+1},\omega_{t+1})\mid\mathcal{F}_t] - B(K_t,\omega_t)\big\} \le 0,
+\]
+tanto en permanencia ($K_{t+1}\in M$) como en el paso de salida superior ($K_{t+1}\ge h$, donde $(h-K_{t+1})_+=0$ y $c_1-c_0\ge q(h-K_t)+(h-b)$ garantiza la desigualdad porque $\frac{\eta_-}{C_{\max,\omega}}(h-b)\ge \Delta_\omega$); el Teorema de Parada Opcional de Doob en $T\wedge\tau$ produce la cota de valor. En el punto 2, a lo largo de cualquier senda que permanece en $M$ hasta $T\wedge\tau$, el flujo acumulado esperado de eventos de ruina más la fracción de continuación $\tilde{\beta}_p^{T\wedge\tau}\frac{\beta p U_0}{1-\tilde{\beta}_p}$ suma idénticamente $\frac{\beta p U_0}{1-\tilde{\beta}_p}$, idéntico al componente de ruina del testigo $W_X^{(p)}$, por lo que la resta anula $U_0$ exactamente. Al depender $\varrho(K,s)$ de $K$ sin intervención de $\tilde{\beta}_p$, la derivada $\partial(W_X^{(p)}-E^+)/\partial K$ coincide con la de la Proposición 1**, extendiendo la monotonía estado a estado automáticamente mientras los bordes $b=0.10$ y $h=0.28$ permanecen positivos. Como el testigo de $25$ pasos posee pagos $\varrho_t\in[-3.3968,-0.6205]<0$, su peor evaluación en caja ocurre en $\tilde{\beta}_{p,+}=\beta_+(1-p)$; la súper-solución continua \texttt{log-PWL} $\Psi^{(p)}$ se certifica uniformemente en $\tilde{\beta}_p\in[\tilde{\beta}_{p,-},\tilde{\beta}_{p,+}]$ sobre todo $(0,\infty)$ combinando ramificación y acotación 3D en forma centrada sobre $[10^{-8},90]$ con colas analíticas contractivas en $(0,10^{-8}]$ y en $[90,\infty)$, y verificando además $\tilde{\beta}_{p,-}\min_{(0,b]}(\Psi^{(p)})' > \eta_+/c_{\min}(E^+)$ junto con una cobertura continua de $50$ subintervalos en $M$ (\texttt{cont} $\ge +0.839$ en $p=2\%$) para excluir salidas $<b$ (en $p=0\%$, la familia paramétrica $(0.45,5.0)$ se certifica análogamente con colas analíticas en $(0,8\times 10^{-5}]$ y $[45,\infty)$).
+
+En el punto 3, para cada $(x,y)\in M\times[b,\infty)$ y $\omega\in\{G,B\}$, la linealidad en $y\in[b,h]$ de $\eta y/C_{\max,\omega}+\beta_-(P\mathbf{m})_\omega(h-y)$ fija su mínimo en $\{b,h\}$ y el exceso en $y\ge h$ aporta $(\eta_-/C_{\max,\omega})(h-b)\ge\Delta_\omega$, validando $\varrho_\omega(x,y)+\beta\mathbb{E}[B(y,\omega')\mid\omega]\le B(x,\omega)$ exactamente cuando $(I-\beta_- P)\mathbf{B}_* = \widehat{\mathbf{R}}-\boldsymbol{\Delta}$. Como el radio espectral de $\beta_- P$ es $\beta_-<1$, el sistema admite inversión explícita positiva. Partiendo de $x_0=0.10$ bajo $(A_+,q_+)$, los máximos stocks alcanzables son $K_1\le 0.150233 < K_2\le 0.238496 < 0.28 < K_3\le 0.398940$, de modo que necesariamente $\tau\ge 3$ y $\beta^\tau\le \beta_+^3$ sobre $\{\tau\le T\}$. Por Doob en $T\wedge\tau$, con $\Psi(y_{\max})-B_*>0$ ($y_{\max}=0.474952$), la probabilidad de salida satisface:
+\[
+\mathbb{P}(\tau\le T) \ge \frac{W_\omega(x_0)-B_\omega(x_0)-\beta_+^T\max_{\omega'}(\Psi_{\omega'}(h)-B_{*,\omega'})}{\beta_+^3\max_{\omega'}(\Psi_{\omega'}(y_{\max})-B_{*,\omega'})-\beta_+^T\max_{\omega'}(\Psi_{\omega'}(h)-B_{*,\omega'})} > 0,
+\]
+descartando $\mathbb{P}(\tau=\infty)=0$ (certificado puntualmente en $p\in\{0\%,0.5\%,1\%,1.5\%,2\%,5\%,8\%,12\%\}$ con $\beta$ emparejado, $32$ subcajas en $H$ y no salida $<b$ en $M$; la cota extrapolada de ruptura de permanencia en el estado $B$ alcanza $p_{\mathrm{cert}}^{\mathrm{Markov}}=15.45\%$). El punto 4 resulta de resolver las ecuaciones de Bellman estocásticas continuas mediante VFI de sección áurea en $880$ puntos acelerada por Howard (usando interpolación PCHIP para las políticas locales y verificando la sensibilidad a $p_{\mathrm{rec}}\in\{0.20,1/3,0.50\}$ en $p=8\%$, Apéndice A.4).
 \end{proof}
 
 \begin{table}[htbp]
 \centering
 \scriptsize
+\setlength{\tabcolsep}{2.8pt}
 \begin{tabular}{@{}cccccc@{}}
 \toprule
-Riesgo $p$ & Doob $T^*(p)$ & $\mathbb{P}_{\mathrm{Doob}}(p)$ vs. $(1-p)^{23}$ & Markov $B_G(0.10)/T^*_G$ & VFI Ruina ($S_p; K'; L$) & VFI Markov ($K'_G; L_G$)\\
+Riesgo $p$ & Doob $T^*(p)$ & $\mathbb{P}_{\mathrm{Doob}}(p)$ vs. $(1-p)^{23}$ & Markov $B_G(0.10)/T^*_G/T^*_B$ & VFI Ruina ($S^{\mathrm{ruin}}(p)$; $K'^{(p)}$; $L^{(p)}$) & VFI Markov ($S_G; S_B^{\mathrm{kink}}; K_B^*; K'_G; L_G$)\\
 \midrule
-$0.0\%$ & \textbf{21} & \textbf{1.000} / 1.000 & $-43.358$ / 21 & 0.001588 ; 0.13364 ; 0.6626 & 0.13369 ; 0.6632\\
-$0.5\%$ & \textbf{24} & \textbf{0.887} / 0.891 & $-43.508$ / 22 & 0.001670 ; 0.13324 ; 0.6579 & 0.13380 ; 0.6645\\
-$1.0\%$ & \textbf{29} & \textbf{0.747} / 0.794 & $-43.654$ / 22 & 0.001769 ; 0.13294 ; 0.6545 & 0.13385 ; 0.6651\\
-$1.5\%$ & \textbf{38} & \textbf{0.563} / 0.706 & $-43.796$ / 23 & 0.001884 ; 0.13254 ; 0.6502 & 0.13389 ; 0.6657\\
-$2.0\%$ & \textbf{74} & \textbf{0.224} / 0.628 & $-43.935$ / 24 & 0.002013 ; 0.13219 ; 0.6464 & 0.13392 ; 0.6660\\
-$5.0\%$ & $>p_{\mathrm{cert}}$ & --- / 0.307 & $-44.695$ / 29 & 0.003053 ; 0.12990 ; 0.6225 & 0.13432 ; 0.6707\\
-$8.0\%$ & $>p_{\mathrm{cert}}$ & --- / 0.147 & $-45.353$ / 34 & \textbf{0.004589 ; 0.12757 ; 0.6008} & \textbf{0.13474 ; 0.6759}\\
+$0.0\%$ & \textbf{22} & \textbf{1.0000} / 1.0000 & $-43.358$ / 21 / 45 & 0.001588 ; 0.13364 ; 0.6626 & 0.001588 ; 0.00166 ; 0.01086 ; 0.13364 ; 0.6626\\
+$0.5\%$ & \textbf{25} & \textbf{0.8822} / 0.8911 & $-43.508$ / 21 / 46 & 0.001670 ; 0.13324 ; 0.6579 & 0.001603 ; 0.00168 ; 0.01062 ; 0.13373 ; 0.6638\\
+$1.0\%$ & \textbf{30} & \textbf{0.7397} / 0.7936 & $-43.654$ / 22 / 47 & 0.001769 ; 0.13294 ; 0.6545 & 0.001608 ; 0.00169 ; 0.01062 ; 0.13379 ; 0.6645\\
+$1.5\%$ & \textbf{40} & \textbf{0.5463} / 0.7064 & $-43.796$ / 22 / 48 & 0.001884 ; 0.13254 ; 0.6502 & 0.001622 ; 0.00171 ; 0.01062 ; 0.13386 ; 0.6654\\
+$2.0\%$ & \textbf{84} & \textbf{0.1832} / 0.6283 & $-43.935$ / 23 / 49 & 0.002013 ; 0.13219 ; 0.6464 & 0.001636 ; 0.00172 ; 0.01062 ; 0.13392 ; 0.6660\\
+$5.0\%$ & $>p_{\mathrm{cert}}$ & --- / 0.307 & $-44.695$ / 25 / 56 & 0.003053 ; 0.12990 ; 0.6225 & 0.001703 ; 0.00179 ; 0.01038 ; 0.13435 ; 0.6710\\
+$8.0\%$ & $>p_{\mathrm{cert}}$ & --- / 0.147 & $-45.353$ / 29 / 66 & \textbf{0.004589 ; 0.12757 ; 0.6008} & \textbf{0.001774 ; 0.00187 ; 0.00991 ; 0.13475 ; 0.6759}\\
 \bottomrule
 \end{tabular}
-\caption{Verificación estocástica conjunta del Teorema 11* sobre la caja (7.3) ($p_{\mathrm{cert}}=2.07\%$).}
+\caption{Verificación estocástica conjunta del Teorema 11* sobre la caja (7.3): el certificado genuino de Doob bajo anticipación con súper-barrera continua \texttt{log-PWL} y peor caso $\beta_+$ ($p_{\mathrm{cert}}=2.0434\%$), el sistema acoplado de Markov ($A_G=0.75\leftrightarrow A_B=0.35, p_{\mathrm{rec}}=1/3$, certificado en $32$ subcajas sobre $p\in[0\%,12\%]$; los valores en $p=12\%$ se reportan en el Apéndice A.3), y el contraste en VFI continua de sección áurea de $880$ puntos entre desaliento por riesgo de ruina ($S^{\mathrm{ruin}}(p), K'^{(p)}(0.10), L^{(p)}(0.10)$) y «huida precautoria» ante recesiones recuperables ($S_G, S_B^{\mathrm{kink}}, K_B^*, K'_G(0.10), L_G$).}
 \end{table}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\linewidth]{fig4_structural_es.png}
-\caption{Extensiones estructurales del modelo. El Panel (a) ilustra el despegue exponencial sin techo («palo de hockey», $K_t=(1+g)^t\hat{K}_t$) para $M=1$ frente al colapso por fragmentación regulatoria ($M=2$); el Panel (b) compara la probabilidad genuina de supervivencia de Doob $(1-p)^{T^*(p)}$ con anticipación del riesgo ($p_{\mathrm{cert}}\approx 2.07\%$) frente a las cotas deterministas ingenuas $(1-p)^{23}$ y $(1-p)^{46}$.}
+\caption{Extensiones estructurales del modelo. El Panel (a) ilustra las trayectorias reales de política VFI desde $K_0=0.06$: despegue exponencial sin techo («palo de hockey», $K_t=(1+g)^t\hat{K}_t$, $g=0.025$) y techo estacionario $K_p^+$ ($g=0$) cuando las empresas operan consolidadas ($N_f=1$), supervivencia con $N_f=2$ ($A_{\mathrm{ef}}=0.5303$, $S=0.003223\ll 0.06$) frente al colapso económico por fragmentación severa ($N_f=60 > N_{f,\mathrm{SN}}=56.79$, $A_{\mathrm{ef}}=0.0968<A_*$); el Panel (b) compara la probabilidad genuina de supervivencia de Doob $(1-p)^{T^*(p)}$ calculada con la súper-barrera continua \texttt{log-PWL} y testigo $\beta_+$ ($T^*(p)=(22,25,30,40,84)$, $\mathbb{P}_{\mathrm{Doob}}(2.0\%)=18.32\%$, umbral $p_{\mathrm{cert}}=2.0434\%$) frente a las cotas deterministas ingenuas $(1-p)^{23}$ (Teorema 9* / MR-Tabla 4) y $(1-p)^{46}$ (bloques de Milei y Reidel).}
 \end{figure}
 
 \section{Conclusión}
 
-Hemos desarrollado cuatro extensiones y refinamientos analíticos sobre el marco de Milei y Reidel (2026): (1) una barrera regional afín de un paso $B_1(K)$ que casi triplica el margen de calibración, reduce a la mitad el plazo de entrada ($\tau_H\le 23$, y $\tau_{.1}\le 10$ en $M_0$), y junto con el certificado de aritmética de intervalos y Wronskiano de la Proposición 1** excluye mínimos interiores y colapsa las doce particiones de la Tabla 5 a dos bordes, elevando el margen global FPBB de $0.0423$ ($0.04$) a $>0.0571$ ($+35\%$); (2) la resolución de la Nota al pie 1 mediante isomorfismo finito, convergencia asintótica de ambas fronteras reescaladas a $(\delta/c_K)^{1/r}$, condición variacional para $S_A^{\mathrm{fix}}(1)<S_A$ y verificación numérica directa por VFI; (3) la microfundación fiscal--regulatoria (Teorema 10) distinguiendo la curva en U exacta de $\overline{S}(\tau)$ y $\kappa(\tau)$, la simetría de $S(\tau)$ a $A_0$ finito y su perfil asintótico cuando $A_0\to\infty$; y (4) la descentralización empresarial con contabilidad factorial exacta $(\theta/\mu)Y_t$, el crecimiento sin techo y el Teorema 11* estocástico completo vía parada opcional de Doob con plazos endógenos $T^*(p)$, sistema acoplado de Markov $(B_G,B_B)$ y VFI estocástica anticipatoria.
+El trabajo \emph{Minimum Viable Scale: Bellman Barriers and the Economics of Survival} de Milei y Reidel (2026) introduce una estructura matemática rigurosa y original para analizar trampas de extinción y certificar trayectorias óptimas en modelos no cóncavos con trabajo endógeno. En este documento hemos desarrollado cuatro extensiones y refinamientos analíticos que responden sus preguntas abiertas principales, refuerzan los márgenes cuantitativos del certificado FPBB y amplían su alcance económico:
+
+\begin{enumerate}
+\item \textbf{Afilamiento completo del certificado FPBB (Sección 3):} Sin alterar un solo parámetro ni supuesto de la Sección 7.2, reemplazar la cota por pares disjuntos de la ecuación (7.6) por nuestra \emph{barrera regional afín de un paso} ($B_1(K)$ en el Lema 1 y el Teorema 9*) casi triplica el margen de calibración en la región de tránsito ($>7.4665$) y \emph{reduce exactamente a la mitad el plazo máximo certificado de entrada} a la región productiva (de $46$ a \textbf{$23$ períodos}, y a $33$ períodos totales desde $K_0=0.05$ vía la Proposición 1*, mejorado además a $\tau_{.1}\le 9$ y $\tau_H\le 21$--$22$ mediante el testigo de $25$ pasos $W_M^{(0)}$ y $\Psi^{(0)}$ continua en el Corolario). Complementariamente, el certificado analítico y de aritmética de intervalos de la Proposición 1** (con base variacional para $l_0\ge\sup(X)/2$ y la regla exacta de signo $\eta_+$ en $[0.10,0.17)$) excluye mínimos interiores y colapsa las doce particiones finitas de la MR-Tabla 5 a dos bordes, elevando el margen de salida adversa en $M$ a $>0.0947$ y ampliando el margen global certificado del Teorema 9 de $0.0423$ ($0.04$) a \textbf{$>0.0571$} ($+35\%$).
+
+\item \textbf{Convergencia asintótica, criterio variacional e isomorfismo laboral (Sección 4):} El análisis en unidades críticas $K=A^{-1/r}k$ junto con el isomorfismo exacto $S_A^{\mathrm{fix}}(\overline{L})=\overline{L}\,S_{A\overline{L}^r}^{\mathrm{fix}}(1)$ del Teorema 3* resuelven la pregunta abierta de la Nota al pie 1: probamos bajo la condición de paciencia que ambas fronteras reescaladas convergen al límite físico común $(\delta/c_K)^{1/r}$ ($S_A/S_A^{\mathrm{fix}}(\overline{L})\to 1$) ---subsanando las tres brechas de la prueba mediante $k_1\ge\max\{2,\dots\}$, cancelación explícita de las Fases I--II con el Lema 9 y la cota uniforme $\chi_p^{\mathrm{fix}}\ge 2.598\times 10^{-4}$---, establecemos la condición variacional precisa para $S_A^{\mathrm{fix}}(1)<S_A$, y verificamos numéricamente dicha convergencia mediante VFI continua hasta $A=10^8$ ($0.000835$, cociente $1.00039$).
+
+\item \textbf{Curva en U institucional y descomposición fiscal--regulatoria (Sección 5):} La microfundación con gasto público productivo endógeno ($G_t=\tau_p Y_t$) y carga improductiva ($\tau_u$) en la Sección 4.3 genera el Teorema 10 con regla óptima de Barro $\tau^*=\gamma=\alpha/(1+\alpha)=0.20$, separando con rigor las trampas físicas ($A_{\mathrm{rep}}=0.073485$), la extinción económica ($A_*=A_{\mathrm{SN}}=0.0995245$, $(\tau_1,\tau_2)=(2.2197\times 10^{-5}, 0.930108)$), la envolvente asintótica $\overline{S}_{\mathrm{asy}}(\tau)$ ($A_e\ge A_{\mathrm{cross}}=0.110038$) y la cota finita certificada del Teorema 8 ($A_e\ge 0.749$ en $[0.117245,0.304799]$), junto con la simetría por pares de $S(\tau)$ a $A_0$ finito, su perfil límite $A_0\to\infty$, la cuña de externalidad $(1-\gamma)$ y la monotonicidad frente al peso muerto $\tau_u$.
+
+\item \textbf{Descentralización, crecimiento perpetuo y barreras estocásticas (Sección 6):} Finalmente, formalizamos la descentralización bajo competencia monopolística con contabilidad factorial exacta $(\theta/\mu)Y_t$ ---exponiendo la cuña marginal persistente $1/\theta<1$ aun en $\mu=\theta$ ($K_{\mathrm{lo}}=0.003039>S_A=0.001587$) y el colapso económico por fragmentación en $N_{f,\mathrm{SN}}=56.79$ firmas frente al umbral físico $N_{f,\mathrm{rep}}=104.17$---, eliminamos el techo estacionario $K_p^+$ mediante unidades de eficiencia (contrastando la Nota al pie 2 donde el $AK$ continuo arroja $V_{\mathrm{AK}}(0.28)=+240.7598$), y cerramos el Teorema 11* estocástico vía Doob con el plazo endógeno $T^*(p)=(22,25,30,40,84)$ hasta $p_{\mathrm{cert}}=2.0434\%$ (frente a la cota miope de $23$ períodos), barreras acopladas de Markov $(B_G,B_B)$ certificadas continuamente en $32$ subcajas sobre $p\in[0\%,12\%]$, y VFI continua de sección áurea que distingue $S^{\mathrm{ruin}}(p)$ de $S_G(p), S_B^{\mathrm{kink}}(p), K_B^*(p)$ y cuantifica la sensibilidad frente a $p_{\mathrm{rec}}$.
+\end{enumerate}
 
 \begin{thebibliography}{99}
 \bibitem{Acemoglu2005} Acemoglu, D., S. Johnson, y J. A. Robinson (2005): «Institutions as a Fundamental Cause of Long-Run Growth», en P. Aghion y S. N. Durlauf (eds.), \emph{Handbook of Economic Growth}, vol. 1A, cap. 6, pp. 385--472. Amsterdam: Elsevier.
@@ -496,5 +695,141 @@ Hemos desarrollado cuatro extensiones y refinamientos analíticos sobre el marco
 \bibitem{Trebbi2026} Trebbi, F., M. B. Zhang, y M. Simkovic (2026): «The Cost of Regulatory Compliance in the United States», \emph{The Review of Financial Studies}, 39(9), 2901--2962.
 \bibitem{Wagener2020} Wagener, F. (2020): «Geometrical Methods for Analyzing the Optimal Management of Tipping Point Dynamics», \emph{Natural Resource Modeling}, 33(3), e12258.
 \end{thebibliography}
+
+\clearpage
+\appendix
+\section{Apéndice Técnico: Testigos Explícitos y Certificados Numéricos de Reproducibilidad}
+
+Este apéndice documenta la tabla de desambiguación notacional libre de colisiones y todos los testigos explícitos, particiones de aritmética de intervalos y certificados continuos reproducidos íntegramente por el script de verificación \texttt{verify\_results.py}.
+
+\subsection{Tabla de Desambiguación de Notación}
+
+Para eliminar toda ambigüedad entre dominios, funciones de valor, tasas y referencias cruzadas entre el presente artículo y el trabajo de referencia, la Tabla A.1 resume la convención unificada adoptada en todo el manuscrito.
+
+\begin{table}[htbp]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Símbolo original} & \textbf{Rol conservado} & \textbf{Símbolo desambiguado para el rol secundario} \\
+\midrule
+$M$ & Región de tránsito $M=[0.10,0.28)$ y conjunto $\mathcal{M}$ & Número de firmas fragmentadas $\to$ \textbf{$N_f$} ($Y_t^{(N_f)}, A_{\mathrm{ef}}(N_f), N_{f,\mathrm{SN}}, N_{f,\mathrm{rep}}$) \\
+$S$ & Frontera MVS ($S_A, S(\tau), \overline{S}(\tau), \hat{S}_p$) & Recurso virtual mayorante de la Prop. 1** $\to$ \textbf{$\mathcal{S}(K)$} \\
+$S_p$ & Umbral MVS base de Milei y Reidel ($\kappa_p, V_p, K_p^+$) & Frontera bajo riesgo de ruina $\to$ \textbf{$S^{\mathrm{ruin}}(p)$} (y política $K'^{(p)}, L^{(p)}$) \\
+$r$ & Exceso de homogeneidad $r=\theta-1$ & Retorno 1 paso $\to$ \textbf{$\varrho(\cdot)$}; renta del capital $\to$ \textbf{$R_t^K$}; prob. recuperación $\to$ \textbf{$p_{\mathrm{rec}}$} \\
+$H$ & Región objetivo $H=[0.28,\infty)$, $H_1, H_2, \hat{H}$ & Factor límite CES (Secc. 5) $\to$ \textbf{$\Lambda_a$}; conocimiento Nota 2 $\to$ \textbf{$\Gamma_t$} \\
+Tabla 4 / Tabla 5 & Tablas 1--5 del presente manuscrito & Tablas de Milei y Reidel (2026) $\to$ \textbf{MR-Tabla 4} y \textbf{MR-Tabla 5} \\
+\bottomrule
+\end{tabular}
+\par\vspace{0.45em}
+\begin{minipage}{0.95\linewidth}\centering\footnotesize
+\textbf{Tabla A.1:} Mapa de desambiguación notacional sin colisiones aplicado en todo el documento.
+\end{minipage}
+\end{table}
+
+\subsection{\texorpdfstring{Testigos explícitos y cotas de intervalo de la Sección 3 (U1 y U2)}{Testigos explícitos y cotas de intervalo de la Sección 3 (U1 y U2)}}
+
+\paragraph{Testigo reforzado en $M_0$ y unificación con $\Psi^{(0)}$ continua (U1).}
+Sobre $M_0=[0.05,0.10)$, la progresión $0.05\to 0.0595\to 0.0755\to 0.100$ con esfuerzos $L=(0.45,0.50,0.60)$ produce consumos $(0.006718, 0.005209, 0.006243)$ y utilidades de etapa $(-3.681867, -3.888538, -3.828711)$ en el peor vértice de (7.3), rindiendo $W_{M_0}(0.05) = -43.540132$ con la cola de la MR-Tabla 4 ($W_M(0.10)=-35.579855$) y $W_{M_0}(0.05) = -43.500107$ con el testigo estacionario de $25$ pasos $W_M^{(0)}(0.10;\beta_+)=-35.536014$ (cuyos primeros $5$ pasos desde $K_0=0.1000$ son $(0.1000,0.6662\to 0.1338)$, $(0.1338,0.6854\to 0.1815)$, $(0.1815,0.7109\to 0.2497)$, $(0.2497,0.7301\to 0.3434)$, $(0.3434,0.7556\to 0.4727)$, convergiendo hacia $2.9036$ con $\varrho_t\in[-3.3968,-0.6205]$). Para $\Psi^{(0)}(K)=0.45K-5K^{-1/2}+c_0$, el algoritmo 3D de ramificación y acotación en forma centrada sobre $[8\times 10^{-5}, 45]$ acota el defecto Bellman en $d(\beta_+)\in[-0.564473, -0.564273]$ con margen analítico de cola $+1.0433$ en $(0,8\times 10^{-5}]\cup[45,\infty)$, dando $c_0(\beta_+)=-18.855281$ y $c_{0,\mathrm{unif}}=-18.713835$ ($\Psi^{(0)}_{\mathrm{unif}}(0.10)=-34.480223$, $\Psi^{(0)}_{\mathrm{unif}}(0.28)=-28.036947$). Esto certifica $\tau_{.1}\le 9$ en $M_0$ ($J(9;0.05)=-43.543050 < -43.540132$, holgura $+0.0029$), $\tau_H\le 22$ bajo extremos independientes ($\text{holgura }+0.122408$, frente a $-0.114831$ en $T=21$), y $\tau_H\le 21$ bajo $\beta$ emparejado (holguras $+0.070042, +0.083959, +0.097882$ en $\beta=0.9699, 0.9700, 0.9701$).
+
+\paragraph{Cotas de aritmética de intervalos de la Proposición 1** y base variacional (U2).}
+En los $4$ subintervalos de $M$ (\texttt{[0.100,0.145,0.190,0.235,0.280]}) y $6$ de $H_1$ (\texttt{[0.28,0.36,0.45,0.54,0.63,0.72,0.80]}):
+\begin{itemize}
+\item $M$: $Q_M\le [-0.06341, -0.05880, -0.05061, -0.04375]$; $\Delta'_M\ge [3.0288, 0.3955, 0.1252, 0.0723]$; en $8$ subintervalos iguales con $\eta_+$ en $[0.10,0.17)$, $\Delta''_M\le [-421.1331, -107.5343, -42.3434, -21.2734, \dots]$ (máximo $-2.5107<0$); $u^*(K)\in[0.5662, 0.6808]<1$ ($L^*\ge 0.3192$).
+\item $H_1$: $Q_{H_1}\le [-0.18976, -0.16941, -0.15171, -0.13844, -0.13124, -0.13540]$; $\Delta'_{H_1}\ge [1.4675, 0.3243, 0.1022, 0.0348, 0.0095, 0.0119]$; en $10$ subintervalos iguales, $\Delta''_{H_1}\le [-40.4320, -12.4955, -5.3078, -2.6661, \dots]$ (máximo $-0.1889<0$); $u^*(K)\in[0.4301, 0.5427]<1$ ($L^*\ge 0.4573$).
+\item Quiebres hacia abajo en $H_1$: $k_W=0.406819$ ($W'_{H_1}: 3.954006\to 3.952877$) y $k_E=0.573570$ ($-\,(E^+)': -1.652310\to -1.652744$). Base variacional U2: $L^*(0.28)=0.569743$, $L^*(0.10)=0.437261$, $L_{\mathrm{tan}}(0.10;0.44)\in[0.433462,0.433840]$.
+\end{itemize}
+
+\subsection{\texorpdfstring{Certificados estocásticos continuos del Teorema 11* (5A y 5B)}{Certificados estocásticos continuos del Teorema 11* (5A y 5B)}}
+
+La Tabla A.2 documenta las súper-barreras globales bajo riesgo de ruina (5A) y los testigos de $25$ pasos evaluados en el peor $\tilde{\beta}_{p,+}=\beta_+(1-p)$; mientras que en $p=0\%$ sobrevive la familia paramétrica $(a_0,b_0)=(0.45,5.0)$, para $p>0$ (y estrictamente por encima de $p_{\mathrm{sing}}=1.1217\%$) la cola inferior de $x^{-1/2}$ diverge, por lo que la súper-barrera continua \texttt{log-PWL} certifica todo $(0,\infty)$ en $[0\%,2\%]$ con margen negativo máximo en las colas $(0,10^{-8}]\cup[90,\infty)$ de $-0.030$ (y primeros $5$ pasos del testigo en $p=2.0\%$ dados por $(0.1000,0.6471\to 0.1320)$, $(0.1320,0.6662\to 0.1765)$, $(0.1765,0.6982\to 0.2395)$, $(0.2395,0.7173\to 0.3249)$, $(0.3249,0.7429\to 0.4440)\to\dots\to 2.5619$, $\varrho_t\in[-3.3015,-0.6333]$). La Tabla A.3 reporta el certificado acoplado completo de Markov (5B) en los $8$ puntos $p\in\{0\%,\dots,12\%\}$ con $\beta$ emparejado, testigos estacionarios en malla y verificación de $32$ subcajas.
+
+\begin{table}[htbp]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{@{}cccccccc@{}}
+\toprule
+$p$ & $\Psi_{\mathrm{par}}$ ($a_0,b_0,c_0$) & Desplaz. $c_{\mathrm{pwl}}$ & $\Psi^{(p)}(0.10)$ & $\Psi^{(p)}(0.28)$ & Margen cola & $W_M^{(p)}(0.10)$ & $W_H^{(p)}(0.28)$ \\
+\midrule
+$0.00\%$ & $(0.45, 5.0, -18.7138)$ & $0.05025$ & $-35.1934$ & $-28.2088$ & $-0.030$ & $-35.536014$ & $-28.529814$ \\
+$0.50\%$ & Explosión $x\to 0^+$ & $0.06592$ & $-32.0566$ & $-25.2133$ & $-0.030$ & $-32.361297$ & $-25.497581$ \\
+$1.00\%$ & Explosión $x\to 0^+$ & $0.03059$ & $-29.6649$ & $-22.9590$ & $-0.030$ & $-29.898125$ & $-23.171248$ \\
+$1.50\%$ & Explosión $x\to 0^+$ & $0.02625$ & $-27.7135$ & $-21.1402$ & $-0.030$ & $-27.915233$ & $-21.322296$ \\
+$2.00\%$ & Explosión $x\to 0^+$ & $0.03063$ & $-26.0891$ & $-19.6444$ & $-0.030$ & $-26.273549$ & $-19.809973$ \\
+\bottomrule
+\end{tabular}
+\par\vspace{0.45em}
+\begin{minipage}{0.95\linewidth}\centering\footnotesize
+\textbf{Tabla A.2:} Certificados continuos de súper-barrera \texttt{log-PWL} en $(0,\infty)$ y testigos de $25$ pasos $W_X^{(p)}$ para el Teorema 11*(2) (5A).
+\end{minipage}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2.8pt}
+\begin{tabular}{@{}cccccccc@{}}
+\toprule
+$p$ & $(c_G, c_B)$ ($\beta_-$) & $(W_G, W_B)$ & Perm. $(G,B)$ & $T^*=(T^*_G,T^*_B)$ & Salida $M$ ($G/B$; cont.) & Salida $H$ ($G$/$B_{32\mathrm{bx}}$) & $\mathbb{P}(\tau\le T^*_G+4)$ \\
+\midrule
+$0.0\%$ & $(0.0396, 0.0389)$ & $(-35.3952, -40.4501)$ & $(7.963, 3.852)$ & $(21, 45)$ & $+1.152 / +0.053$ ($\ge +0.032$) & $+0.553 / +0.013$ & $\ge 0.120$ \\
+$0.5\%$ & $(0.0350, 0.0347)$ & $(-35.7208, -40.7379)$ & $(7.787, 3.701)$ & $(21, 46)$ & $+1.168 / +0.059$ ($\ge +0.037$) & $+0.563 / +0.019$ & $\ge 0.109$ \\
+$1.0\%$ & $(0.0322, 0.0322)$ & $(-36.0392, -41.0197)$ & $(7.615, 3.553)$ & $(22, 47)$ & $+1.182 / +0.062$ ($\ge +0.040$) & $+0.571 / +0.021$ & $\ge 0.117$ \\
+$1.5\%$ & $(0.0357, 0.0354)$ & $(-36.3512, -41.2963)$ & $(7.445, 3.406)$ & $(22, 48)$ & $+1.190 / +0.059$ ($\ge +0.038$) & $+0.573 / +0.023$ & $\ge 0.105$ \\
+$2.0\%$ & $(0.0332, 0.0331)$ & $(-36.6568, -41.5657)$ & $(7.278, 3.264)$ & $(23, 49)$ & $+1.203 / +0.061$ ($\ge +0.040$) & $+0.578 / +0.025$ & $\ge 0.097$ \\
+$5.0\%$ & $(0.0358, 0.0356)$ & $(-38.3626, -43.0710)$ & $(6.333, 2.454)$ & $(25, 56)$ & $+1.264 / +0.063$ ($\ge +0.043$) & $+0.609 / +0.021$ & $\ge 0.082$ \\
+$8.0\%$ & $(0.0336, 0.0337)$ & $(-39.8733, -44.4031)$ & $(5.480, 1.724)$ & $(29, 66)$ & $+1.334 / +0.073$ ($\ge +0.053$) & $+0.648 / +0.022$ & $\ge 0.072$ \\
+$12.0\%$ & $(0.0373, 0.0372)$ & $(-41.6563, -45.9694)$ & $(4.447, 0.844)$ & $(33, 88)$ & $+1.413 / +0.080$ ($\ge +0.060$) & $+0.689 / +0.022$ & $\ge 0.057$ \\
+\bottomrule
+\end{tabular}
+\par\vspace{0.45em}
+\begin{minipage}{0.95\linewidth}\centering\footnotesize
+\textbf{Tabla A.3:} Certificados acoplados de Markov \texttt{log-PWL} (5B) bajo $\beta\in[0.9699,0.9701]$ emparejado, cobertura continua de $M$ y partición de $32$ subcajas sobre $p\in[0\%,12\%]$ ($p_{\mathrm{cert}}^{\mathrm{Markov}}=15.45\%$ es extrapolación de la raíz de permanencia en $B$).
+\end{minipage}
+\end{table}
+
+\subsection{Curva en U, equilibrios descentralizados y sensibilidad a \texorpdfstring{$p_{\mathrm{rec}}$}{p\_rec}}
+
+Para el Teorema 10 (Tabla 4), los umbrales exactos son $A_{\mathrm{rep}}=0.073485$ con $(\tau_{\min},\tau_{\max})=(6.60\times 10^{-6}, 0.948649)$, el umbral nodo-silla endógeno es $A_*=A_{\mathrm{SN}}=0.0995245$ con $(\tau_1,\tau_2)=(2.219660\times 10^{-5}, 0.930108)$, el cruce de la envolvente asintótica ocurre en $A_{\mathrm{cross}}=0.110038$ ($(\tau_{c1},\tau_{c2})=(3.317089\times 10^{-5}, 0.922567)$), y el dominio certificado a $A$ finito del Teorema 8 ($A_e\ge 0.749$) es $[0.117245, 0.304799]$. La Tabla A.4 reporta los equilibrios descentralizados de la Proposición 2* frente al umbral del planificador $S(A_{\mathrm{mkt}})$, y la Tabla A.5 resume la sensibilidad en $p=8.0\%$ de la VFI continua de Markov respecto de $p_{\mathrm{rec}}\in\{0.20, 1/3, 0.50\}$.
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{@{}cccccc@{}}
+\toprule
+$\mu$ y cierre & $A_{\mathrm{mkt}}=(\theta/\mu)A$ & $S(A_{\mathrm{mkt}})$ (VFI) & $K_{\mathrm{lo}}$ ($L_{\mathrm{lo}}$) & $K_{\mathrm{hi}}$ ($L_{\mathrm{hi}}$) & Relación \\
+\midrule
+$\mu=1.5$ (costos fijos) & $0.7500$ & $0.001587$ & $0.003039$ ($0.1423$) & $1.808955$ ($0.6787$) & $K_{\mathrm{lo}} > S_A$ \\
+$\mu=1.8$ (costos fijos) & $0.6250$ & $0.002302$ & $0.004490$ ($0.1689$) & $1.558817$ ($0.6755$) & $K_{\mathrm{lo}} > S_{A_{\mathrm{mkt}}}$ \\
+$\mu=1.8$ (reembolso) & $0.6250$ & $0.002302$ & $0.004670$ ($0.1346$) & $1.390019$ ($0.6226$) & Efecto riqueza $\uparrow K_{\mathrm{lo}}$ \\
+$\mu=2.0$ (costos fijos) & $0.5625$ & $0.002856$ & $0.005644$ ($0.1862$) & $1.423495$ ($0.6734$) & $K_{\mathrm{lo}} > S_{A_{\mathrm{mkt}}}$ \\
+$\mu=2.0$ (reembolso) & $0.5625$ & $0.002856$ & $0.006055$ ($0.1349$) & $1.171530$ ($0.5872$) & Efecto riqueza $\uparrow K_{\mathrm{lo}}$ \\
+\bottomrule
+\end{tabular}
+\par\vspace{0.45em}
+\begin{minipage}{0.95\linewidth}\centering\footnotesize
+\textbf{Tabla A.4:} Estados estacionarios descentralizados $(K_{\mathrm{lo}}, K_{\mathrm{hi}})$ de la Proposición 2* frente al umbral del planificador $S(A_{\mathrm{mkt}})$ ($A=0.75, \theta=1.5$).
+\end{minipage}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{@{}cccccc@{}}
+\toprule
+$p_{\mathrm{rec}}$ (en $p=8.0\%$) & $S_G$ & $S_B^{\mathrm{kink}}$ & $K_B^*$ & $K'_G(0.10)$ & $L_G(0.10)$ \\
+\midrule
+$0.2000$ & $0.001836$ & $0.00192$ & $0.00969$ & $0.13511$ & $0.6803$ \\
+$1/3 \approx 0.3333$ & $0.001774$ & $0.00187$ & $0.00991$ & $0.13475$ & $0.6759$ \\
+$0.5000$ & $0.001735$ & $0.00182$ & $0.01038$ & $0.13447$ & $0.6726$ \\
+\bottomrule
+\end{tabular}
+\par\vspace{0.45em}
+\begin{minipage}{0.95\linewidth}\centering\footnotesize
+\textbf{Tabla A.5:} Sensibilidad de la VFI continua de Markov a la probabilidad de recuperación $p_{\mathrm{rec}}$ en $p=8.0\%$.
+\end{minipage}
+\end{table}
 
 \end{document}
