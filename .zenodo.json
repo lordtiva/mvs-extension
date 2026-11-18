@@ -2,13 +2,13 @@
   "title": "State-Dependent Affine Bellman Barriers, Asymptotic Equivalence, and the Institutional U-Curve: Analytical Extensions on Minimum Viable Scale",
   "upload_type": "publication",
   "publication_type": "workingpaper",
-  "publication_date": "2026-11-17",
+  "publication_date": "2026-11-18",
   "creators": [
     {
       "name": "Segura, Marcelo"
     }
   ],
-  "description": "Analytical extensions, sharpened First Passage Bellman Barrier (FPBB) certificates, interval-arithmetic proofs, asymptotic fixed- vs. endogenous-labor equivalence with continuous-state VFI, Barro-CES institutional U-curves, firm decentralization, balanced growth, and Stochastic Bellman Barriers (Theorem 11*: anticipation-adjusted Doob deadlines T*(p), coupled 2x2 Markov barrier systems, and forward-looking stochastic VFI) building on Milei and Reidel (2026), 'Minimum Viable Scale: Bellman Barriers and the Economics of Survival'. Includes synchronized English and Spanish manuscripts (PDF/Typst/LaTeX), figure-generation scripts, and reproducible verification code.",
+  "description": "Analytical extensions, sharpened First Passage Bellman Barrier (FPBB) certificates, interval-arithmetic and branch-and-bound proofs, asymptotic fixed- vs. endogenous-labor equivalence with continuous-state VFI, Barro-CES institutional U-curves, firm decentralization, balanced growth, Stochastic Bellman Barriers (Theorem 11*: continuous log-PWL Doob deadlines T*(p), matched-beta 32-subbox coupled 2x2 Markov barrier systems, and 880-point golden-section stochastic VFI), and Technical Appendix A.1-A.4 building on Milei and Reidel (2026), 'Minimum Viable Scale: Bellman Barriers and the Economics of Survival'. Includes synchronized English and Spanish manuscripts (PDF/Typst/LaTeX), figure-generation scripts, and reproducible verification code.",
   "keywords": [
     "minimum viable scale",
     "First Passage Bellman Barriers",
@@ -24,6 +24,6 @@
   ],
   "license": "cc-by-4.0",
   "language": "eng",
-  "version": "4.0",
-  "notes": "Includes bilingual preprints: mvs_improvements_en.pdf (English, 23 pp.) and mvs_mejoras_paper.pdf (Spanish, 26 pp.). Analytical development, technical editing, and Python verification routines were assisted by AI tools under the author's direction, critical review, and sole responsibility."
+  "version": "5.0",
+  "notes": "Includes bilingual preprints: mvs_improvements_en.pdf (English, 31 pp.) and mvs_mejoras_paper.pdf (Spanish, 34 pp.). Analytical development, technical editing, and Python verification routines were assisted by AI tools under the author's direction, critical review, and sole responsibility."
 }
