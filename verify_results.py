@@ -1231,13 +1231,17 @@ def verify_theorem11_stochastic():
 
     # Build continuous log-PWL super/sub-barrier machinery on [1e-8, 60.0] + analytical tails (0, 1e-8] & [90, inf)
     ks_m = np.unique(np.concatenate([
-        np.geomspace(1e-8, 1e-5, 14, endpoint=False),
-        np.geomspace(1e-5, 0.0012, 26, endpoint=False),
-        np.geomspace(0.0012, 0.0045, 220, endpoint=False),
-        np.geomspace(0.0045, 0.05, 110, endpoint=False),
-        np.geomspace(0.05, 0.40, 110, endpoint=False),
+        np.geomspace(1e-8, 1e-5, 12, endpoint=False),
+        np.geomspace(1e-5, 0.0012, 20, endpoint=False),
+        np.geomspace(0.0012, 0.0030, 220, endpoint=False),
+        np.geomspace(0.0030, 0.012, 65, endpoint=False),
+        np.geomspace(0.012, 0.05, 50, endpoint=False),
+        np.geomspace(0.05, 0.10, 45, endpoint=False),
+        np.geomspace(0.10, 0.28, 50, endpoint=False),
+        np.geomspace(0.28, 0.40, 25, endpoint=False),
         [B_M, H_M],
-        np.geomspace(0.40, 60.0, 170),
+        np.geomspace(0.40, 2.0, 100, endpoint=False),
+        np.geomspace(2.0, 60.0, 55),
     ]))
     lks_m = np.log(ks_m)
     nk_m = len(ks_m)
@@ -1262,7 +1266,7 @@ def verify_theorem11_stochastic():
             x1 = hi - inv_phi * (hi - lo)
             x2 = lo + inv_phi * (hi - lo)
             f1, f2 = get_u(Av, ka, x1, kpa), get_u(Av, ka, x2, kpa)
-            for _ in range(22):
+            for _ in range(18):
                 mr = f1 < f2
                 lo = np.where(mr, x1, lo)
                 hi = np.where(mr, hi, x2)
@@ -1303,7 +1307,7 @@ def verify_theorem11_stochastic():
             solve_L=sG["solve_L"], get_u=sG["get_u"],
         )
 
-    def solve_markov_pwl(pre, bv, p, init=None, return_ongrid_W=False):
+    def solve_markov_pwl(pre, bv, p, init=None, return_ongrid_W=False, return_pol=False, tol_out=1e-8):
         ec0 = ETA_MIN if pre["is_upper"] else ETA_MAX
         s_lo_tail = ec0 / (1.0 - bv)
         d_hi_tail = (ETA_MAX if pre["is_upper"] else ETA_MIN) / (1.0 - bv)
@@ -1347,7 +1351,7 @@ def verify_theorem11_stochastic():
                 _, u2 = solve_L(Av, ks_m, x2)
                 f1 = u1 + bv * interp(EV, x1)
                 f2 = u2 + bv * interp(EV, x2)
-                for _g in range(14):
+                for _g in range(10):
                     mr = f1 < f2
                     lo = np.where(mr, x1, lo)
                     hi = np.where(mr, hi, x2)
@@ -1369,7 +1373,7 @@ def verify_theorem11_stochastic():
                 z2 = lo0 + inv_phi * (hi0 - lo0)
                 g1 = get_u(Av, ks_m, 0.0, z1) + bv * interp(EV, z1)
                 g2 = get_u(Av, ks_m, 0.0, z2) + bv * interp(EV, z2)
-                for _g0 in range(14):
+                for _g0 in range(10):
                     mr0 = g1 < g2
                     lo0 = np.where(mr0, z1, lo0)
                     hi0 = np.where(mr0, hi0, z2)
@@ -1395,10 +1399,12 @@ def verify_theorem11_stochastic():
                     VGe, VBe = VGn, VBn
                     break
                 VGe, VBe = VGn, VBn
-            if max(np.max(np.abs(VGe - VG)), np.max(np.abs(VBe - VB))) < 1e-8:
+            if max(np.max(np.abs(VGe - VG)), np.max(np.abs(VBe - VB))) < tol_out:
                 VG, VB = VGe, VBe
                 break
             VG, VB = VGe, VBe
+        if return_pol:
+            return VG, VB, polG, polB
         if not return_ongrid_W:
             return VG, VB
         # Exact feasible stationary on-grid policy evaluation (zero off-grid interpolation)
@@ -1432,15 +1438,15 @@ def verify_theorem11_stochastic():
             WG, WB = WGn, WBn
         return VG, VB, WG, WB
 
-    def certify_logpwl_sens(Av, V_self, EV, bv, tol=1.5e-3, q_hi=Q_MAX, s_tail_arg=None, d_hi_arg=None):
+    def certify_logpwl_sens(Av, V_self, EV, bv, tol=1.5e-3, q_hi=Q_MAX, s_tail_arg=None, d_hi_arg=None, eL=ETA_MIN, eU=ETA_MAX):
         """Continuously certify log-PWL super-barrier on all (0, inf) via:
-           (0, ks_m[0]]: exact contraction tail (needs s_tail <= ETA_MIN/(1-bv), Y(x_lo, 1)/x_lo < 1),
+           (0, ks_m[0]]: exact contraction tail (needs s_tail <= eL/(1-bv), Y(x_lo, 1)/x_lo < 1),
            [ks_m[0], 90.0]: sensitivity-guided 3D interval B&B over log-PWL extended above 60 by D_hi,
-           [90.0, inf): exact 3-regime analytical upper tail (needs D_hi >= ETA_MAX/(1-bv)).
+           [90.0, inf): exact 3-regime analytical upper tail (needs D_hi >= eU/(1-bv)).
         """
-        s_tail = ETA_MIN / (1.0 - bv) if s_tail_arg is None else float(s_tail_arg)
-        D_hi = ETA_MAX / (1.0 - bv) if d_hi_arg is None else float(d_hi_arg)
-        assert s_tail <= ETA_MIN / (1.0 - bv) + 1e-12 and D_hi >= ETA_MAX / (1.0 - bv) - 1e-12
+        s_tail = eL / (1.0 - bv) if s_tail_arg is None else float(s_tail_arg)
+        D_hi = eU / (1.0 - bv) if d_hi_arg is None else float(d_hi_arg)
+        assert s_tail <= eL / (1.0 - bv) + 1e-12 and D_hi >= eU / (1.0 - bv) - 1e-12
         x_cut = float(ks_m[-1])
         tail_knots = np.array([68.0, 78.0, 90.0])
         ks_ext = np.concatenate([ks_m, tail_knots])
@@ -1475,13 +1481,13 @@ def verify_theorem11_stochastic():
                 np.where(below, np.maximum(hi_s, s_tail), hi_s) / kL,
             )
 
-        # 1) Analytical lower tail (0, ks_m[0]] (since s_tail <= ETA_MIN/(1-bv), coeff(log x) >= 0 -> max at x = ks_m[0])
+        # 1) Analytical lower tail (0, ks_m[0]] (since s_tail <= eL/(1-bv), coeff(log x) >= 0 -> max at x = ks_m[0])
         r_top = q_hi + F_A(Av, ks_m[0], 1.0) / ks_m[0]
         assert r_top < 1.0, f"Lower tail contraction failed: {r_top} >= 1.0"
-        c_slo = ETA_MIN + bv * s_tail
+        c_slo = eL + bv * s_tail
         s_lo_opt = (bv * s_tail) / c_slo
         tail_lo_val = float(
-            ETA_MIN * np.log((1.0 - s_lo_opt) * ks_m[0])
+            eL * np.log((1.0 - s_lo_opt) * ks_m[0])
             + bv * s_tail * np.log(s_lo_opt)
             + c_slo * np.log(r_top)
             + bv * EV[0]
@@ -1493,31 +1499,31 @@ def verify_theorem11_stochastic():
         F_inf = Av * (2.0 ** 1.5)
         Y_end = q_hi * x_end + F_inf
         assert Y_end < x_end
-        # y in (0, 1.0]: decreasing in x for all x >= x_end since ETA_MAX < D_hi
+        # y in (0, 1.0]: decreasing in x for all x >= x_end since eU < D_hi
         V1 = float(np.interp(np.log(1.0), lks_m, EV))
-        tail_hi_lt1 = float(ETA_MAX * np.log(Y_end) + bv * V1 - V_self_ext[-1])
+        tail_hi_lt1 = float(eU * np.log(Y_end) + bv * V1 - V_self_ext[-1])
         # y in [1.0, x_cut]: exact continuous concave slope lower bound sl_min = min_{[1, x_cut]} d(EV)/dy
         idx1 = max(0, int(np.searchsorted(ks_m, 1.0)) - 1)
         sl_min = float(np.min((np.diff(EV[idx1:]) / np.diff(lks_m[idx1:])) / ks_m[idx1 + 1:]))
         assert sl_min > 0.0 and np.all(EV[idx1:] <= EV[-1] - sl_min * (x_cut - ks_m[idx1:]) + 1e-12)
-        c_star = ETA_MAX / (bv * sl_min)
+        c_star = eU / (bv * sl_min)
         x_cross = (x_cut + c_star - F_inf) / q_hi
-        x_peak = D_hi * max(x_cut - F_inf, 1.0) / ((D_hi - ETA_MAX) * q_hi)
+        x_peak = D_hi * max(x_cut - F_inf, 1.0) / ((D_hi - eU) * q_hi)
         cand_x = [v for v in (x_end, x_cross, x_peak, 2.0 * x_end, 1e6) if v >= x_end]
         tail_hi_mid = -1e9
         for xv in cand_x:
             Ytv = q_hi * xv + F_inf
             c_op = max(c_star, Ytv - x_cut)
-            val_m = ETA_MAX * np.log(c_op) + bv * (EV[-1] + sl_min * (Ytv - c_op - x_cut)) - (V_self[-1] + D_hi * np.log(xv / x_cut))
+            val_m = eU * np.log(c_op) + bv * (EV[-1] + sl_min * (Ytv - c_op - x_cut)) - (V_self[-1] + D_hi * np.log(xv / x_cut))
             tail_hi_mid = max(tail_hi_mid, float(val_m))
-        # y > x_cut: coeff(log x) = ETA_MAX + bv*D_hi - D_hi <= 0 => bounded by x = x_end
-        c_dhi = ETA_MAX + bv * D_hi
+        # y > x_cut: coeff(log x) = eU + bv*D_hi - D_hi <= 0 => bounded by x = x_end
+        c_dhi = eU + bv * D_hi
         s_hi_opt = (bv * D_hi) / c_dhi
         tail_hi_log = float(
-            ETA_MAX * np.log(1.0 - s_hi_opt)
+            eU * np.log(1.0 - s_hi_opt)
             + bv * D_hi * np.log(s_hi_opt)
             + c_dhi * np.log(Y_end / x_end)
-            + ETA_MAX * np.log(x_end)
+            + eU * np.log(x_end)
             + (bv * D_hi - D_hi) * np.log(x_end / x_cut)
             + bv * EV[-1]
             - V_self[-1]
@@ -1525,22 +1531,29 @@ def verify_theorem11_stochastic():
         tail_hi_val = max(tail_hi_lt1, tail_hi_mid, tail_hi_log)
         assert tail_hi_val < 0.0, f"Upper tail [90, inf) not negative: lt1={tail_hi_lt1:.4f}, mid={tail_hi_mid:.4f}, log={tail_hi_log:.4f}"
 
-        # 3) Tight lower bound on [ks_m[0], 90.0]
-        xg = np.geomspace(ks_m[0], x_end, 130)
-        Lg = np.concatenate([[0.0], np.geomspace(1e-5, 0.999, 44)])
-        sg = np.linspace(0.05, 0.998, 45)
+        # 3) Tight lower bound on [ks_m[0], 90.0] (grid + knot-midpoint seeding)
+        xg = np.geomspace(ks_m[0], x_end, 48)
+        Lg = np.concatenate([[0.0], np.geomspace(1e-5, 0.999, 22)])
+        sg = np.linspace(0.05, 0.998, 22)
         Y_g = q_hi * xg[:, None] + F_A(Av, xg[:, None], Lg[None, :])
         c_g = Y_g[:, :, None] * (1.0 - sg[None, None, :])
         y_g = Y_g[:, :, None] * sg[None, None, :]
-        ec_g = np.where(c_g < 1.0, ETA_MIN, ETA_MAX)
-        val_g = ec_g * np.log(c_g) + (1.0 - ETA_MAX) * np.log(1.0 - Lg[None, :, None]) + bv * eval_V(EV_ext, y_g) - eval_V(V_self_ext, xg[:, None, None])
-        best_lb = max(tail_lo_val, tail_hi_val, float(np.max(val_g)))
+        ec_g = np.where(c_g < 1.0, eL, eU)
+        val_g = ec_g * np.log(c_g) + (1.0 - eU) * np.log(1.0 - Lg[None, :, None]) + bv * eval_V(EV_ext, y_g) - eval_V(V_self_ext, xg[:, None, None])
+        xm_s = np.sqrt(ks_m[:-1] * ks_m[1:])[:, None, None]
+        Lm_s = np.array([0.0, 0.37, 0.50, 0.62, 0.72, 0.85])[None, :, None]
+        sm_s = np.array([0.82, 0.90, 0.955, 0.985, 0.9979])[None, None, :]
+        Ym_s = q_hi * xm_s + F_A(Av, xm_s, Lm_s)
+        cm_s = Ym_s * (1.0 - sm_s)
+        ecm_s = np.where(cm_s < 1.0, eL, eU)
+        val_ms = ecm_s * np.log(cm_s) + (1.0 - eU) * np.log(1.0 - Lm_s) + bv * eval_V(EV_ext, Ym_s * sm_s) - eval_V(V_self_ext, xm_s)
+        best_lb = max(tail_lo_val, tail_hi_val, float(np.max(val_g)), float(np.max(val_ms)))
         target = best_lb + tol
 
-        xs_b = np.concatenate([ks_m[::12], [x_cut, 68.0, 78.0, 90.0]])
+        xs_b = np.concatenate([ks_m[::10], [x_cut, 68.0, 78.0, 90.0]])
         xs_b = np.unique(xs_b)
         Ls_b = np.concatenate([[0.0, 0.2, 0.5, 0.7], np.linspace(0.8, 0.99, 6, endpoint=False), [0.99, 0.999, 1.0]])
-        ss_b = np.concatenate([[0.0, 0.3, 0.65], np.linspace(0.75, 0.99, 8, endpoint=False), [0.99, 0.999, 1.0]])
+        ss_b = np.concatenate([[0.0, 0.3, 0.65], np.linspace(0.75, 0.99, 8, endpoint=False), [0.99, 0.996, 0.998, 0.999, 1.0]])
         gxL, gLL, gsL = np.meshgrid(xs_b[:-1], Ls_b[:-1], ss_b[:-1], indexing="ij")
         gxR, gLR, gsR = np.meshgrid(xs_b[1:], Ls_b[1:], ss_b[1:], indexing="ij")
         bxL, bxR, bLL, bLR, bsL, bsR = gxL.ravel(), gxR.ravel(), gLL.ravel(), gLR.ravel(), gsL.ravel(), gsR.ravel()
@@ -1549,10 +1562,10 @@ def verify_theorem11_stochastic():
             Y_min = q_hi * bxL + F_A(Av, bxL, bLL)
             Y_max = q_hi * bxR + F_A(Av, bxR, bLR)
             c_max = np.maximum((1.0 - bsL) * Y_max, 1e-300)
-            ec_max = np.where(c_max < 1.0, ETA_MIN, ETA_MAX)
+            ec_max = np.where(c_max < 1.0, eL, eU)
             ub_mono = (
                 np.where(bsL >= 1.0, -1e9, ec_max * np.log(c_max))
-                + (1.0 - ETA_MAX) * np.log(np.maximum(1.0 - bLL, 1e-300))
+                + (1.0 - eU) * np.log(np.maximum(1.0 - bLL, 1e-300))
                 + np.where(bsR <= 0.0, -1e9, bv * eval_V(EV_ext, bsR * Y_max))
                 - eval_V(V_self_ext, bxL)
             )
@@ -1561,9 +1574,9 @@ def verify_theorem11_stochastic():
             Ym = q_hi * xm + F_A(Av, xm, Lm)
             cm = (1.0 - sm) * Ym
             c_min = np.maximum((1.0 - bsR) * Y_min, 1e-300)
-            valid_c = (bLR < 1.0) & (bsL > 0.0) & (bsR < 1.0) & (c_min > 1e-12)
+            valid_c = (ub_mono > target) & (bLR < 1.0) & (bsL > 0.0) & (bsR < 1.0) & (c_min > 1e-12)
             ub_cent = np.full_like(ub_mono, 1e9)
-            ex, eL, es = (bxR - bxL) / bxL, hL, hs
+            ex, eL_err, es = (bxR - bxL) / bxL, hL, hs
             if np.any(valid_c):
                 xLv, xRv, LLv, LRv, sLv, sRv = bxL[valid_c], bxR[valid_c], bLL[valid_c], bLR[valid_c], bsL[valid_c], bsR[valid_c]
                 xmv, Lmv, smv = xm[valid_c], Lm[valid_c], sm[valid_c]
@@ -1583,15 +1596,15 @@ def verify_theorem11_stochastic():
                 err_x_v = np.zeros(np.sum(valid_c))
                 err_L_v = np.zeros(np.sum(valid_c))
                 err_s_v = np.zeros(np.sum(valid_c))
-                for ec in (ETA_MIN, ETA_MAX):
-                    mask_ec = (c_min[valid_c] < 1.0) if ec == ETA_MIN else (c_max[valid_c] >= 1.0)
-                    ec_lo = np.where(cross_c1, ETA_MIN, ec)
-                    ec_hi = np.where(cross_c1, ETA_MAX, ec)
-                    hm = ec * np.log(cm[valid_c]) + (1.0 - ETA_MAX) * np.log(1.0 - Lmv) + bv * eval_V(EV_ext, smv * Ymv) - eval_V(V_self_ext, xmv)
+                for ec in (eL, eU):
+                    mask_ec = (c_min[valid_c] < 1.0) if ec == eL else (c_max[valid_c] >= 1.0)
+                    ec_lo = np.where(cross_c1, eL, ec)
+                    ec_hi = np.where(cross_c1, eU, ec)
+                    hm = ec * np.log(cm[valid_c]) + (1.0 - eU) * np.log(1.0 - Lmv) + bv * eval_V(EV_ext, smv * Ymv) - eval_V(V_self_ext, xmv)
                     A_lo = ec_lo / Y_max_v + bv * sLv * fp_y_lo
                     A_hi_b = ec_hi / Y_min_v + bv * sRv * fp_y_hi
                     sx = np.maximum(np.abs(A_lo * Yx_lo - fp_x_hi), np.abs(A_hi_b * Yx_hi - fp_x_lo)) * hxv
-                    sL = np.maximum(np.abs(A_lo * YL_lo - (1.0 - ETA_MAX) / (1.0 - LRv)), np.abs(A_hi_b * YL_hi - (1.0 - ETA_MAX) / (1.0 - LLv))) * hLv
+                    sL = np.maximum(np.abs(A_lo * YL_lo - (1.0 - eU) / (1.0 - LRv)), np.abs(A_hi_b * YL_hi - (1.0 - eU) / (1.0 - LLv))) * hLv
                     ss_e = np.maximum(np.abs(-ec_hi / (1.0 - sRv) + bv * Y_min_v * fp_y_lo), np.abs(-ec_lo / (1.0 - sLv) + bv * Y_max_v * fp_y_hi)) * hsv
                     ub_ec = hm + sx + sL + ss_e
                     best_eta_ub = np.where(mask_ec, np.maximum(best_eta_ub, ub_ec), best_eta_ub)
@@ -1599,7 +1612,7 @@ def verify_theorem11_stochastic():
                     err_L_v = np.where(mask_ec, np.maximum(err_L_v, sL), err_L_v)
                     err_s_v = np.where(mask_ec, np.maximum(err_s_v, ss_e), err_s_v)
                 ub_cent[valid_c] = best_eta_ub
-                ex[valid_c], eL[valid_c], es[valid_c] = err_x_v, err_L_v, err_s_v
+                ex[valid_c], eL_err[valid_c], es[valid_c] = err_x_v, err_L_v, err_s_v
             ub = np.minimum(ub_mono, ub_cent)
             keep = ub > target
             n_keep = int(np.sum(keep))
@@ -1607,13 +1620,13 @@ def verify_theorem11_stochastic():
                 return float(target), float(best_lb), float(max(tail_lo_val, tail_hi_val))
             bxL, bxR, bLL, bLR, bsL, bsR = bxL[keep], bxR[keep], bLL[keep], bLR[keep], bsL[keep], bsR[keep]
             xm, Lm, sm = xm[keep], Lm[keep], sm[keep]
-            ex, eL, es = ex[keep], eL[keep], es[keep]
+            ex, eL_err, es = ex[keep], eL_err[keep], es[keep]
             Ym_k = q_hi * xm + F_A(Av, xm, Lm)
             cm_k = (1.0 - sm) * Ym_k
-            ecm_k = np.where(cm_k < 1.0, ETA_MIN, ETA_MAX)
+            ecm_k = np.where(cm_k < 1.0, eL, eU)
             lb_k = np.where(
                 (Lm < 1.0) & (sm > 0.0) & (sm < 1.0),
-                ecm_k * np.log(np.maximum(cm_k, 1e-300)) + (1.0 - ETA_MAX) * np.log(np.maximum(1.0 - Lm, 1e-300)) + bv * eval_V(EV_ext, sm * Ym_k) - eval_V(V_self_ext, xm),
+                ecm_k * np.log(np.maximum(cm_k, 1e-300)) + (1.0 - eU) * np.log(np.maximum(1.0 - Lm, 1e-300)) + bv * eval_V(EV_ext, sm * Ym_k) - eval_V(V_self_ext, xm),
                 -1e9,
             )
             if np.max(lb_k) > best_lb:
@@ -1628,8 +1641,8 @@ def verify_theorem11_stochastic():
                 nsR = np.concatenate([sm, sm, sm, sm, bsR, bsR, bsR, bsR])
                 bxL, bxR, bLL, bLR, bsL, bsR = nxL, nxR, nLL, nLR, nsL, nsR
             else:
-                m1 = (ex >= eL) & (ex >= es)
-                m2 = (~m1) & (eL >= es)
+                m1 = (ex >= eL_err) & (ex >= es)
+                m2 = (~m1) & (eL_err >= es)
                 m3 = (~m1) & (~m2)
                 axL, axR, aLL, aLR, asL, asR = bxL.copy(), bxR.copy(), bLL.copy(), bLR.copy(), bsL.copy(), bsR.copy()
                 bxLc, bxRc, bLLc, bLRc, bsLc, bsRc = bxL.copy(), bxR.copy(), bLL.copy(), bLR.copy(), bsL.copy(), bsR.copy()
@@ -1789,16 +1802,17 @@ def verify_theorem11_stochastic():
     eMB_exit = E_plus_exact(AB_MAX, Q_MAX, B_M, B_M, 0.478)
     eHG_exit = E_plus_exact(A_MAX, Q_MAX, H_M, H_M, 0.57)
 
-    # Precompute cached single-state tables for 4x2x2 Box(7.3) sub-box cover of mExitHB
+    # Precompute cached single-state tables for 4x2x2x2 (=32 sub-boxes of (A_G, A_B, q, eta)) Box(7.3) cover of mExitHB
     aG_pts = np.linspace(A_MIN, A_MAX, 5)
     aB_pts = np.linspace(AB_MIN, AB_MAX, 3)
     q_pts = np.linspace(Q_MIN, Q_MAX, 3)
-    cache_G = {(av, qv, iu): precompute_state_pwl(av, qv, iu) for iu in (False, True) for qv in q_pts for av in aG_pts}
-    cache_B = {(bv, qv, iu): precompute_state_pwl(bv, qv, iu) for iu in (False, True) for qv in q_pts for bv in aB_pts}
+    e_pts = np.linspace(ETA_MIN, ETA_MAX, 3)
+    cache_G = {(av, qv, ie, iu): precompute_state_pwl(av, qv, iu, e_pts[ie], e_pts[ie + 1]) for ie in range(2) for iu in (False, True) for qv in q_pts for av in aG_pts}
+    cache_B = {(bv, qv, ie, iu): precompute_state_pwl(bv, qv, iu, e_pts[ie], e_pts[ie + 1]) for ie in range(2) for iu in (False, True) for qv in q_pts for bv in aB_pts}
 
-    def pack_pre(ag, ab, qv, iu):
-        sG = cache_G[(ag, qv, iu)]
-        sB = cache_B[(ab, qv, iu)]
+    def pack_pre(ag, ab, qv, ie, iu):
+        sG = cache_G[(ag, qv, ie, iu)]
+        sB = cache_B[(ab, qv, ie, iu)]
         return dict(
             AG=ag, AB=ab, qv=qv, is_upper=iu,
             uG=sG["u"], uG0=sG["u0"], ymG=sG["ym"], kptG=sG["kpt"], utG=sG["ut"],
@@ -1806,13 +1820,98 @@ def verify_theorem11_stochastic():
             solve_L=sG["solve_L"], get_u=sG["get_u"],
         )
 
+    # High-resolution finite-state feasible Markov policy witness grid (strict superset of ks_m)
+    ks_wit = np.unique(np.concatenate([
+        ks_m,
+        np.geomspace(0.006, 0.05, 220, endpoint=False),
+        np.geomspace(0.05, 0.28, 280, endpoint=False),
+        np.geomspace(0.28, 1.5, 160, endpoint=False),
+    ]))
+    lks_wit = np.log(ks_wit)
+    n_wit = len(ks_wit)
+    idx_w05 = int(np.searchsorted(ks_wit, 0.05))
+    iw_lo = int(np.searchsorted(ks_wit, B_M))
+    iw_hi = int(np.searchsorted(ks_wit, H_M))
+    assert ks_wit[iw_lo] == B_M and ks_wit[iw_hi] == H_M
+
+    def solve_L_wit(Av, qv, eL, eU, ka, kpa):
+        def uf(La):
+            cv = qv * ka + F_A(Av, ka, La) - kpa
+            lc = np.log(np.maximum(cv, 1e-30))
+            ll = np.log(1.0 - La)
+            return np.where(cv > 1e-15, np.minimum(eL * lc + (1.0 - eL) * ll, eU * lc + (1.0 - eU) * ll), -1e9 + cv)
+
+        u0 = uf(np.zeros_like(ka))
+        lo = np.full_like(ka, 1e-7)
+        hi = np.full_like(ka, 1.0 - 1e-9)
+        x1 = hi - inv_phi * (hi - lo)
+        x2 = lo + inv_phi * (hi - lo)
+        f1, f2 = uf(x1), uf(x2)
+        for _ in range(18):
+            mr = f1 < f2
+            lo = np.where(mr, x1, lo)
+            hi = np.where(mr, hi, x2)
+            x1n = np.where(mr, x2, hi - inv_phi * (hi - lo))
+            x2n = np.where(mr, lo + inv_phi * (hi - lo), x1)
+            f1n = np.where(mr, f2, uf(x1n))
+            f2n = np.where(mr, uf(x2n), f1)
+            x1, x2, f1, f2 = x1n, x2n, f1n, f2n
+        Lb = 0.5 * (lo + hi)
+        ub = uf(Lb)
+        return np.where(u0 > ub, 0.0, Lb), np.maximum(u0, ub)
+
+    def eval_wit_chain(AG_v, AB_v, qv, eL, eU, bv, p, VG_ref, VB_ref, polG_ref, polB_ref, n_sw=6, half_w=5):
+        WG = np.interp(lks_wit, lks_m, VG_ref)
+        WB = np.interp(lks_wit, lks_m, VB_ref)
+        pG_w = np.exp(np.interp(lks_wit, lks_m, np.log(np.maximum(polG_ref, 1e-30))))
+        pB_w = np.exp(np.interp(lks_wit, lks_m, np.log(np.maximum(polB_ref, 1e-30))))
+        jbG = np.clip(np.searchsorted(ks_wit, pG_w), 0, n_wit - 1)
+        jbB = np.clip(np.searchsorted(ks_wit, pB_w), 0, n_wit - 1)
+        offs = np.arange(-half_w, half_w + 1)[None, :]
+        c0_t = (1.0 - bv) * qv * ks_wit[0]
+        u0_t = min(ev * np.log(c0_t) for ev in (eL, eU)) + bv * (eU / (1.0 - bv)) * np.log(bv * qv)
+        for _sw in range(n_sw):
+            EVG = (1.0 - p) * WG + p * WB
+            EVB = r_rec * WG + (1.0 - r_rec) * WB
+            cG = np.clip(jbG[:, None] + offs, 0, n_wit - 1)
+            cB = np.clip(jbB[:, None] + offs, 0, n_wit - 1)
+            _, uGm = solve_L_wit(AG_v, qv, eL, eU, np.broadcast_to(ks_wit[:, None], cG.shape), ks_wit[cG])
+            _, uBm = solve_L_wit(AB_v, qv, eL, eU, np.broadcast_to(ks_wit[:, None], cB.shape), ks_wit[cB])
+            bG = np.argmax(uGm + bv * EVG[cG], axis=1)
+            bB = np.argmax(uBm + bv * EVB[cB], axis=1)
+            jbG = cG[np.arange(n_wit), bG]
+            uG_on = uGm[np.arange(n_wit), bG]
+            jbB = cB[np.arange(n_wit), bB]
+            uB_on = uBm[np.arange(n_wit), bB]
+            if uG_on[0] <= -1e8:
+                jbG[0] = 0
+                uG_on[0] = u0_t
+            if uB_on[0] <= -1e8:
+                jbB[0] = 0
+                uB_on[0] = u0_t
+            conv_w = False
+            for _it in range(1500):
+                EVGi = (1.0 - p) * WG + p * WB
+                EVBi = r_rec * WG + (1.0 - r_rec) * WB
+                WGn = uG_on + bv * EVGi[jbG]
+                WBn = uB_on + bv * EVBi[jbB]
+                if max(np.max(np.abs(WGn - WG)), np.max(np.abs(WBn - WB))) < 1e-11:
+                    WG, WB = WGn, WBn
+                    conv_w = True
+                    break
+                WG, WB = WGn, WBn
+            assert conv_w
+        assert np.min(jbG[idx_w05:]) >= 1 and np.min(jbB[idx_w05:]) >= 1
+        assert np.all(uG_on[1:] > -1e8) and np.all(uB_on[1:] > -1e8)
+        return WG, WB, jbG, jbB
+
     bump_5b = (0.030 / (1.0 - BETA_MAX)) * phi_loc
     idx_M_lo = int(np.searchsorted(ks_m, B_M))
     idx_M_hi = int(np.searchsorted(ks_m, H_M))
     assert ks_m[idx_M_lo] == B_M and ks_m[idx_M_hi] == H_M
     eta_max_c_MG = ETA_MAX / min_c_E_plus(A_MIN, Q_MIN, B_M, B_M, 0.44)
     eta_max_c_MB = ETA_MAX / min_c_E_plus(AB_MIN, Q_MIN, B_M, B_M, 0.478)
-    print("    (Matched-beta across {BETA_MIN, BETA_MAX}, on-grid feasible witnesses, ALL 16 sub-boxes B&B-certified, continuous M=[0.10,0.28) <b checks)")
+    print("    (Matched-beta across {BETA_MIN, BETA_MAX}, on-grid feasible witnesses, ALL 32 (4x2x2x2) sub-boxes B&B-certified, continuous M=[0.10,0.28) <b checks)")
     appendix_5B = []
     for p in [0.0, 0.005, 0.01, 0.015, 0.02, 0.05, 0.08, 0.12]:
         P = np.array([[1.0 - p, p], [r_rec, 1.0 - r_rec]])
@@ -1832,19 +1931,20 @@ def verify_theorem11_stochastic():
             VBp = VBp + bump_bv
             EVGp = (1.0 - p) * VGp + p * VBp
             EVBp = r_rec * VGp + (1.0 - r_rec) * VBp
-            dG_ub, _, _ = certify_logpwl_sens(A_MAX, VGp, EVGp, bv, tol=4e-4)
-            dB_ub, _, _ = certify_logpwl_sens(AB_MAX, VBp, EVBp, bv, tol=4e-4)
-            cG, cB = np.linalg.solve(np.eye(2) - bv * P, np.array([dG_ub + 0.0002, dB_ub + 0.0002]))
+            dG_ub, _, _ = certify_logpwl_sens(A_MAX, VGp, EVGp, bv, tol=2.5e-4)
+            dB_ub, _, _ = certify_logpwl_sens(AB_MAX, VBp, EVBp, bv, tol=2.5e-4)
+            cG, cB = np.linalg.solve(np.eye(2) - bv * P, np.array([dG_ub + 0.00003, dB_ub + 0.00003]))
             PsiG_arr = VGp + cG
             PsiB_arr = VBp + cB
 
-            # Exact feasible stationary on-grid policy witnesses (zero off-grid approximation)
-            VGm, VBm, WG_on, WB_on = solve_markov_pwl(pre_lo, bv, p, return_ongrid_W=True)
-            assert np.all(np.diff(WG_on[idx_M_lo:idx_M_hi + 1]) >= 0.0) and np.all(np.diff(WB_on[idx_M_lo:idx_M_hi + 1]) >= 0.0)
-            WG0 = float(np.min(WG_on[ks_m >= B_M]))
-            WB0 = float(np.min(WB_on[ks_m >= B_M]))
-            WGh = float(np.min(WG_on[ks_m >= H_M]))
-            WBh = float(np.min(WB_on[ks_m >= H_M]))
+            # Exact feasible stationary on-grid policy witnesses on ks_wit (zero off-grid interpolation)
+            VGm, VBm, pGm, pBm = solve_markov_pwl(pre_lo, bv, p, return_pol=True)
+            WG_on, WB_on, _, _ = eval_wit_chain(A_MIN, AB_MIN, Q_MIN, ETA_MIN, ETA_MAX, bv, p, VGm, VBm, pGm, pBm)
+            assert np.all(np.diff(WG_on[iw_lo:iw_hi + 1]) >= 0.0) and np.all(np.diff(WB_on[iw_lo:iw_hi + 1]) >= 0.0)
+            WG0 = float(np.min(WG_on[ks_wit >= B_M]))
+            WB0 = float(np.min(WB_on[ks_wit >= B_M]))
+            WGh = float(np.min(WG_on[ks_wit >= H_M]))
+            WBh = float(np.min(WB_on[ks_wit >= H_M]))
 
             PsiGb = float(np.interp(np.log(B_M), lks_m, PsiG_arr))
             PsiBb = float(np.interp(np.log(B_M), lks_m, PsiB_arr))
@@ -1872,36 +1972,39 @@ def verify_theorem11_stochastic():
             assert bv * min_dEVG_b > eta_max_c_MG, f"5B-G <b slope failed: {bv * min_dEVG_b:.2f} <= {eta_max_c_MG:.2f}"
             assert bv * min_dEVB_b > eta_max_c_MB, f"5B-B <b slope failed: {bv * min_dEVB_b:.2f} <= {eta_max_c_MB:.2f}"
             min_M_G = min(
-                float(WG_on[ii]) - (E_plus_exact(A_MAX, Q_MAX, ks_m[ii + 1], B_M, 0.44) + bv * EVGb_p)
-                for ii in range(idx_M_lo, idx_M_hi)
+                float(WG_on[ii]) - (E_plus_exact(A_MAX, Q_MAX, float(ks_wit[ii + 1]), B_M, 0.44) + bv * EVGb_p)
+                for ii in range(iw_lo, iw_hi)
             )
             min_M_B = min(
-                float(WB_on[ii]) - (E_plus_exact(AB_MAX, Q_MAX, ks_m[ii + 1], B_M, 0.478) + bv * EVBb_p)
-                for ii in range(idx_M_lo, idx_M_hi)
+                float(WB_on[ii]) - (E_plus_exact(AB_MAX, Q_MAX, float(ks_wit[ii + 1]), B_M, 0.478) + bv * EVBb_p)
+                for ii in range(iw_lo, iw_hi)
             )
 
-            # Certify ALL 16 sub-boxes of 4x2x2 cover via warm-started VFI + exact B&B on EVERY sub-box
+            # Certify ALL 32 sub-boxes of 4x2x2x2 cover via warm-started VFI + exact B&B on EVERY sub-box
             mExitHB_box = 1e9
             init_u = (VGp - bump_bv, VBp - bump_bv)
-            init_l = (VGm, VBm)
-            for iq in range(2):
-                qL, qU = q_pts[iq], q_pts[iq + 1]
-                for iG in range(4):
-                    GL, GU = aG_pts[iG], aG_pts[iG + 1]
-                    for iB in range(2):
-                        BL, BU = aB_pts[iB], aB_pts[iB + 1]
-                        _, _, _, WB_l = solve_markov_pwl(pack_pre(GL, BL, qL, False), bv, p, init=init_l, return_ongrid_W=True)
-                        VGu, VBu = solve_markov_pwl(pack_pre(GU, BU, qU, True), bv, p, init=init_u)
-                        VGu = VGu + bump_bv
-                        VBu = VBu + bump_bv
-                        dGs, _, _ = certify_logpwl_sens(GU, VGu, (1.0 - p) * VGu + p * VBu, bv, tol=5e-4, q_hi=qU)
-                        dBs, _, _ = certify_logpwl_sens(BU, VBu, r_rec * VGu + (1.0 - r_rec) * VBu, bv, tol=5e-4, q_hi=qU)
-                        cGs, cBs = np.linalg.solve(np.eye(2) - bv * P, np.array([dGs + 0.0002, dBs + 0.0002]))
-                        wb_s = float(np.min(WB_l[ks_m >= H_M]))
-                        pg_s = float(np.interp(np.log(H_M), lks_m, VGu)) + cGs
-                        pb_s = float(np.interp(np.log(H_M), lks_m, VBu)) + cBs
-                        e_sub = E_plus_exact(BU, qU, H_M, H_M, 0.603)
-                        mExitHB_box = min(mExitHB_box, wb_s - (e_sub + bv * (r_rec * pg_s + (1.0 - r_rec) * pb_s)))
+            for ie in range(2):
+                eLs, eUs = e_pts[ie], e_pts[ie + 1]
+                for iq in range(2):
+                    qL, qU = q_pts[iq], q_pts[iq + 1]
+                    for iG in range(4):
+                        GL, GU = aG_pts[iG], aG_pts[iG + 1]
+                        for iB in range(2):
+                            BL, BU = aB_pts[iB], aB_pts[iB + 1]
+                            _, WB_l, _, _ = eval_wit_chain(GL, BL, qL, eLs, eUs, bv, p, VGm, VBm, pGm, pBm)
+                            VGu, VBu = solve_markov_pwl(pack_pre(GU, BU, qU, ie, True), bv, p, init=init_u, tol_out=1e-5)
+                            VGu = VGu + bump_bv
+                            VBu = VBu + bump_bv
+                            dGs, _, _ = certify_logpwl_sens(GU, VGu, (1.0 - p) * VGu + p * VBu, bv, tol=2.5e-4, q_hi=qU, eL=eLs, eU=eUs)
+                            dBs, _, _ = certify_logpwl_sens(BU, VBu, r_rec * VGu + (1.0 - r_rec) * VBu, bv, tol=2.5e-4, q_hi=qU, eL=eLs, eU=eUs)
+                            cGs, cBs = np.linalg.solve(np.eye(2) - bv * P, np.array([dGs + 0.00003, dBs + 0.00003]))
+                            wb_s = float(np.min(WB_l[ks_wit >= H_M]))
+                            pg_s = float(np.interp(np.log(H_M), lks_m, VGu)) + cGs
+                            pb_s = float(np.interp(np.log(H_M), lks_m, VBu)) + cBs
+                            t_sb = dF_dL(BU, H_M, 0.603)
+                            c_sb_sup = qU * H_M + F_A(BU, H_M, 0.603) + 0.397 * t_sb - H_M
+                            e_sub = max(ev_s * np.log(c_sb_sup - t_sb * min(1.0, (1.0 - ev_s) * c_sb_sup / t_sb)) + (1.0 - ev_s) * np.log(min(1.0, (1.0 - ev_s) * c_sb_sup / t_sb)) for ev_s in (eLs, eUs))
+                            mExitHB_box = min(mExitHB_box, wb_s - (e_sub + bv * (r_rec * pg_s + (1.0 - r_rec) * pb_s)))
 
             T_prob = T_G + 4
             max_ym_gap = max(PsiG_ym - B_star[0], PsiB_ym - B_star[1])
@@ -1934,7 +2037,7 @@ def verify_theorem11_stochastic():
             f"    p={100*p:4.1f}% | BG={worst_res['BG']:7.3f} (marg={worst_res['margG']:5.2f}, T*_G={worst_res['T_G']:2d}) | "
             f"BB={worst_res['BB']:7.3f} (marg={worst_res['margB']:5.2f}, T*_B={worst_res['T_B']:2d}) | "
             f"mExit(M:G/B={worst_res['mExitMG']:+.2f}/{worst_res['mExitMB']:+.3f} [cont>={worst_res['min_M_B']:+.3f}], "
-            f"H:G/B_16bx={worst_res['mExitHG']:+.2f}/{worst_res['mExitHB_box']:+.3f}) | P(tau<={worst_res['T_prob']})>={worst_res['P_tau_G']:.3f}"
+            f"H:G/B_32bx={worst_res['mExitHG']:+.2f}/{worst_res['mExitHB_box']:+.3f}) | P(tau<={worst_res['T_prob']})>={worst_res['P_tau_G']:.3f}"
         )
         appendix_5B.append((
             p, worst_res["cG"], worst_res["cB"], worst_res["WG0"], worst_res["WB0"],
@@ -2221,7 +2324,7 @@ def verify_theorem11_stochastic():
     for p, cG, cB, WG0, WB0, mG, mB, TG, TB, eMG, eMB, eHG, eHB_s in appendix_5B:
         print(
             f"      p={100*p:4.1f}% | (c_G,c_B)=({cG:.4f},{cB:.4f}) | W_G={WG0:.4f}, W_B={WB0:.4f} | "
-            f"stay=({mG:.3f},{mB:.3f}) | T*=({TG},{TB}) | exit(M:G={eMG:+.3f},B={eMB:+.3f}; H:G={eHG:+.3f},B_16bx={eHB_s:+.3f})"
+            f"stay=({mG:.3f},{mB:.3f}) | T*=({TG},{TB}) | exit(M:G={eMG:+.3f},B={eMB:+.3f}; H:G={eHG:+.3f},B_32bx={eHB_s:+.3f})"
         )
 
 
