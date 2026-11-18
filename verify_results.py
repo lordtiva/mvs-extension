@@ -477,6 +477,157 @@ def verify_barriers():
     assert all(g > 0.06 for g in gaps_matched_T21.values())
 
 
+def verify_restricted_M_vfi():
+    """Compare tau_H <= 23 against the exact restricted DP on M=[0.10, 0.28),
+    the optimal regional staying barrier B_opt, and unrestricted VFI entry times."""
+    print("\n  [Slack decomposition on M = [0.10, 0.28): B_1 vs B_opt / Restricted DP / VFI]")
+    M_grid = np.linspace(B_M, H_M - 1e-5, 181)
+    inv_phi = (np.sqrt(5.0) - 1.0) / 2.0
+
+    def _rho_mat(A_v, q_v, e_v=None):
+        lo = np.full((len(M_grid), len(M_grid)), 1e-8)
+        hi = np.full((len(M_grid), len(M_grid)), 1.0 - 1e-9)
+
+        def _gu(La):
+            c = q_v * M_grid[:, None] + F_A(A_v, M_grid[:, None], La) - M_grid[None, :]
+            lc = np.log(np.maximum(c, 1e-30))
+            ll = np.log(1.0 - La)
+            if e_v is None:
+                uv = np.maximum(ETA_MIN * lc + (1.0 - ETA_MIN) * ll, ETA_MAX * lc + (1.0 - ETA_MAX) * ll)
+            else:
+                uv = e_v * lc + (1.0 - e_v) * ll
+            return np.where(c > 1e-15, uv, -1e9 + c)
+
+        u0 = _gu(np.zeros_like(lo))
+        x1 = hi - inv_phi * (hi - lo)
+        x2 = lo + inv_phi * (hi - lo)
+        f1, f2 = _gu(x1), _gu(x2)
+        for _ in range(20):
+            mr = f1 < f2
+            lo = np.where(mr, x1, lo)
+            hi = np.where(mr, hi, x2)
+            x1n = np.where(mr, x2, hi - inv_phi * (hi - lo))
+            x2n = np.where(mr, lo + inv_phi * (hi - lo), x1)
+            f1n = np.where(mr, f2, _gu(x1n))
+            f2n = np.where(mr, _gu(x2n), f1)
+            x1, x2, f1, f2 = x1n, x2n, f1n, f2n
+        return np.maximum(u0, _gu(0.5 * (lo + hi)))
+
+    # 1. Exact box-upper restricted DP (Psi^sharp vs MR-Table 4 W_M) and optimal staying barrier B_opt
+    Psi_sharp = 0.4 * M_grid - 5.0 * (M_grid ** (-0.5)) - 18.5 - 10.0 / 301.0
+    c_M = Q_MIN * M_grid + F_A(A_MIN, M_grid, 0.68) - 0.135
+    W_M_lb = box_worst_u(c_M, 0.68) + BETA_MAX * (-33.103)
+    rho_up = _rho_mat(A_MAX, Q_MAX, e_v=None)
+
+    J_dp = Psi_sharp.copy()
+    gaps_dp = {}
+    for T in range(1, 12):
+        J_dp = np.max(rho_up + BETA_MAX * J_dp[None, :], axis=1)
+        gaps_dp[T] = float(np.max(J_dp - W_M_lb))
+
+    B_opt = np.full_like(M_grid, -40.0)
+    for _ in range(1000):
+        Bn = np.max(rho_up + BETA_MIN * B_opt[None, :], axis=1)
+        if np.max(np.abs(Bn - B_opt)) < 1e-10:
+            B_opt = Bn
+            break
+        B_opt = Bn
+    inf_W_B = float(np.min(W_M_lb - B_opt))
+    sup_Psi_B = float(np.max(Psi_sharp - B_opt))
+    gap_Bopt_T8 = inf_W_B - (BETA_MAX ** 8) * sup_Psi_B
+    gap_Bopt_T9 = inf_W_B - (BETA_MAX ** 9) * sup_Psi_B
+
+    # 2. Unrestricted center VFI (A=0.75, beta=0.97, q=0.92, eta=0.70) and true restricted DP vs V
+    A_c, b_c, q_c, e_c = 0.75, 0.97, 0.92, 0.70
+    K_g = np.unique(np.concatenate([
+        np.geomspace(1e-4, 0.095, 100, endpoint=False),
+        np.linspace(0.095, 0.285, 190, endpoint=False),
+        np.geomspace(0.285, 4.0, 220),
+    ]))
+    solve_L_c = lambda ka, kpa: _golden_solve_L(ka, kpa, lambda k, L: F_A(A_c, k, L), q_c, e_c)
+
+    def _iv(kp, Va):
+        r = np.interp(np.clip(kp, K_g[0], K_g[-1]), K_g, Va)
+        return np.where(kp < K_g[0], Va[0] + (e_c / (1.0 - b_c)) * np.log(np.maximum(kp, 1e-30) / K_g[0]), r)
+
+    y_max = q_c * K_g + F_A(A_c, K_g, 0.9999)
+    s_cand = 1.0 - np.geomspace(1e-5, 0.25, 65)
+    kp_c = y_max[:, None] * s_cand[None, :]
+    u_c = np.zeros_like(kp_c)
+    for j in range(len(s_cand)):
+        _, u_c[:, j] = solve_L_c(K_g, kp_c[:, j])
+    V_cake0 = (e_c / (1.0 - b_c)) * (np.log((1.0 - b_c) * q_c) + (b_c / (1.0 - b_c)) * np.log(b_c * q_c))
+    V_c = np.where(K_g > 0.002, -30.0, V_cake0 + (e_c / (1.0 - b_c)) * np.log(K_g))
+    for _ in range(120):
+        Vn = np.max(u_c + b_c * _iv(kp_c, V_c), axis=1)
+        if np.max(np.abs(Vn - V_c)) < 1e-7:
+            V_c = Vn
+            break
+        V_c = Vn
+    for _ in range(80):
+        idx = np.argmax(u_c + b_c * _iv(kp_c, V_c), axis=1)
+        lo = y_max * s_cand[np.maximum(0, idx - 1)]
+        hi = y_max * s_cand[np.minimum(len(s_cand) - 1, idx + 1)]
+        x1 = hi - inv_phi * (hi - lo)
+        x2 = lo + inv_phi * (hi - lo)
+        _, u1 = solve_L_c(K_g, x1)
+        _, u2 = solve_L_c(K_g, x2)
+        f1 = u1 + b_c * _iv(x1, V_c)
+        f2 = u2 + b_c * _iv(x2, V_c)
+        for _g in range(18):
+            mr = f1 < f2
+            lo = np.where(mr, x1, lo)
+            hi = np.where(mr, hi, x2)
+            x1 = np.where(mr, x2, hi - inv_phi * (hi - lo))
+            x2 = np.where(mr, lo + inv_phi * (hi - lo), x1)
+            _, u1n = solve_L_c(K_g, x1)
+            _, u2n = solve_L_c(K_g, x2)
+            f1 = np.where(mr, f2, u1n + b_c * _iv(x1, V_c))
+            f2 = np.where(mr, u2n + b_c * _iv(x2, V_c), f1)
+        pol_c = 0.5 * (lo + hi)
+        _, up = solve_L_c(K_g, pol_c)
+        Vn = up + b_c * _iv(pol_c, V_c)
+        for _h in range(40):
+            Vh = up + b_c * _iv(pol_c, Vn)
+            if np.max(np.abs(Vh - Vn)) < 1e-10:
+                Vn = Vh
+                break
+            Vn = Vh
+        if np.max(np.abs(Vn - V_c)) < 1e-9:
+            V_c = Vn
+            break
+        V_c = Vn
+
+    max_tau_vfi = 0
+    for k0 in M_grid:
+        k = float(k0)
+        t = 0
+        while k < H_M and t < 50:
+            k = float(np.interp(k, K_g, pol_c))
+            t += 1
+        max_tau_vfi = max(max_tau_vfi, t)
+
+    V_M_true = np.interp(M_grid, K_g, V_c)
+    rho_c = _rho_mat(A_c, q_c, e_v=e_c)
+    J_true = V_M_true.copy()
+    gaps_true = {}
+    for T in range(1, 7):
+        J_true = np.max(rho_c + b_c * J_true[None, :], axis=1)
+        gaps_true[T] = (float(np.max(J_true - V_M_true)), float(J_true[0] - V_M_true[0]))
+
+    print(f"    Box-upper restricted DP (Psi^sharp vs W_M): T=8 gap={gaps_dp[8]:+.6f}, T=9 gap={gaps_dp[9]:+.6f} (tau_H^DP = 9)")
+    print(f"    Optimal regional barrier B_opt on M: [{B_opt[0]:.6f}, {B_opt[-1]:.6f}] -> T=8 gap={gap_Bopt_T8:+.6f}, T=9 gap={gap_Bopt_T9:+.6f}")
+    print(f"    Center VFI (A=0.75, beta=0.97): V(0.10)={V_M_true[0]:.6f}, max_{{K0 in M}} tau_H^VFI = {max_tau_vfi}")
+    print(f"    True restricted DP vs V(K): T=1..6 max = {[round(gaps_true[t][0], 6) for t in range(1, 7)]}")
+    print(f"      at K0=0.10: T=1..6 = {[round(gaps_true[t][1], 6) for t in range(1, 7)]}")
+
+    assert gaps_dp[8] > 0.0 and gaps_dp[9] < -0.50
+    assert abs(B_opt[0] - (-56.794979)) < 1e-4 and abs(B_opt[-1] - (-52.457990)) < 1e-4
+    assert gap_Bopt_T8 < 0.0 and gap_Bopt_T9 > 0.45
+    assert max_tau_vfi == 4
+    assert gaps_true[4][0] < -0.15 and gaps_true[5][0] < -0.70
+
+
 # ---------------------------------------------------------------------------
 # 2. Proposition 1** & Upgrade U2 (Analytical interval arithmetic & Wronskian)
 # ---------------------------------------------------------------------------
@@ -721,8 +872,8 @@ def _golden_solve_L(k_arr, kp_arr, f_norm, q, eta):
     return L_best, obj(L_best)
 
 
-def solve_vfi_frontiers(A_val):
-    theta, rho, w, delta, beta, eta = 1.5, -1.0, 0.5, 0.08, 0.97, 0.70
+def solve_vfi_frontiers(A_val, beta=0.97, k_band=(0.00078, 0.00102)):
+    theta, rho, w, delta, eta = 1.5, -1.0, 0.5, 0.08, 0.70
     q = 1.0 - delta
     c_K = w ** (theta / rho)
     D = 1.0 / beta - q
@@ -738,6 +889,8 @@ def solve_vfi_frontiers(A_val):
 
     # Modified golden-rule steady state with dynamic upper bracket scaling as A^2.5
     lo_ss = 0.25 * (A_val ** 2)
+    while df_dk(lo_ss) <= D and lo_ss > 1e-6:
+        lo_ss *= 0.5
     hi_ss = max(1e10, 10.0 * np.sqrt(1.5 * c_K / D) * (A_val ** 2.5))
     while df_dk(hi_ss) >= D:
         hi_ss *= 10.0
@@ -745,10 +898,11 @@ def solve_vfi_frontiers(A_val):
     k_lo, k_hi = 1e-6, 1.10 * k_ss
 
     # 880-point concentrated 3-region grid in k = A^2 K
+    k_b0, k_b1 = k_band
     k_grid = np.unique(np.concatenate([
-        np.geomspace(k_lo, 0.00078, 160, endpoint=False),
-        np.linspace(0.00078, 0.00102, 360, endpoint=False),
-        np.geomspace(0.00102, k_hi, 360),
+        np.geomspace(k_lo, k_b0, 160, endpoint=False),
+        np.linspace(k_b0, k_b1, 360, endpoint=False),
+        np.geomspace(k_b1, k_hi, 360),
     ]))
     n_k = len(k_grid)  # 880
 
@@ -801,8 +955,9 @@ def solve_vfi_frontiers(A_val):
 
     # --- 1. Fixed labor L = 1 ---
     y_fix = q * k_grid + f_norm(k_grid, 1.0)
+    k_init = 0.00082 if abs(k_b0 - 0.00078) < 1e-8 else 0.5 * (k_b0 + k_b1)
     V_fix = np.where(
-        k_grid > 0.00082,
+        k_grid > k_init,
         eta * np.log(f_norm(k_ss, 1.0) - delta * k_ss) / (1.0 - beta),
         V_cake_const + (eta / (1.0 - beta)) * np.log(k_grid),
     )
@@ -860,7 +1015,7 @@ def solve_vfi_frontiers(A_val):
             break
         V_fix = V_eval
 
-    idx_m = np.where((k_grid >= 0.00078) & (k_grid <= 0.00102))[0]
+    idx_m = np.where((k_grid >= k_b0) & (k_grid <= k_b1))[0]
     jump = np.where((pol_fix - k_grid)[idx_m] > 0)[0][0]
     k_S_fix = refine_skiba(idx_m[jump], V_fix, endo=False)
 
@@ -1063,6 +1218,21 @@ def verify_theorem3_star():
             assert ratio < prev_ratio
         prev_ratio = ratio
     assert kS_fix < 0.000836 and kS_endo < 0.000837 and abs(ratio - 1.0) < 0.002
+
+    # Weak patience check: beta = 0.90 satisfies beta*theta = 1.35 > 1 while violating (2.3): beta*(q+theta*delta) = 0.936 < 1
+    beta_wk = 0.90
+    D_wk = 1.0 / beta_wk - (1.0 - delta)
+    print(f"\n  [Weak Patience Regime: beta={beta_wk:.2f}, beta*(q+theta*delta)={beta_wk*(1-delta+theta*delta):.3f} < 1 < beta*theta={beta_wk*theta:.2f}, (D/c_K)^2={(D_wk/c_K)**2:.6f}]")
+    prev_fix_wk = 1.0
+    prev_rat_wk = 2.0
+    for A_val in [1.5, 100.0, 1e8]:
+        kSf_wk, kSe_wk, dWp_wk = solve_vfi_frontiers(A_val, beta=beta_wk, k_band=(0.0014, 0.0026))
+        rat_wk = kSe_wk / kSf_wk
+        print(f"    A={A_val:8.1e}: A^2*S_fix={kSf_wk:.6f}, A^2*S_endo={kSe_wk:.6f}, ratio={rat_wk:.5f}, dW+={dWp_wk:.2f}")
+        assert kSf_wk < kSe_wk < (D_wk / c_K) ** 2
+        assert kSf_wk < prev_fix_wk and rat_wk < prev_rat_wk
+        prev_fix_wk, prev_rat_wk = kSf_wk, rat_wk
+    assert kSe_wk < 0.00180 and rat_wk < 1.005
 
 
 # ---------------------------------------------------------------------------
@@ -2330,6 +2500,7 @@ def verify_theorem11_stochastic():
 
 if __name__ == "__main__":
     verify_barriers()
+    verify_restricted_M_vfi()
     verify_prop1_double_star()
     verify_theorem3_star()
     verify_theorem10()
