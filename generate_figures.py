@@ -51,7 +51,7 @@ slope_min = ETA_MIN * Q_MIN / C_max_plus
 
 
 # ==============================================================================
-# HELPER SOLVERS FOR VFI CURVES, TRAJECTORIES & 5A CONTINUOUS LOG-PWL CERTIFICATES
+# HELPER SOLVERS FOR VFI CURVES, TRAJECTORIES & RUIN DOOB LOG-PWL CERTIFICATES
 # ==============================================================================
 def _solve_endo_threshold_norm(A_val):
     """Normalized k = A^2 K continuous golden-section VFI for S_A^{endo}."""
@@ -289,8 +289,8 @@ def _solve_vfi_trajectory(A_val, K_0=0.06, g_rate=0.0, n_steps=44):
     return np.array(traj)
 
 
-def _compute_5A_doob_data():
-    """Compute exact 5A box-uniform log-PWL + b_max Doob deadlines T*(p) and p_cert."""
+def _compute_ruin_doob_data():
+    """Compute exact Proposition 4* box-uniform log-PWL + b_max Doob deadlines T*(p) and p_cert."""
     _, _, _, eval_witness = build_25step_witness_builder()
     ks_m = np.unique(np.concatenate([
         np.geomspace(1e-8, 1e-5, 12, endpoint=False),
@@ -627,7 +627,7 @@ def _compute_5A_doob_data():
                 bxL, bxR = np.concatenate([axL, bxLc]), np.concatenate([axR, bxRc])
                 bLL, bLR = np.concatenate([aLL, bLLc]), np.concatenate([aLR, bLRc])
                 bsL, bsR = np.concatenate([asL, bsLc]), np.concatenate([asR, bsRc])
-        raise RuntimeError("5A B&B did not converge")
+        raise RuntimeError("Ruin Doob B&B did not converge")
 
     def stay_gap_fn(p_v):
         b_min = BETA_MIN * (1.0 - p_v)
@@ -666,10 +666,10 @@ def _compute_5A_doob_data():
 
     T_arr = np.array(T_star_list)
     P_arr = np.array(P_doob_list)
-    # Verify exact parity with verify_results.py Section 5A (#39)
+    # Verify exact parity with verify_results.py Proposition 4* Ruin Doob
     for pv, Tv in [(0.0, 22), (0.005, 25), (0.010, 30), (0.015, 40), (0.020, 84)]:
         idx = int(np.argmin(np.abs(p_grid - pv)))
-        assert T_arr[idx] == Tv, f"5A mismatch at p={pv}: got {T_arr[idx]} vs {Tv}"
+        assert T_arr[idx] == Tv, f"Ruin Doob mismatch at p={pv}: got {T_arr[idx]} vs {Tv}"
     idx_2pct = int(np.argmin(np.abs(p_grid - 0.020)))
     assert abs(P_arr[idx_2pct] - 0.1832) < 0.001
     assert abs(p_cert - 0.020434) < 5e-4
@@ -727,8 +727,13 @@ def precompute_figure_data():
         0.105,
         xtol=1e-9,
     )
-    tau_1 = brentq(lambda t: A0 * (t ** alpha_pub) * (1.0 - t) - A_SN, 1e-9, tau_opt)
-    tau_2 = brentq(lambda t: A0 * (t ** alpha_pub) * (1.0 - t) - A_SN, tau_opt, 1.0 - 1e-9)
+    tau_1_SN = brentq(lambda t: A0 * (t ** alpha_pub) * (1.0 - t) - A_SN, 1e-9, tau_opt)
+    tau_2_SN = brentq(lambda t: A0 * (t ** alpha_pub) * (1.0 - t) - A_SN, tau_opt, 1.0 - 1e-9)
+
+    # Global survival (Skiba/Maxwell) threshold A_* verified in verify_results.py
+    A_star = 0.0996091
+    tau_1 = brentq(lambda t: A0 * (t ** alpha_pub) * (1.0 - t) - A_star, 1e-9, tau_opt)
+    tau_2 = brentq(lambda t: A0 * (t ** alpha_pub) * (1.0 - t) - A_star, tau_opt, 1.0 - 1e-9)
     tau_t8_lo = brentq(lambda t: A0 * (t ** alpha_pub) * (1.0 - t) - 0.749, 1e-9, tau_opt)
     tau_t8_hi = brentq(lambda t: A0 * (t ** alpha_pub) * (1.0 - t) - 0.749, tau_opt, 1.0 - 1e-9)
 
@@ -742,7 +747,7 @@ def precompute_figure_data():
     tau_c2 = brentq(lambda t: A0 * (t ** alpha_pub) * (1.0 - t) - A_cross, tau_opt, 1.0 - 1e-9)
 
     A_max_curve = A0 * (tau_opt ** alpha_pub) * (1.0 - tau_opt)
-    A_knots_lo = [0.0998, 0.1000, 0.1015, 0.1035, 0.1060, 0.1080, A_cross, 0.1125, 0.1160, 0.1200]
+    A_knots_lo = [0.09975, 0.0998, 0.1000, 0.1015, 0.1035, 0.1060, 0.1080, A_cross, 0.1125, 0.1160, 0.1200]
     A_knots_hi = [0.130, 0.150, 0.180, 0.220, 0.280, 0.360, 0.480, 0.620, A_max_curve]
     A_vfi_list, S_vfi_list = [], []
     for av in A_knots_lo:
@@ -769,6 +774,9 @@ def precompute_figure_data():
         'tau_min': tau_min,
         'tau_max': tau_max,
         'A_SN': A_SN,
+        'tau_1_SN': tau_1_SN,
+        'tau_2_SN': tau_2_SN,
+        'A_star': A_star,
         'tau_1': tau_1,
         'tau_2': tau_2,
         'tau_t8_lo': tau_t8_lo,
@@ -781,15 +789,16 @@ def precompute_figure_data():
         'k_vfi_interp': k_vfi_interp,
     }
 
-    print("Precomputing VFI trajectories (Fig 4a) and 5A Doob curve (Fig 4b)...")
+    print("Precomputing VFI trajectories (Fig 4a) and Ruin Doob curve (Fig 4b)...")
     t_grid = np.arange(0, 45)
     fig4_data = {
         't_grid': t_grid,
+        'N_f_star': (0.75 / A_star) ** 2,
         'traj_Nf1_g025': _solve_vfi_trajectory(0.75, K_0=0.06, g_rate=0.025, n_steps=44),
         'traj_Nf1_g0': _solve_vfi_trajectory(0.75, K_0=0.06, g_rate=0.0, n_steps=44),
         'traj_Nf2_g0': _solve_vfi_trajectory(0.75 / (2.0 ** 0.5), K_0=0.06, g_rate=0.0, n_steps=44),
         'traj_Nf60_g0': _solve_vfi_trajectory(0.75 / (60.0 ** 0.5), K_0=0.06, g_rate=0.0, n_steps=44),
-        'doob': _compute_5A_doob_data(),
+        'doob': _compute_ruin_doob_data(),
     }
     return fig2_data, fig3_data, fig4_data
 
@@ -911,7 +920,7 @@ def make_fig1(lang):
 # FIGURE 2: Asymptotic Scaling & Endogenous vs Fixed Labor (Footnote 1 & Thm 3*)
 # ==============================================================================
 def make_fig2(lang, fig2_data):
-    A_vals = np.logspace(np.log10(0.75), np.log10(100.0), 300)
+    A_vals = np.logspace(np.log10(0.70), np.log10(118.0), 300)
     theta, rho, w, delta, beta, eta = 1.5, -1.0, 0.5, 0.08, 0.97, 0.70
     r_exp = theta - 1.0
     c_K = w ** (theta / rho)
@@ -957,8 +966,13 @@ def make_fig2(lang, fig2_data):
         l_L = r'Trabajo FOC en $(k,c)=(0.002,10^{-4})$: $L_A^* \propto A^{-1}$'
         l_loss = r'Costo de ocio en $(k,c)$: $(1-\eta)|\ln(1-L_A^*)| \propto A^{-1}$'
         l_KL = r'Razón $K_b(A)/L_A^*$ en $(k,c)$ ($\propto A^{-1} \to 0$)'
-        l_fgap = r'Brecha VFI de fronteras $S_A^{\mathrm{endo}}/S_A^{\mathrm{fix}}(1) - 1 \to 0$'
+        l_fgap = r'Brecha VFI de fronteras $S_A^{\mathrm{endo}}/S_A^{\mathrm{fix}}(1) - 1$ (subpolinómica)'
         l_K = r'Capital fijo de referencia $K_b(A) = 0.002 A^{-2}$'
+        ann_flat = (
+            r'Brecha global VFI se aplana:' + '\n'
+            + r'ascenso lento $O(1/\log\log A)$' + '\n'
+            + r'vs. FOC local $\propto A^{-1}$'
+        )
         xlab2 = r'Productividad total de los factores $A$ (escala log)'
         ylab2 = r'Magnitudes FOC $(k,c)=(0.002,10^{-4})$ y brecha VFI'
         tit2 = r'(b) Convergencia trabajo endógeno vs. fijo (Nota 1)'
@@ -977,8 +991,13 @@ def make_fig2(lang, fig2_data):
         l_L = r'FOC labor at $(k,c)=(0.002,10^{-4})$: $L_A^* \propto A^{-1}$'
         l_loss = r'Leisure cost at $(k,c)$: $(1-\eta)|\ln(1-L_A^*)| \propto A^{-1}$'
         l_KL = r'Ratio $K_b(A)/L_A^*$ at $(k,c)$ ($\propto A^{-1} \to 0$)'
-        l_fgap = r'VFI frontier gap $S_A^{\mathrm{endo}}/S_A^{\mathrm{fix}}(1) - 1 \to 0$'
+        l_fgap = r'VFI frontier gap $S_A^{\mathrm{endo}}/S_A^{\mathrm{fix}}(1) - 1$ (sub-polynomial)'
         l_K = r'Benchmark capital $K_b(A) = 0.002 A^{-2}$'
+        ann_flat = (
+            r'Global VFI gap flattens:' + '\n'
+            + r'ultraslow $O(1/\log\log A)$ climb' + '\n'
+            + r'vs. local FOC $\propto A^{-1}$'
+        )
         xlab2 = r'Total factor productivity $A$ (log scale)'
         ylab2 = r'FOC magnitudes $(k,c)=(0.002,10^{-4})$ & VFI gap'
         tit2 = r'(b) Endogenous vs. fixed labor convergence (Footnote 1)'
@@ -991,7 +1010,7 @@ def make_fig2(lang, fig2_data):
     ax1.loglog(A_vfi, S_endo_vfi, 'o', color='#c00000', markersize=4.6, zorder=5, label=l_endo)
     ax1.loglog(A_vfi, S_fix_vfi, 's', markerfacecolor='none', markeredgecolor='#0b2c4d',
                markeredgewidth=1.25, markersize=6.4, zorder=6, label=l_fix)
-    ax1.set_xlim(0.75, 100.0)
+    ax1.set_xlim(0.70, 118.0)
     ax1.set_ylim(2.5e-8, 6e-2)
     ax1.set_xlabel(xlab1, fontsize=9.5)
     ax1.set_ylabel(ylab1, fontsize=9.5)
@@ -1008,7 +1027,7 @@ def make_fig2(lang, fig2_data):
     ax1_in.semilogx(A_vfi, fig2_data['kS_endo'], 'o-', color='#c00000', markersize=3.0, linewidth=1.1)
     ax1_in.semilogx(A_vfi, fig2_data['kS_fix'], 's--', markerfacecolor='none', markeredgecolor='#0b2c4d',
                     color='#0b2c4d', markeredgewidth=0.9, markersize=4.1, linewidth=0.95)
-    ax1_in.set_xlim(0.75, 100.0)
+    ax1_in.set_xlim(0.70, 118.0)
     ax1_in.set_ylim(0.00075, 0.00148)
     ax1_in.set_yticks([0.0008, 0.0011, 0.0014])
     ax1_in.set_yticklabels(['8e-4', '1.1e-3', '1.4e-3'], fontsize=6.2)
@@ -1022,7 +1041,17 @@ def make_fig2(lang, fig2_data):
     ax2.loglog(A_vals, KL_ratio, '--', color='#d95f02', linewidth=1.8, label=l_KL)
     ax2.loglog(A_vfi, frontier_gap_vfi, 'o-', color='#c00000', markersize=4.4, linewidth=1.7, label=l_fgap)
     ax2.loglog(A_vals, K_crit, '-.', color='#1b7837', linewidth=1.8, label=l_K)
-    ax2.set_xlim(0.75, 100.0)
+    ax2.annotate(
+        ann_flat,
+        xy=(A_vfi[4], frontier_gap_vfi[4]),
+        xytext=(10.5, 9.5e-6),
+        arrowprops=dict(arrowstyle='->', color='#c00000', lw=1.0, connectionstyle='arc3,rad=-0.12'),
+        bbox=dict(boxstyle='round,pad=0.25', fc='white', ec='#c00000', lw=0.7, alpha=0.95),
+        fontsize=6.9,
+        color='#9b0000',
+        zorder=7,
+    )
+    ax2.set_xlim(0.70, 118.0)
     ax2.set_ylim(1.0e-7, 3.0)
     ax2.set_xlabel(xlab2, fontsize=9.5)
     ax2.set_ylabel(ylab2, fontsize=9.0)
@@ -1050,6 +1079,7 @@ def make_fig3(lang, fig3_data):
     tau_min = fig3_data['tau_min']
     tau_max = fig3_data['tau_max']
     A_SN = fig3_data['A_SN']
+    A_star = fig3_data['A_star']
     tau_1 = fig3_data['tau_1']
     tau_2 = fig3_data['tau_2']
     tau_t8_lo = fig3_data['tau_t8_lo']
@@ -1106,46 +1136,46 @@ def make_fig3(lang, fig3_data):
     if lang == 'es':
         l_ae = r'Productividad neta $A_e(\tau) = A_0 \tau^\alpha (1-\tau)$'
         l_lin = r'Pérdida lineal $A_e(\tau^*) \frac{1-\tau}{1-\tau^*}$ (Sec. 4.3)'
-        l_rep = r'Umbral físico $A_{\mathrm{rep}} = 0.0735$'
-        l_asn = r'Umbral económico $A_{\mathrm{SN}} = 0.0995$'
+        l_rep = rf'Umbral físico $A_{{\mathrm{{rep}}}} = {A_rep:.4f}$'
+        l_astar = rf'Umbral global $A_* = {A_star:.4f}$'
         l_a749 = r'Cota Teorema 8 ($A_e \geq 0.749$)'
         l_opt = r'Carga óptima $\tau^* = \frac{\alpha}{1+\alpha} = 0.20$'
         l_pe = r'Extinción física ($A_e \leq A_{\mathrm{rep}}$)'
-        l_ee = r'Extinción económica ($A_{\mathrm{rep}} < A_e \leq A_{\mathrm{SN}}$)'
+        l_ee = r'Extinción económica ($A_{\mathrm{rep}} < A_e \leq A_*$)'
         xlab1 = r'Carga tributaria / regulatoria $\tau \in (0, 1)$'
         ylab1 = r'Productividad efectiva $A_e(\tau)$'
         tit1 = r'(a) Regímenes físicos y económicos de $A_e(\tau)$'
-        l_Svfi = r'Frontera real VFI $S(\tau)$ en $(\tau_1, \tau_2)$'
+        l_Svfi = r'Frontera real VFI $S(\tau)$ en $(\tau_{1,*}, \tau_{2,*})$'
         l_Sasy = r'Envolvente asintótica Teo. 3 $(D/c_K)^2 A_e^{-2}$'
         l_t8 = r'Cota certificada Teo. 8 ($[0.117, 0.305]$)'
         l_K = r'Piso físico $\kappa(\tau)$ en $(\tau_{\min}, \tau_{\max})$'
-        l_ee2 = r'Extinción económica $(\tau_{\min}, \tau_1] \cup [\tau_2, \tau_{\max}]$'
-        l_pe2 = r'Extinción física $[0, \tau_{\min}] \cup [\tau_{\max}, 0.98]$'
+        l_ee2 = r'Extinción económica $(\tau_{\min}, \tau_{1,*}] \cup [\tau_{2,*}, \tau_{\max}]$'
+        l_pe2 = r'Extinción física $[0, \tau_{\min}] \cup [\tau_{\max}, 1)$'
         ann_min = r'Mínimo en $\tau^* = 0.20$'
-        inset_tit = r'Cruce $\tau_{c2} = 0.9226$ y extinción'
+        inset_tit = rf'Cruce $\tau_{{c2}} = {tau_c2:.4f}$ y extinción'
         xlab2 = r'Carga tributaria / regulatoria $\tau \in (0, 1)$'
         ylab2 = r'Umbrales de capital $\kappa(\tau), S(\tau)$ (escala log)'
         tit2 = r'(b) Curva en U real $S(\tau)$, envolvente y extinción'
     else:
         l_ae = r'Net productivity $A_e(\tau) = A_0 \tau^\alpha (1-\tau)$'
         l_lin = r'Linear wedge $A_e(\tau^*) \frac{1-\tau}{1-\tau^*}$ (Sec. 4.3)'
-        l_rep = r'Physical floor $A_{\mathrm{rep}} = 0.0735$'
-        l_asn = r'Economic floor $A_{\mathrm{SN}} = 0.0995$'
+        l_rep = rf'Physical floor $A_{{\mathrm{{rep}}}} = {A_rep:.4f}$'
+        l_astar = rf'Global threshold $A_* = {A_star:.4f}$'
         l_a749 = r'Theorem 8 threshold ($A_e \geq 0.749$)'
         l_opt = r'Optimal burden $\tau^* = \frac{\alpha}{1+\alpha} = 0.20$'
         l_pe = r'Physical extinction ($A_e \leq A_{\mathrm{rep}}$)'
-        l_ee = r'Economic extinction ($A_{\mathrm{rep}} < A_e \leq A_{\mathrm{SN}}$)'
+        l_ee = r'Economic extinction ($A_{\mathrm{rep}} < A_e \leq A_*$)'
         xlab1 = r'Fiscal / regulatory wedge $\tau \in (0, 1)$'
         ylab1 = r'Effective productivity $A_e(\tau)$'
         tit1 = r'(a) Physical and economic regimes of $A_e(\tau)$'
-        l_Svfi = r'True VFI frontier $S(\tau)$ on $(\tau_1, \tau_2)$'
+        l_Svfi = r'True VFI frontier $S(\tau)$ on $(\tau_{1,*}, \tau_{2,*})$'
         l_Sasy = r'Thm. 3 asymptotic envelope $(D/c_K)^2 A_e^{-2}$'
         l_t8 = r'Thm. 8 certified bound ($[0.117, 0.305]$)'
         l_K = r'Physical floor $\kappa(\tau)$ on $(\tau_{\min}, \tau_{\max})$'
-        l_ee2 = r'Economic extinction $(\tau_{\min}, \tau_1] \cup [\tau_2, \tau_{\max}]$'
-        l_pe2 = r'Physical extinction $[0, \tau_{\min}] \cup [\tau_{\max}, 0.98]$'
+        l_ee2 = r'Economic extinction $(\tau_{\min}, \tau_{1,*}] \cup [\tau_{2,*}, \tau_{\max}]$'
+        l_pe2 = r'Physical extinction $[0, \tau_{\min}] \cup [\tau_{\max}, 1)$'
         ann_min = r'Minimum at $\tau^* = 0.20$'
-        inset_tit = r'Crossing $\tau_{c2} = 0.9226$ & extinction'
+        inset_tit = rf'Crossing $\tau_{{c2}} = {tau_c2:.4f}$ & extinction'
         xlab2 = r'Fiscal / regulatory wedge $\tau \in (0, 1)$'
         ylab2 = r'Capital thresholds $\kappa(\tau), S(\tau)$ (log scale)'
         tit2 = r'(b) True VFI U-curve $S(\tau)$, envelope & extinction'
@@ -1154,7 +1184,7 @@ def make_fig3(lang, fig3_data):
     ax1.plot(tau_grid, A_eff, '-', color='#1f4e78', linewidth=2.2, label=l_ae)
     ax1.plot(tau_grid, A_max_curve * (1.0 - tau_grid) / (1.0 - tau_opt), '--', color='#888888', linewidth=1.3, label=l_lin)
     ax1.axhline(A_rep, color='#c00000', linestyle=':', linewidth=1.5, label=l_rep)
-    ax1.axhline(A_SN, color='#d95f02', linestyle='-.', linewidth=1.4, label=l_asn)
+    ax1.axhline(A_star, color='#d95f02', linestyle='-.', linewidth=1.4, label=l_astar)
     ax1.axhline(0.749, color='#7b3294', linestyle='--', linewidth=1.1, label=l_a749)
     ax1.axvline(tau_opt, color='#1b7837', linestyle='--', linewidth=1.2, label=l_opt)
 
@@ -1163,7 +1193,7 @@ def make_fig3(lang, fig3_data):
     ax1.axvspan(tau_min, tau_1, color='#e69f00', alpha=0.26)
     ax1.axvspan(tau_2, tau_max, color='#e69f00', alpha=0.26, label=l_ee)
     ax1.scatter([tau_min, tau_max], [A_rep, A_rep], color='#c00000', s=24, zorder=5)
-    ax1.scatter([tau_1, tau_2], [A_SN, A_SN], color='#d95f02', s=24, zorder=5)
+    ax1.scatter([tau_1, tau_2], [A_star, A_star], color='#d95f02', s=24, zorder=5)
 
     ax1.set_xlim(0.0, 0.98)
     ax1.set_ylim(0.0, 1.08)
@@ -1188,9 +1218,11 @@ def make_fig3(lang, fig3_data):
 
     S_min_pt = float(k_vfi_interp(A_max_curve)) / (A_max_curve ** 2)
     ax2.scatter([tau_opt], [S_min_pt], color='#0b2c4d', s=32, zorder=5)
-    ax2.annotate(ann_min, xy=(tau_opt, S_min_pt), xytext=(0.045, 0.0082),
+    ax2.annotate(ann_min, xy=(tau_opt, S_min_pt), xytext=(0.225, 0.0052),
+                 ha='left',
                  arrowprops=dict(arrowstyle='->', color='#0b2c4d', lw=1.0),
-                 fontsize=7.8, color='#0b2c4d', fontweight='bold')
+                 bbox=dict(boxstyle='round,pad=0.18', fc='white', ec='none', alpha=0.92),
+                 fontsize=7.8, color='#0b2c4d', fontweight='bold', zorder=7)
 
     ax2.set_xlim(0.0, 0.98)
     ax2.set_ylim(7e-4, 0.95)
@@ -1235,6 +1267,7 @@ def make_fig3(lang, fig3_data):
 # ==============================================================================
 def make_fig4(lang, fig4_data):
     t_grid = fig4_data['t_grid']
+    N_f_star = fig4_data['N_f_star']
     traj_Nf1_g025 = fig4_data['traj_Nf1_g025']
     traj_Nf1_g0 = fig4_data['traj_Nf1_g0']
     traj_Nf2_g0 = fig4_data['traj_Nf2_g0']
@@ -1260,7 +1293,7 @@ def make_fig4(lang, fig4_data):
         l_h = r'Crecimiento VFI «palo de hockey» ($N_f=1, g=0.025$)'
         l_s1 = r'Trayectoria VFI acotada por $K_p^+$ ($N_f=1, g=0$)'
         l_s2 = r'Supervivencia VFI con $N_f=2, g=0$ ($K_0=0.06 > S$)'
-        l_f = r'Extinción por fragmentación ($N_f=60 > N_{f,\mathrm{SN}}=56.79$)'
+        l_f = rf'Extinción por fragmentación ($N_f=60 > N_{{f,*}}={N_f_star:.2f}$)'
         l_t = r'Umbral región productiva $\hat{h} = 0.28$'
         xlab1 = r'Períodos de tiempo $t$'
         ylab1 = r'Stock de capital real $K_t$ (escala log)'
@@ -1278,7 +1311,7 @@ def make_fig4(lang, fig4_data):
         l_h = r'VFI hockey-stick growth ($N_f=1, g=0.025$)'
         l_s1 = r'VFI ceiling trajectory $K_p^+$ ($N_f=1, g=0$)'
         l_s2 = r'VFI survival with $N_f=2, g=0$ ($K_0=0.06 > S$)'
-        l_f = r'Fragmentation extinction ($N_f=60 > N_{f,\mathrm{SN}}=56.79$)'
+        l_f = rf'Fragmentation extinction ($N_f=60 > N_{{f,*}}={N_f_star:.2f}$)'
         l_t = r'Productive region threshold $\hat{h} = 0.28$'
         xlab1 = r'Time periods $t$'
         ylab1 = r'Real capital stock $K_t$ (log scale)'

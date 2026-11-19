@@ -4,8 +4,8 @@ title: "State-Dependent Affine Bellman Barriers, Asymptotic Equivalence, and the
 authors:
   - family-names: "Segura"
     given-names: "Marcelo"
-date-released: "2026-11-18"
-version: "5.1"
+date-released: "2026-11-19"
+version: "5.2"
 doi: "10.5281/zenodo.24340962"
 repository-code: "https://github.com/lordtiva/mvs-extension"
 url: "https://zenodo.org/records/24340962"
