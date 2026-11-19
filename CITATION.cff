@@ -6,9 +6,9 @@ authors:
     given-names: "Marcelo"
 date-released: "2026-11-19"
 version: "5.2"
-doi: "10.5281/zenodo.24340962"
+doi: "10.5281/zenodo.24361078"
 repository-code: "https://github.com/lordtiva/mvs-extension"
-url: "https://zenodo.org/records/24340962"
+url: "https://zenodo.org/records/24361078"
 license: "CC-BY-4.0"
 keywords:
   - "minimum viable scale"
@@ -23,6 +23,6 @@ preferred-citation:
   authors:
     - family-names: "Segura"
       given-names: "Marcelo"
-  doi: "10.5281/zenodo.24340962"
+  doi: "10.5281/zenodo.24361078"
   year: 2026
   month: 11
